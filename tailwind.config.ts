@@ -22,16 +22,28 @@ const config: Config = {
           900: '#312e81',
         },
         navy: {
-          50: '#f0f4f8',
-          100: '#d9e2ec',
-          200: '#bcccdc',
-          300: '#9fb3c8',
-          400: '#829ab1',
-          500: '#627d98',
-          600: '#486581',
-          700: '#334e68',
-          800: '#243b53',
-          900: '#102a43',
+          50: '#f5f4f9',
+          100: '#e8e6f0',
+          200: '#d1cce1',
+          300: '#b3a9cc',
+          400: '#8f7fb0',
+          500: '#6f74c9',
+          600: '#5a5fb8',
+          700: '#4a4a9e',
+          800: '#3d3d7f',
+          900: '#1e1a49', // Navy principal
+        },
+        accent: {
+          DEFAULT: '#6f74c9', // Periwinkle para "Tecnología"
+          light: '#a5b8fc',
+        },
+        peach: {
+          DEFAULT: '#e6b596', // Durazno
+          light: '#f0d4c0',
+        },
+        lavender: {
+          DEFAULT: '#e0e5fc', // Fondo lila muy claro
+          light: '#f0f4ff',
         },
       },
       boxShadow: {

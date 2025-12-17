@@ -12,16 +12,23 @@
   --color-primary-800: #3730a3;
   --color-primary-900: #312e81;
 
-  --color-navy-50: #f0f4f8;
-  --color-navy-100: #d9e2ec;
-  --color-navy-200: #bcccdc;
-  --color-navy-300: #9fb3c8;
-  --color-navy-400: #829ab1;
-  --color-navy-500: #627d98;
-  --color-navy-600: #486581;
-  --color-navy-700: #334e68;
-  --color-navy-800: #243b53;
-  --color-navy-900: #102a43;
+  --color-navy-50: #f5f4f9;
+  --color-navy-100: #e8e6f0;
+  --color-navy-200: #d1cce1;
+  --color-navy-300: #b3a9cc;
+  --color-navy-400: #8f7fb0;
+  --color-navy-500: #6f74c9;
+  --color-navy-600: #5a5fb8;
+  --color-navy-700: #4a4a9e;
+  --color-navy-800: #3d3d7f;
+  --color-navy-900: #1e1a49;
+
+  --color-accent: #6f74c9;
+  --color-accent-light: #a5b8fc;
+  --color-peach: #e6b596;
+  --color-peach-light: #f0d4c0;
+  --color-lavender: #e0e5fc;
+  --color-lavender-light: #f0f4ff;
 
   --shadow-soft: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
 }
@@ -32,7 +39,7 @@
   }
 
   body {
-    @apply bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 text-slate-900 antialiased;
+    @apply bg-lavender text-navy-900 antialiased p-0 m-0;
   }
 
   :focus-visible {
@@ -43,6 +50,66 @@
 @layer components {
   .link {
     @apply text-primary-600 hover:text-primary-700 underline-offset-4 hover:underline transition-colors;
+  }
+}
+
+@layer utilities {
+  .font-inter {
+    font-family: var(--font-inter);
+  }
+
+  .font-tech {
+    font-family: var(--font-tech);
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  /* Alternativa más cuadrada si se necesita cambiar Orbitron por Tektur */
+  .font-tech-alt {
+    font-family: var(--font-tech-alt);
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  /* Clase utilitaria para palabra tech con fallback completo */
+  .tech-word {
+    font-family: var(--font-tech), var(--font-tech-alt), var(--font-inter), system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .animate-in {
+    animation-duration: 0.2s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
+
+  .fade-in {
+    animation-name: fadeIn;
+  }
+
+  .slide-in-from-bottom-2 {
+    animation-name: slideInFromBottom;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideInFromBottom {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 

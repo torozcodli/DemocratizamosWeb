@@ -1,10 +1,22 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Orbitron, Tektur } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { siteConfig } from '@/config/site';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+// Fuente tech principal: Orbitron Bold (700) - estilo cuadrado/futurista
+const orbitron = Orbitron({ 
+  subsets: ['latin'], 
+  variable: '--font-tech', 
+  weight: ['700'] 
+});
+// Alternativa: Tektur Bold (700) - más cuadrada si Orbitron no es suficiente
+const tektur = Tektur({ 
+  subsets: ['latin'], 
+  variable: '--font-tech-alt', 
+  weight: ['700'] 
+});
 
 export const metadata: Metadata = {
   title: {
@@ -37,7 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.variable} ${orbitron.variable} ${tektur.variable} ${inter.className}`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
