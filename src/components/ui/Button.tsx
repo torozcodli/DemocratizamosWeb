@@ -13,11 +13,11 @@ export function Button({
   ...props
 }: ButtonProps) {
   const baseStyles =
-    'inline-flex items-center justify-center rounded-lg px-6 py-3 text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
+    'inline-flex items-center justify-center rounded-full focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none';
 
   const variants = {
     primary:
-      'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800',
+      'bg-[#1E1A49] text-white px-5 py-1.5 text-[19px] font-normal shadow-sm hover:bg-[#27225a] transition-colors focus-visible:ring-2 focus-visible:ring-[#6F74C9] focus-visible:ring-offset-2',
     secondary:
       'bg-slate-200 text-slate-900 hover:bg-slate-300 active:bg-slate-400',
     ghost:
