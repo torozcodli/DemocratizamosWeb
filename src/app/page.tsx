@@ -11,10 +11,9 @@ import { Tools } from '@/components/sections/Tools';
 import { Academy } from '@/components/sections/Academy';
 import { Contact } from '@/components/sections/Contact';
 import { Footer } from '@/components/sections/Footer';
-
 export default function Home() {
   return (
-    <main>
+    <main className="p-0 m-0">
       <Navbar />
       <Hero />
       <About />

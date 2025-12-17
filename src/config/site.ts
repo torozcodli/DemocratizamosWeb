@@ -9,10 +9,9 @@ export const siteConfig = {
     { label: 'Inicio', href: '#inicio' },
     { label: 'Nosotros', href: '#nosotros' },
     { label: 'Programas', href: '#programas' },
-    { label: 'Blog', href: '#blog' },
+    { label: 'Blog/Publicaciones', href: '#blog' },
     { label: 'Herramientas', href: '#herramientas' },
     { label: 'Academia', href: '#academia' },
-    { label: 'Contacto', href: '#contacto' },
   ],
   cta: {
     label: 'Contacto',
