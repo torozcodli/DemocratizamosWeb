@@ -8,9 +8,9 @@ export const homeContent = {
   about: {
     card: {
       title: '¿Quiénes Somos?',
-      text: 'Somos una asociación civil sin fines de lucro, comprometida con cerrar la brecha digital en México. Trabajamos para democratizar el acceso a la tecnología y las habilidades digitales, especialmente en comunidades vulnerables y marginadas.',
+      text: 'Somos una asociación civil sin fines de lucro, comprometida con cerrar la brecha digital en México. Trabajamos para que cada persona, sin importar su contexto, pueda acceder a las herramientas tecnológicas que necesita para transformar su realidad.',
       additional:
-        'A través de programas educativos, capacitaciones y proyectos colaborativos, creamos comunidades de aprendizaje que empoderan a las personas para transformar sus vidas y sus entornos mediante el uso responsable de la tecnología.',
+        'No solo enseñamos tecnología, creamos comunidades de aprendizaje donde las personas descubren su potencial y construyen su futuro.',
     },
     heading: 'Creemos en el poder de la tecnología para todos.',
   },

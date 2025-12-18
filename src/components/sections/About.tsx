@@ -1,29 +1,89 @@
+import Image from 'next/image';
 import { Container } from '@/components/ui/Container';
-import { SectionHeading } from '@/components/ui/SectionHeading';
+import { TechCard } from '@/components/ui/TechCard';
 import { homeContent } from '@/content/home';
 
 export function About() {
   return (
-    <section id="nosotros" className="py-20 sm:py-24 lg:py-32 bg-white/50">
+    <section
+      id="nosotros"
+      className="relative py-20 md:py-28 overflow-hidden"
+      style={{
+        background: `
+          radial-gradient(circle 600px at 20% 30%, rgba(185,192,255,0.15) 0%, rgba(185,192,255,0) 60%),
+          radial-gradient(circle 500px at 80% 70%, rgba(240,176,124,0.12) 0%, rgba(240,176,124,0) 65%),
+          linear-gradient(180deg, #0E0D2B 0%, #12113A 50%, #0E0D2B 100%)
+        `,
+      }}
+    >
       <Container>
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-start">
-          <div className="bg-white rounded-2xl p-8 shadow-soft border border-slate-100">
-            <h3 className="text-2xl font-bold text-slate-900 mb-4">
-              {homeContent.about.card.title}
-            </h3>
-            <p className="text-slate-600 leading-relaxed mb-4">
-              {homeContent.about.card.text}
-            </p>
-            <p className="text-slate-600 leading-relaxed">
-              {homeContent.about.card.additional}
-            </p>
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16 items-center">
+          {/* Columna izquierda - TechCard */}
+          <div className="order-1 lg:order-1">
+            <TechCard title={homeContent.about.card.title}>
+              <p className="mb-4">{homeContent.about.card.text}</p>
+              <p>{homeContent.about.card.additional}</p>
+            </TechCard>
           </div>
-          <div className="space-y-6">
-            <SectionHeading>{homeContent.about.heading}</SectionHeading>
+
+          {/* Columna derecha - Heading + Logo + Línea */}
+          <div className="order-2 lg:order-2 space-y-8 relative">
+            {/* Heading grande */}
+            <h2 className="text-center lg:text-right text-[44px] md:text-[64px] lg:text-[72px] font-bold leading-[1.1] tracking-[-0.02em]">
+              <span className="text-[#E7ECFF]">Creemos en el </span>
+              <span className="tech-word text-[#B9C0FF]">poder</span>
+              <span className="text-[#E7ECFF]"> de la </span>
+              <span className="tech-word text-[#F0B07C]">tecnología</span>
+              <span className="text-[#E7ECFF]"> para todos.</span>
+            </h2>
+
+            {/* Círculo logo D centrado debajo del texto */}
+            <div className="relative flex justify-center items-center -mt-12">
+              <div className="relative h-24 w-24 md:h-28 md:w-28 rounded-full bg-white/90 shadow-lg flex items-center justify-center z-10 -ml-10">
+                <Image
+                  src="/images/logo-d.png"
+                  alt="Logo D"
+                  width={56}
+                  height={56}
+                  className="object-contain"
+                />
+              </div>
+            </div>
+
+            {/* Línea horizontal pegada a la derecha */}
+            <div className="relative hidden lg:block -mt-18">
+              <div className="absolute right-0 h-[2px] bg-[#9DACFD] top-1/2 -translate-y-1/2 w-[70%] max-w-[500px]" style={{ right: '-13rem' }}>
+                {/* Nodo circular al inicio de la línea (izquierda) - igual al de DecorativeLine */}
+                <svg
+                  className="absolute -top-[10px] left-0"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 22 22"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {/* Círculo exterior */}
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="10.25"
+                    stroke="#9DACFD"
+                    strokeWidth="1.5"
+                    strokeMiterlimit="10"
+                  />
+                  {/* Círculo interior */}
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="3.5"
+                    fill="#C7D2FF"
+                  />
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
       </Container>
     </section>
   );
 }
-
