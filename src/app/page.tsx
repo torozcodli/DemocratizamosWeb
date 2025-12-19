@@ -1,6 +1,7 @@
 import { Navbar } from '@/components/sections/Navbar';
 import { Hero } from '@/components/sections/Hero';
 import { About } from '@/components/sections/About';
+import { InclusionDigitalSection } from '@/components/sections/InclusionDigitalSection';
 import { Values } from '@/components/sections/Values';
 import { Stats } from '@/components/sections/Stats';
 import { Allies } from '@/components/sections/Allies';
@@ -17,6 +18,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <About />
+      <InclusionDigitalSection />
       <Values />
       <Stats />
       <Allies />
