@@ -6,19 +6,19 @@ const latestItems = [
     title: 'Capacitación en Ciberseguridad',
     description:
       'Taller intensivo para fortalecer las habilidades digitales seguras en sectores vulnerables. Se abordaron prácticas básicas de protección de datos y navegación responsable.',
-    image: '/images/ImagotipoColor.png',
+    image: '/images/CapacitacionCiber.jpg',
   },
   {
     title: 'Feria de Tecnología Social',
     description:
       'Una jornada para compartir herramientas tecnológicas aplicadas a problemas comunitarios. Participaron jóvenes de zonas rurales con proyectos innovadores en accesibilidad digital.',
-    image: '/images/WhatsApp.png',
+    image: '/images/Feriade.jpg',
   },
   {
     title: 'Taller de Innovación Digital',
     description:
       'Una iniciativa para impulsar habilidades tecnológicas, creatividad e inclusión digital entre jóvenes y emprendedores. Este taller forma parte del programa de profesionalización para comunidades vulnerables.',
-    image: '/images/6f32485f-34a2-4620-9941-4a312126e43d.png',
+    image: '/images/TallerdeInnovacion.jpeg',
   },
 ];
 
