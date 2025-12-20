@@ -37,14 +37,14 @@ export function About() {
               <span className="text-[#E7ECFF]"> para todos.</span>
             </h2>
 
-            {/* Círculo logo D centrado debajo del texto */}
+            {/* Logo Demoinn centrado debajo del texto */}
             <div className="relative flex justify-center items-center -mt-12">
-              <div className="relative h-24 w-24 md:h-28 md:w-28 rounded-full bg-white/90 shadow-lg flex items-center justify-center z-10 -ml-10">
+              <div className="relative h-32 w-32 md:h-36 md:w-36 flex items-center justify-center z-10 -ml-10">
                 <Image
-                  src="/images/logo-d.png"
-                  alt="Logo D"
-                  width={56}
-                  height={56}
+                  src="/solar/icons/Demoinnlogo.svg"
+                  alt="Demoinn Logo"
+                  width={144}
+                  height={144}
                   className="object-contain"
                 />
               </div>
