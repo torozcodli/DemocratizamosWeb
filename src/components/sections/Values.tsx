@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils/cn';
 
 export function Values() {
   return (
-    <section className="py-20 sm:py-24 lg:py-32">
+    <section className="flow-root mt-0 py-20 sm:py-24 lg:py-32">
       <Container>
         <div className="text-center mb-12">
           <SectionHeading>Nuestros Valores</SectionHeading>

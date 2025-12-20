@@ -7,7 +7,7 @@ export function InclusionDigitalSection() {
   return (
     <section
       id="inclusion-digital"
-      className="relative py-20 md:py-28 lg:py-32 overflow-hidden min-h-[900px]"
+      className="relative py-20 md:py-28 lg:py-32 overflow-hidden"
     >
       {/* Capa base: Color sólido */}
       <div
@@ -18,7 +18,7 @@ export function InclusionDigitalSection() {
       />
 
       {/* Wrapper para decoraciones */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Círculo 1: bottom-right (grande, parcialmente cortado) */}
         <div className="absolute bottom-0 right-0 z-[1] opacity-35" style={{ filter: 'blur(0.5px)' }}>
           <svg

@@ -2,7 +2,8 @@ import { Navbar } from '@/components/sections/Navbar';
 import { Hero } from '@/components/sections/Hero';
 import { About } from '@/components/sections/About';
 import { InclusionDigitalSection } from '@/components/sections/InclusionDigitalSection';
-import { Values } from '@/components/sections/Values';
+import { Ribbon } from '@/components/ui/Ribbon';
+import { AlliesSection } from '@/components/sections/AlliesSection';
 import { Stats } from '@/components/sections/Stats';
 import { Allies } from '@/components/sections/Allies';
 import { News } from '@/components/sections/News';
@@ -19,7 +20,8 @@ export default function Home() {
       <Hero />
       <About />
       <InclusionDigitalSection />
-      <Values />
+      <Ribbon />
+      <AlliesSection />
       <Stats />
       <Allies />
       <News />
