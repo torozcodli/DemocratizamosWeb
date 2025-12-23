@@ -35,20 +35,19 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative bg-gradient-to-r from-[#090828] to-[#1D194C] text-[#E1E6FD] pt-24 pb-12">
+    <footer className="relative bg-gradient-to-r from-[#090828] to-[#1D194C] text-[#E1E6FD] pt-28 pb-24">
       {/* Floating circular logo badge */}
-      <div className="absolute left-1/2 -top-16 -translate-x-1/2 w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden bg-white/10 backdrop-blur-sm flex items-center justify-center z-10">
-        <Image
+      <div className="pointer-events-none absolute left-1/2 -top-16 -translate-x-1/2 w-40 h-40 md:w-44 md:h-44 z-10">
+        <img
           src="/solar/icons/Demoinnlogo.svg"
           alt="Demoinn Logo"
-          width={160}
-          height={160}
-          className="w-full h-full object-contain p-4 rotate-[10.8deg]"
+          className="w-full h-full object-contain"
+          draggable={false}
         />
       </div>
 
-      <Container className="max-w-7xl">
-        <div className="grid gap-20 lg:grid-cols-4 items-start px-16 py-10">
+      <Container className="max-w-[95%] lg:max-w-[90%]">
+        <div className="grid gap-12 lg:grid-cols-[1.25fr_1fr_.75fr_1.6fr] lg:gap-x-16 lg:gap-y-0 items-start px-4 lg:px-6">
           {/* Column 1: Branding */}
           <div className="space-y-4">
             <Image
@@ -61,7 +60,7 @@ export function Footer() {
           </div>
 
           {/* Column 2: Social Media & Contact */}
-          <div className="space-y-10">
+          <div className="space-y-8">
             <div>
               <h4 className="font-semibold text-[#E1E6FD] mb-6">Redes sociales</h4>
               <div className="flex gap-4">
@@ -137,23 +136,23 @@ export function Footer() {
           </div>
 
           {/* Column 4: Newsletter */}
-          <div>
+          <div className="w-full lg:justify-self-end lg:max-w-[520px]">
             <h4 className="font-semibold text-[#EFBE9F] mb-6 text-xl">
               ¡Déjanos tu correo y te escribimos en breve!
             </h4>
-            <form onSubmit={handleSubmit} className="max-w-md">
-              <div className="flex items-center h-14 sm:h-16 rounded-full border-2 border-[#AAB3FF] bg-[#6D73B3]/35 overflow-hidden">
+            <form onSubmit={handleSubmit} className="w-full">
+              <div className="flex items-center h-14 sm:h-16 rounded-full border-2 border-[#AAB3FF] bg-[#6D73B3]/35 overflow-hidden w-full">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tucorreoaquí@correo.com"
-                  className="flex-1 bg-transparent px-6 outline-none placeholder:text-[#E1E6FD]/35 text-[#E1E6FD]/80 text-sm sm:text-base h-full"
+                  className="flex-1 bg-transparent px-6 outline-none placeholder:text-[#E1E6FD]/35 text-[#E1E6FD]/80 text-sm sm:text-base h-full min-w-0"
                   aria-label="Email para newsletter"
                 />
                 <button
                   type="submit"
-                  className="h-full px-10 sm:px-12 rounded-full bg-[#E79A5A] text-white font-bold text-lg sm:text-xl tracking-wide hover:bg-[#E79A5A]/90 transition-colors whitespace-nowrap"
+                  className="h-full px-6 sm:px-8 flex-shrink-0 rounded-full bg-[#E79A5A] text-white font-bold text-sm sm:text-base tracking-wide hover:bg-[#E79A5A]/90 transition-colors whitespace-nowrap"
                 >
                   ENVIAR
                 </button>
@@ -164,7 +163,7 @@ export function Footer() {
       </Container>
 
       {/* Separator line with circular node - Full width */}
-      <div className="mt-12 w-full h-20 sm:h-24 md:h-28">
+      <div className="mt-10 w-full h-16 sm:h-20 md:h-24">
         <Image
           src="/solar/icons/footerLine.svg"
           alt="Footer separator line"
@@ -174,9 +173,9 @@ export function Footer() {
         />
       </div>
 
-      <Container className="max-w-7xl">
+      <Container className="max-w-[95%] lg:max-w-[90%]">
         {/* Copyright */}
-        <div className="mt-10 text-center text-sm text-[#E1E6FD]/70 px-16">
+        <div className="mt-8 text-center text-sm text-[#E1E6FD]/70 px-8 lg:px-12">
           <p>© {currentYear}. Todos los derechos reservados</p>
         </div>
       </Container>

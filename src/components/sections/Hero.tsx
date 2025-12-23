@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { WhatsAppBanner } from '@/components/ui/WhatsAppBanner';
 import { homeContent } from '@/content/home';
+import HeroIllustration from '@/components/landing/HeroIllustration';
 
 export function Hero() {
   return (
@@ -53,21 +53,13 @@ export function Hero() {
             </Link>
           </div>
 
-          {/* Lado derecho - Imagen */}
+          {/* Lado derecho - Ilustración compuesta */}
           <div className="relative lg:absolute lg:bottom-0 lg:-right-8 xl:-right-16 lg:w-[58%] flex items-end justify-end">
-            <div className="relative w-full h-[570px] sm:h-[670px] lg:h-[920px] lg:-mb-16 overflow-visible">
-              <Image
-                src="/images/6f32485f-34a2-4620-9941-4a312126e43d.png"
-                alt="Hero illustration"
-                fill
-                className="object-contain object-right-bottom"
-                priority
-              />
-            </div>
+            <HeroIllustration className="w-full max-w-[620px] mx-auto" />
           </div>
 
           {/* Banner WhatsApp pegado al borde derecho */}
-          <WhatsAppBanner className="absolute bottom-0 -right-45 sm:-right-50 lg:-right-55" />
+          <WhatsAppBanner className="absolute bottom-0 -right-45 sm:-right-50 lg:-right-55 z-50" />
         </div>
       </Container>
     </section>
