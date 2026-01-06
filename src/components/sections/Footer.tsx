@@ -4,7 +4,7 @@ import { Container } from '@/components/ui/Container';
 import { siteConfig } from '@/config/site';
 import { Facebook, Instagram, Linkedin, Mail, Phone } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+// import { useState } from 'react'; // Deshabilitado - newsletter desactivado
 
 // Simple TikTok icon component
 function TikTokIcon({ className }: { className?: string }) {
@@ -25,19 +25,20 @@ function TikTokIcon({ className }: { className?: string }) {
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const [email, setEmail] = useState('');
+  // Newsletter deshabilitado
+  // const [email, setEmail] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Placeholder - no real submission logic
-    console.log('Newsletter submission:', email);
-    setEmail('');
-  };
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   // Placeholder - no real submission logic
+  //   console.log('Newsletter submission:', email);
+  //   setEmail('');
+  // };
 
   return (
-    <footer className="relative bg-gradient-to-r from-[#090828] to-[#1D194C] text-[#E1E6FD] pt-28 pb-24">
+    <footer className="relative bg-gradient-to-r from-[#090828] to-[#1D194C] text-[#E1E6FD] pt-20 pb-16 sm:pt-24 sm:pb-20 md:pt-28 md:pb-24">
       {/* Floating circular logo badge */}
-      <div className="pointer-events-none absolute left-1/2 -top-16 -translate-x-1/2 w-40 h-40 md:w-44 md:h-44 z-10">
+      <div className="pointer-events-none absolute left-1/2 -top-12 sm:-top-14 md:-top-16 -translate-x-1/2 w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44 z-10">
         <img
           src="/solar/icons/Demoinnlogo.svg"
           alt="Demoinn Logo"
@@ -46,88 +47,93 @@ export function Footer() {
         />
       </div>
 
-      <Container className="max-w-[95%] lg:max-w-[90%]">
-        <div className="grid gap-12 lg:grid-cols-[1.25fr_1fr_.75fr_1.6fr] lg:gap-x-16 lg:gap-y-0 items-start px-4 lg:px-6">
+      <Container className="max-w-[95%] sm:max-w-[90%] lg:max-w-[90%]">
+        <div className="grid gap-8 sm:gap-10 md:gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr_.75fr] lg:gap-x-16 lg:gap-y-0 items-start px-4 sm:px-6 md:px-8 lg:px-6">
           {/* Column 1: Branding */}
-          <div className="space-y-4">
-            <Image
-              src="/solar/icons/DemoinnBlanco.svg"
-              alt="Demoinn Logo"
-              width={240}
-              height={240}
-              className="object-contain"
-            />
+          <div className="space-y-4 sm:col-span-2 md:col-span-1">
+            <div className="w-full max-w-[200px] sm:max-w-[220px] md:max-w-[240px]">
+              <Image
+                src="/solar/icons/DemoinnBlanco.svg"
+                alt="Demoinn Logo"
+                width={240}
+                height={240}
+                className="object-contain w-full h-auto"
+                style={{ width: 'auto', height: 'auto' }}
+              />
+            </div>
           </div>
 
           {/* Column 2: Social Media & Contact */}
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             <div>
-              <h4 className="font-semibold text-[#E1E6FD] mb-6">Redes sociales</h4>
-              <div className="flex gap-4">
+              <h4 className="font-semibold text-[#E1E6FD] mb-4 sm:mb-6 text-base sm:text-lg">Redes sociales</h4>
+              <div className="flex gap-3 sm:gap-4">
                 <a
                   href={siteConfig.social.linkedin}
-                  className="w-8 h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors"
+                  className="w-9 h-9 sm:w-8 sm:h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors active:bg-white/20"
                   aria-label="LinkedIn"
                 >
-                  <Linkedin size={14} />
+                  <Linkedin size={16} className="sm:w-[14px] sm:h-[14px]" />
                 </a>
                 <a
                   href={siteConfig.social.instagram}
-                  className="w-8 h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors"
+                  className="w-9 h-9 sm:w-8 sm:h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors active:bg-white/20"
                   aria-label="Instagram"
                 >
-                  <Instagram size={14} />
+                  <Instagram size={16} className="sm:w-[14px] sm:h-[14px]" />
                 </a>
                 <a
                   href={siteConfig.social.facebook}
-                  className="w-8 h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors"
+                  className="w-9 h-9 sm:w-8 sm:h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors active:bg-white/20"
                   aria-label="Facebook"
                 >
-                  <Facebook size={14} />
+                  <Facebook size={16} className="sm:w-[14px] sm:h-[14px]" />
                 </a>
                 <a
                   href="#"
-                  className="w-8 h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors"
+                  className="w-9 h-9 sm:w-8 sm:h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors active:bg-white/20"
                   aria-label="TikTok"
                 >
-                  <TikTokIcon className="w-4 h-4" />
+                  <TikTokIcon className="w-5 h-5 sm:w-4 sm:h-4" />
                 </a>
               </div>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <a
                 href={`tel:${siteConfig.phone}`}
-                className="flex items-center gap-2 text-sm text-[#E1E6FD] hover:text-white transition-colors"
+                className="flex items-center gap-2 text-sm sm:text-base text-[#E1E6FD] hover:text-white transition-colors active:text-white/80"
               >
-                <Phone size={16} className="flex-shrink-0" />
-                <span>{siteConfig.phone}</span>
+                <Phone size={18} className="sm:w-4 sm:h-4 flex-shrink-0" />
+                <span className="break-all">{siteConfig.phone}</span>
               </a>
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="flex items-center gap-2 text-sm text-[#E1E6FD] hover:text-white transition-colors"
+                className="flex items-center gap-2 text-sm sm:text-base text-[#E1E6FD] hover:text-white transition-colors active:text-white/80"
               >
-                <Mail size={16} className="flex-shrink-0" />
-                <span>{siteConfig.email}</span>
+                <Mail size={18} className="sm:w-4 sm:h-4 flex-shrink-0" />
+                <span className="break-all">{siteConfig.email}</span>
               </a>
             </div>
           </div>
 
           {/* Column 3: Explore */}
-          <div>
-            <h4 className="font-semibold text-[#E1E6FD] mb-6">Explore</h4>
-            <ul className="space-y-4">
+          <div className="sm:col-start-1 sm:row-start-2 md:col-start-3 md:row-start-1">
+            <h4 className="font-semibold text-[#E1E6FD] mb-4 sm:mb-6 text-base sm:text-lg">Explore</h4>
+            <ul className="space-y-3 sm:space-y-4">
               <li>
                 <a
                   href="#nosotros"
-                  className="text-sm text-[#E1E6FD] hover:underline transition-colors"
+                  className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
                 >
                   Nosotros
                 </a>
               </li>
               <li>
                 <a
-                  href="#contacto"
-                  className="text-sm text-[#E1E6FD] hover:underline transition-colors"
+                  href="https://wa.me/+5216145871758"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
                 >
                   Contáctanos
                 </a>
@@ -135,8 +141,8 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Newsletter */}
-          <div className="w-full lg:justify-self-end lg:max-w-[520px]">
+          {/* Column 4: Newsletter - Deshabilitado */}
+          {/* <div className="w-full lg:justify-self-end lg:max-w-[520px]">
             <h4 className="font-semibold text-[#EFBE9F] mb-6 text-xl">
               ¡Déjanos tu correo y te escribimos en breve!
             </h4>
@@ -158,12 +164,12 @@ export function Footer() {
                 </button>
               </div>
             </form>
-          </div>
+          </div> */}
         </div>
       </Container>
 
       {/* Separator line with circular node - Full width */}
-      <div className="mt-10 w-full h-16 sm:h-20 md:h-24">
+      <div className="mt-8 sm:mt-10 md:mt-10 w-full h-12 sm:h-16 md:h-20 lg:h-24">
         <Image
           src="/solar/icons/footerLine.svg"
           alt="Footer separator line"
@@ -173,9 +179,9 @@ export function Footer() {
         />
       </div>
 
-      <Container className="max-w-[95%] lg:max-w-[90%]">
+      <Container className="max-w-[95%] sm:max-w-[90%] lg:max-w-[90%]">
         {/* Copyright */}
-        <div className="mt-8 text-center text-sm text-[#E1E6FD]/70 px-8 lg:px-12">
+        <div className="mt-6 sm:mt-8 md:mt-8 text-center text-xs sm:text-sm text-[#E1E6FD]/70 px-4 sm:px-6 md:px-8 lg:px-12">
           <p>© {currentYear}. Todos los derechos reservados</p>
         </div>
       </Container>

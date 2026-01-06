@@ -37,7 +37,7 @@ export function Contact() {
   return (
     <section id="contacto" className="py-20 sm:py-24 lg:py-32">
       <Container>
-        <div className="max-w-2xl mx-auto text-center space-y-8">
+        <div className="max-w-2xl mx-auto text-center space-y-8 px-4 sm:px-0">
           <div>
             <SectionHeading>Contacto</SectionHeading>
             <h3 className="mt-4 text-2xl font-semibold text-slate-900">

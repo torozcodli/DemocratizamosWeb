@@ -2,12 +2,9 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils/cn';
 
 export function WhatsAppBanner({ className }: { className?: string }) {
-  const phoneNumber = '526141418003'; // sin "+"
-  const message = encodeURIComponent('¡Hola! Me gustaría obtener más información.');
-
   return (
     <a
-      href={`https://wa.me/${phoneNumber}?text=${message}`}
+      href="https://wa.me/+5216145871758"
       target="_blank"
       rel="noopener noreferrer"
       className={cn(

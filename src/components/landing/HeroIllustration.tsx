@@ -17,7 +17,7 @@ export default function HeroIllustration({ className }: HeroIllustrationProps) {
       )}
     >
       {/* Capa 1 (z-0): Backplate SVG */}
-      <div className="absolute inset-0 m-auto w-[100%] lg:w-[98%] h-auto translate-x-[25%] pointer-events-none z-0">
+      <div className="absolute inset-0 m-auto w-[100%] lg:w-[98%] h-auto translate-x-[25%] pointer-events-none z-0 max-w-full overflow-hidden">
         <img
           src="/hero/hero-backplate.svg"
           alt=""

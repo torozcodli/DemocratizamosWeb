@@ -36,10 +36,18 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: clip;
   }
 
   body {
-    @apply bg-lavender text-navy-900 antialiased p-0 m-0;
+    @apply bg-lavender text-navy-900 antialiased;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: clip;
   }
 
   :focus-visible {
@@ -124,6 +132,13 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  /* Fix para logo en About section - mover a la izquierda en desktop */
+  @media (min-width: 1024px) {
+    .about-logo-container {
+      transform: translateX(-16rem) !important;
     }
   }
 }

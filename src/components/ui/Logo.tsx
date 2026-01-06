@@ -16,7 +16,7 @@ export function Logo({ className }: LogoProps) {
       )}
     >
       {/* Logo desde public/images - tamaño más grande y nítido */}
-      <div className="flex-shrink-0 w-72 h-36 sm:w-80 sm:h-40 lg:w-96 lg:h-48 relative">
+      <div className="flex-shrink-0 w-56 h-28 sm:w-64 sm:h-32 md:w-72 md:h-36 lg:w-96 lg:h-48 relative max-w-[90vw] sm:max-w-none">
         <Image
           src="/images/ImagotipoColor.png"
           alt="Democratizamos la Innovación"

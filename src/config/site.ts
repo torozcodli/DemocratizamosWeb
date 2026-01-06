@@ -15,7 +15,7 @@ export const siteConfig = {
   ],
   cta: {
     label: 'Contacto',
-    href: '#contacto',
+    href: 'https://wa.me/+5216145871758',
   },
   social: {
     facebook: '#',

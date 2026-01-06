@@ -38,7 +38,7 @@ export function LatestSection() {
             viewBox="0 0 464 464"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-[600px] md:w-[800px] lg:w-[1000px] -translate-x-1/3 translate-y-1/3"
+            className="w-[300px] sm:w-[400px] md:w-[600px] lg:w-[800px] lg:w-[1000px] -translate-x-1/3 translate-y-1/3"
             aria-hidden="true"
           >
             <g clipPath="url(#clip0_circle1_latest)">
@@ -64,7 +64,7 @@ export function LatestSection() {
             viewBox="0 0 464 464"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-[250px] md:w-[350px] lg:w-[450px] translate-x-1/4"
+            className="w-[150px] sm:w-[200px] md:w-[280px] lg:w-[350px] lg:w-[450px] translate-x-1/4"
             aria-hidden="true"
           >
             <g clipPath="url(#clip0_circle2_latest)">
@@ -122,7 +122,7 @@ export function LatestSection() {
       {/* Contenido */}
       <Container className="relative z-10 pl-4 sm:pl-6 lg:pl-8 max-w-none">
         {/* Título */}
-        <h2 className="text-center text-6xl sm:text-7xl lg:text-8xl leading-[0.95] mb-16 md:mb-20">
+        <h2 className="text-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] mb-16 md:mb-20">
           <span
             className="text-[#1E1A49] font-black tracking-tight font-tech-alt"
             style={{ fontWeight: 900, WebkitTextStroke: '1px #1E1A49', letterSpacing: '-0.02em' }}
@@ -132,7 +132,7 @@ export function LatestSection() {
         </h2>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 lg:gap-20 max-w-[88rem] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 lg:gap-20 max-w-[88rem] mx-auto px-4 sm:px-0">
           {latestItems.map((item, index) => (
             <div
               key={index}
@@ -157,9 +157,9 @@ export function LatestSection() {
               </div>
 
               {/* Parte inferior: Panel navy */}
-              <div className="bg-[#1E1A49] px-10 py-8 flex-1 flex flex-col">
+              <div className="bg-[#1E1A49] px-8 sm:px-10 py-6 sm:py-8 flex-1 flex flex-col">
                 {/* Título */}
-                <h3 className="text-[32px] text-white text-center font-avenir font-bold" style={{ fontWeight: 700 }}>{item.title}</h3>
+                <h3 className="text-[28px] sm:text-[32px] text-white text-center font-avenir font-bold" style={{ fontWeight: 700 }}>{item.title}</h3>
 
                 {/* Línea divisora */}
                 <div className="mx-auto mt-4 h-[2px] w-16 bg-white/70 rounded-full" />

@@ -9,7 +9,7 @@ import { Footer } from '@/components/sections/Footer';
 
 export default function Home() {
   return (
-    <main className="p-0 m-0">
+    <main className="min-h-screen w-full p-0 m-0">
       <Navbar />
       <Hero />
       <About />

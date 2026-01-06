@@ -76,6 +76,7 @@ export function SolarSystem() {
             width={256}
             height={256}
             className="h-auto w-48 sm:w-56 lg:w-64"
+            style={{ height: 'auto' }}
             priority
           />
         </div>
@@ -88,6 +89,7 @@ export function SolarSystem() {
             width={272}
             height={272}
             className="h-auto w-52 sm:w-60 lg:w-68"
+            style={{ height: 'auto' }}
             priority
           />
         </div>
@@ -100,6 +102,7 @@ export function SolarSystem() {
             width={288}
             height={288}
             className="h-auto w-56 sm:w-64 lg:w-72"
+            style={{ height: 'auto' }}
             priority
           />
         </div>

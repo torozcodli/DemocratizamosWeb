@@ -27,7 +27,7 @@ export function InclusionDigitalSection() {
             viewBox="0 0 464 464"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-[600px] md:w-[800px] lg:w-[1000px] translate-x-1/4 translate-y-1/4"
+            className="w-[300px] sm:w-[400px] md:w-[600px] lg:w-[800px] lg:w-[1000px] translate-x-1/4 translate-y-1/4"
             aria-hidden="true"
           >
             <g clipPath="url(#clip0_circle1)">
@@ -53,7 +53,7 @@ export function InclusionDigitalSection() {
             viewBox="0 0 464 464"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-[260px] md:w-[320px] lg:w-[380px] -translate-x-1/3"
+            className="w-[150px] sm:w-[200px] md:w-[260px] lg:w-[320px] lg:w-[380px] -translate-x-1/3"
             aria-hidden="true"
           >
             <g clipPath="url(#clip0_circle2)">
@@ -72,24 +72,25 @@ export function InclusionDigitalSection() {
         </div>
 
         {/* Rectangulitos 1: top-right - más arriba y más a la izquierda */}
-        <BgPixelBlocks className="absolute right-80 top-[50%] z-[2] w-[176px] h-[85px] opacity-70 drop-shadow-sm" />
+        <BgPixelBlocks className="absolute right-4 sm:right-20 md:right-40 lg:right-80 top-[50%] z-[2] w-[100px] h-[50px] sm:w-[140px] sm:h-[70px] md:w-[176px] md:h-[85px] opacity-70 drop-shadow-sm hidden sm:block" />
 
         {/* Rectangulitos 2: left, más arriba - un poco más a la derecha y un poco más abajo */}
-        <BgPixelBlocks className="absolute left-56 top-40 z-[2] w-[176px] h-[85px] opacity-60 drop-shadow-sm" />
+        <BgPixelBlocks className="absolute left-4 sm:left-20 md:left-40 lg:left-56 top-20 sm:top-32 md:top-40 z-[2] w-[100px] h-[50px] sm:w-[140px] sm:h-[70px] md:w-[176px] md:h-[85px] opacity-60 drop-shadow-sm hidden sm:block" />
 
         {/* Rectangulitos 3: mucho más abajo */}
-        <BgPixelBlocks className="absolute left-10 top-[78%] z-[2] w-[176px] h-[85px] opacity-70 drop-shadow-sm" />
+        <BgPixelBlocks className="absolute left-2 sm:left-6 md:left-10 top-[78%] z-[2] w-[80px] h-[40px] sm:w-[120px] sm:h-[60px] md:w-[176px] md:h-[85px] opacity-70 drop-shadow-sm" />
       </div>
 
       {/* Capa textura: bg-texture.png repetida con opacidad (debajo de decoraciones pero sobre gradiente) */}
-      <div
+      {/* Temporarily disabled - texture file not found */}
+      {/* <div
         className="absolute inset-0 z-[3] opacity-[0.25]"
         style={{
           backgroundImage: 'url(/inclusion-digital/bg-texture.png)',
           backgroundRepeat: 'repeat',
           backgroundSize: 'auto',
         }}
-      />
+      /> */}
 
       {/* Contenido */}
       <Container className="relative z-10">
@@ -99,7 +100,7 @@ export function InclusionDigitalSection() {
         </div>
 
         {/* Cards de estadísticas */}
-        <div className="min-h-[520px] flex items-center justify-center">
+        <div className="min-h-[520px] flex items-center justify-center px-4 sm:px-0">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24 lg:gap-32 max-w-5xl w-full">
             <StatCard
               value="+2500"

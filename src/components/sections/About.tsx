@@ -7,7 +7,7 @@ export function About() {
   return (
     <section
       id="nosotros"
-      className="relative py-20 md:py-28 overflow-hidden"
+      className="relative py-20 md:py-28 overflow-x-clip overflow-y-visible"
       style={{
         background: `
           radial-gradient(circle 600px at 20% 30%, rgba(185,192,255,0.15) 0%, rgba(185,192,255,0) 60%),
@@ -27,9 +27,9 @@ export function About() {
           </div>
 
           {/* Columna derecha - Heading + Logo + Línea */}
-          <div className="order-2 lg:order-2 space-y-8 relative">
+          <div className="order-2 lg:order-2 space-y-8 relative overflow-visible">
             {/* Heading grande */}
-            <h2 className="text-center lg:text-right text-[44px] md:text-[64px] lg:text-[72px] font-bold leading-[1.1] tracking-[-0.02em]">
+            <h2 className="text-center lg:text-right text-[44px] md:text-[48px] lg:text-[72px] font-bold leading-[1.1] tracking-[-0.02em]">
               <span className="text-[#E7ECFF]">Creemos en el </span>
               <span className="tech-word text-[#B9C0FF]">poder</span>
               <span className="text-[#E7ECFF]"> de la </span>
@@ -38,14 +38,15 @@ export function About() {
             </h2>
 
             {/* Logo Demoinn centrado debajo del texto */}
-            <div className="relative flex justify-center items-center -mt-12">
-              <div className="relative h-32 w-32 md:h-36 md:w-36 flex items-center justify-center z-10 -ml-10">
+            <div className="relative flex justify-center lg:justify-end items-center -mt-12 overflow-visible">
+              <div className="relative h-36 w-36 md:h-40 md:w-40 lg:h-44 lg:w-44 flex items-center justify-center z-10 about-logo-container">
                 <Image
                   src="/solar/icons/Demoinnlogo.svg"
                   alt="Demoinn Logo"
-                  width={144}
-                  height={144}
+                  width={176}
+                  height={176}
                   className="object-contain"
+                  style={{ width: 'auto', height: 'auto' }}
                 />
               </div>
             </div>
