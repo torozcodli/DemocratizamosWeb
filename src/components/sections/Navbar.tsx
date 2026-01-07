@@ -31,9 +31,9 @@ export function Navbar() {
       )}
     >
       <div className="w-full">
-        <div className="max-w-7xl mx-auto pl-0 pr-4 sm:pr-6 md:pl-8 md:pr-8 lg:pl-0 lg:pr-8">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-10 xl:px-8">
           <div className="flex h-16 md:h-20 items-center justify-between">
-            <div className="lg:ml-0">
+            <div>
               <Logo />
             </div>
             <div className="hidden xl:flex xl:items-center xl:gap-4">
@@ -72,7 +72,7 @@ export function Navbar() {
         </div>
         {isOpen && (
           <div className="xl:hidden py-4 space-y-4 border-t border-navy-200/30 mt-2">
-            <div className="max-w-7xl mx-auto pl-0 pr-4 sm:pr-6 md:pl-8 md:pr-8 lg:pl-0 lg:pr-8">
+            <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-10 xl:px-8">
               {siteConfig.navigation.map((item) => {
                 const isActive = item.href === '#inicio';
                 return (

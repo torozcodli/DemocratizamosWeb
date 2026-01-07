@@ -5,7 +5,7 @@ import HeroIllustration from '@/components/landing/HeroIllustration';
 
 export function Hero() {
   return (
-    <section id="inicio" className="pt-8 md:pt-12 lg:pt-14 pb-8 md:pb-12 lg:pb-16 relative w-full overflow-x-clip">
+    <section id="inicio" className="pt-6 sm:pt-8 md:pt-12 xl:pt-14 pb-6 sm:pb-8 md:pb-12 xl:pb-16 relative w-full overflow-x-clip">
       {/* Background */}
       <div
         className="absolute inset-0 z-0"
@@ -21,44 +21,40 @@ export function Hero() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto pl-0 pr-4 sm:pr-6 md:pl-8 md:pr-8 lg:pl-0 lg:pr-8 relative z-10">
-        <div className="hero-section-container grid grid-cols-1 md:grid-cols-2 md:gap-10 lg:gap-14 items-center relative min-h-[500px] md:min-h-[600px] lg:min-h-[700px]">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-10 xl:px-8 relative z-10">
+        <div className="hero-section-container grid grid-cols-1 md:grid-cols-2 md:gap-8 lg:gap-10 xl:gap-14 items-center relative min-h-[500px] md:min-h-[550px] xl:min-h-[700px]">
           {/* Lado izquierdo */}
-          <div className="space-y-6 md:space-y-6 lg:space-y-8 lg:-ml-18 z-10">
-            <h1 className="hero-title font-inter font-extrabold text-[#1E1A49] text-[48px] sm:text-[56px] md:text-[56px] lg:text-[72px] leading-[1.1] tracking-[-0.02em]">
+          <div className="space-y-4 sm:space-y-5 md:space-y-6 xl:space-y-8 xl:-ml-18 z-10 order-1 md:order-1">
+            <h1 className="hero-title font-inter font-extrabold text-[#1E1A49] text-[clamp(32px,8vw,56px)] md:text-[clamp(40px,5vw,56px)] xl:text-[72px] leading-[1.1] tracking-[-0.02em]">
               Transformamos
-              <br className="hidden md:block" />
+              <br className="hidden xl:block" />
               <span className="whitespace-nowrap">vidas a través de</span>
-              <br className="hidden md:block" />
+              <br className="hidden xl:block" />
               <span className="whitespace-nowrap">
                 <span>la </span>
                 <span className="tech-word text-[#6F74C9]">Tecnología.</span>
               </span>
             </h1>
 
-            <p className="hero-description mt-4 max-w-[52ch] text-left text-[22px] md:text-[20px] lg:text-[22px] font-medium leading-normal text-[#1E1A49]/85">
-              Llevando habilidades digitales a quienes más
-              <br className="hidden md:block" />
-              las necesitan, contribuyendo así a la inclusión
-              <br className="hidden md:block" />
-              digital y disminuyendo la desigualdad social.
+            <p className="hero-description mt-3 sm:mt-4 max-w-[52ch] text-left text-[clamp(16px,4vw,20px)] md:text-[clamp(17px,2.5vw,20px)] xl:text-[22px] font-medium leading-normal text-[#1E1A49]/85">
+              Llevando habilidades digitales a quienes más las necesitan, contribuyendo así a la inclusión digital y disminuyendo la desigualdad social.
             </p>
 
             <a href="https://wa.me/+5216145871758" target="_blank" rel="noopener noreferrer">
-              <Button variant="primary" className="hero-cta-button -mt-1 text-xl px-7 py-2.5">
+              <Button variant="primary" className="hero-cta-button -mt-1 text-[clamp(16px,4vw,20px)] md:text-lg xl:text-xl px-6 md:px-7 py-2 md:py-2.5">
                 {homeContent.hero.cta}
               </Button>
             </a>
           </div>
 
           {/* Lado derecho - Ilustración compuesta */}
-          <div className="relative md:absolute md:bottom-0 md:-right-8 lg:-right-8 xl:-right-16 md:w-[58%] flex items-end justify-end">
-            <HeroIllustration className="w-full max-w-[620px] md:max-w-[500px] lg:max-w-[620px] mx-auto" />
+          <div className="relative md:relative xl:absolute xl:bottom-0 xl:-right-16 md:w-full xl:w-[58%] flex items-end justify-center md:justify-end order-2 md:order-2">
+            <HeroIllustration className="w-full max-w-[400px] sm:max-w-[450px] md:max-w-[480px] lg:max-w-[520px] xl:max-w-[620px] mx-auto" />
           </div>
 
           {/* Banner WhatsApp pegado al borde derecho */}
-          <div className="hero-whatsapp-banner absolute bottom-0 right-4 md:right-6 lg:right-0 z-50">
-            <div className="lg:translate-x-[calc(100%-3rem)]">
+          <div className="hero-whatsapp-banner absolute bottom-0 right-4 md:right-6 xl:right-0 z-50 order-3">
+            <div className="xl:translate-x-[calc(100%-3rem)]">
               <WhatsAppBanner />
             </div>
           </div>
