@@ -17,9 +17,9 @@ export function About() {
       }}
     >
       <Container>
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16 items-center">
+        <div className="grid gap-10 md:grid-cols-2 md:gap-12 lg:gap-16 items-center">
           {/* Columna izquierda - TechCard */}
-          <div className="order-1 lg:order-1">
+          <div className="order-1 md:order-1">
             <TechCard title={homeContent.about.card.title}>
               <p className="mb-4">{homeContent.about.card.text}</p>
               <p>{homeContent.about.card.additional}</p>
@@ -27,9 +27,9 @@ export function About() {
           </div>
 
           {/* Columna derecha - Heading + Logo + Línea */}
-          <div className="order-2 lg:order-2 space-y-8 relative overflow-visible">
+          <div className="order-2 md:order-2 space-y-8 relative overflow-visible">
             {/* Heading grande */}
-            <h2 className="text-center lg:text-right text-[44px] md:text-[48px] lg:text-[72px] font-bold leading-[1.1] tracking-[-0.02em]">
+            <h2 className="text-center md:text-center xl:text-right text-[44px] md:text-[48px] lg:text-[56px] xl:text-[72px] font-bold leading-[1.1] tracking-[-0.02em]">
               <span className="text-[#E7ECFF]">Creemos en el </span>
               <span className="tech-word text-[#B9C0FF]">poder</span>
               <span className="text-[#E7ECFF]"> de la </span>
@@ -38,7 +38,7 @@ export function About() {
             </h2>
 
             {/* Logo Demoinn centrado debajo del texto */}
-            <div className="relative flex justify-center lg:justify-end items-center -mt-12 overflow-visible">
+            <div className="relative flex justify-center md:justify-center xl:justify-end items-center -mt-12 overflow-visible">
               <div className="relative h-36 w-36 md:h-40 md:w-40 lg:h-44 lg:w-44 flex items-center justify-center z-10 about-logo-container">
                 <Image
                   src="/solar/icons/Demoinnlogo.svg"
@@ -52,7 +52,7 @@ export function About() {
             </div>
 
             {/* Línea horizontal pegada a la derecha */}
-            <div className="relative hidden lg:block -mt-18">
+            <div className="relative hidden xl:block -mt-18">
               <div className="absolute right-0 h-[2px] bg-[#9DACFD] top-1/2 -translate-y-1/2 w-[70%] max-w-[500px]" style={{ right: '-13rem' }}>
                 {/* Nodo circular al inicio de la línea (izquierda) - igual al de DecorativeLine */}
                 <svg

@@ -160,8 +160,10 @@
   /* Desktop - NO aplicar ningún estilo, dejar que las clases de Tailwind funcionen */
   
   
-  /* Fix para tablet (768-1279px) - NO afectar desktop (xl+) */
+  /* Fix para elementos visuales de la ilustración en tablet (768-1279px) - NO afectar desktop (xl+) */
+  /* NOTA: NO usar !important en layout/tipografía - dejar que Tailwind controle responsive */
   @media (min-width: 768px) and (max-width: 1279px) {
+    /* Solo ajustes visuales de elementos de la ilustración, NO layout del Hero */
     .hero-laptop-container {
       transform: scale(0.56) translateY(-3cm) translateX(-3cm) !important;
     }
@@ -177,34 +179,17 @@
     .hero-whatsapp-banner {
       transform: translateX(-4.5cm) !important;
     }
-    .hero-section-container {
-      min-height: 500px !important;
-    }
-    .hero-title {
-      margin-left: 4.5cm !important;
-    }
-    .hero-description {
-      margin-left: 4.5cm !important;
-      max-width: 45ch !important;
-      line-height: 1.5 !important;
-    }
-    .hero-cta-button {
-      transform: scale(0.9) !important;
-      margin-left: 4.5cm !important;
-    }
+    /* ELIMINADO: margin-left, max-width, line-height, transform en .hero-title, .hero-description, .hero-cta-button */
+    /* Estas propiedades bloqueaban el responsive de Tailwind - ahora Tailwind controla el layout */
   }
   
-  /* Ajustes específicos para iPad más pequeños (768-1023px) */
+  /* Ajustes específicos para iPad más pequeños (768-1023px) - solo elementos visuales */
   @media (min-width: 768px) and (max-width: 1023px) {
     .hero-laptop-container {
       transform: scale(0.55) translateY(-3cm) translateX(-3cm) !important;
     }
-    .hero-section-container {
-      min-height: 450px !important;
-    }
-    .hero-cta-button {
-      transform: scale(0.85) !important;
-    }
+    /* ELIMINADO: min-height, transform en .hero-section-container, .hero-cta-button */
+    /* Tailwind controla estos valores a través de las clases en el HTML */
   }
 }
 

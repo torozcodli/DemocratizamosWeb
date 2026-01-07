@@ -21,6 +21,18 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Bloquear scroll del body cuando el menú está abierto
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   return (
     <nav
       className={cn(
@@ -71,33 +83,54 @@ export function Navbar() {
           </div>
         </div>
         {isOpen && (
-          <div className="xl:hidden py-4 space-y-4 border-t border-navy-200/30 mt-2">
-            <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-10 xl:px-8">
-              {siteConfig.navigation.map((item) => {
-                const isActive = item.href === '#inicio';
-                return (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      'block text-lg font-medium transition-colors px-3 py-2 rounded-full',
-                      isActive
-                        ? 'text-navy-900 bg-lavender'
-                        : 'text-navy-900 hover:text-navy-900'
-                    )}
+          <>
+            {/* Overlay full-screen */}
+            <div className="xl:hidden fixed inset-0 bg-[#1E1A49]/95 backdrop-blur-md z-50">
+              {/* Botón cerrar arriba derecha */}
+              <div className="absolute top-4 right-4">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="h-12 w-12 rounded-full bg-indigo-200/60 hover:bg-indigo-200 flex items-center justify-center transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X size={24} className="h-6 w-6 text-indigo-950/80" />
+                </button>
+              </div>
+              
+              {/* Menú centrado verticalmente */}
+              <div className="flex flex-col items-center justify-center h-full px-4">
+                <nav className="space-y-6 text-center">
+                  {siteConfig.navigation.map((item) => {
+                    const isActive = item.href === '#inicio';
+                    return (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          'block text-2xl md:text-3xl font-medium transition-colors text-[#E1E6FD] hover:text-white',
+                          isActive && 'text-white'
+                        )}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {item.label}
+                      </a>
+                    );
+                  })}
+                  <a 
+                    href={siteConfig.cta.href} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="block mt-8"
                     onClick={() => setIsOpen(false)}
                   >
-                    {item.label}
+                    <Button variant="primary" className="text-lg md:text-xl px-8 py-3 rounded-full">
+                      {siteConfig.cta.label}
+                    </Button>
                   </a>
-                );
-              })}
-              <a href={siteConfig.cta.href} target="_blank" rel="noopener noreferrer" className="block" onClick={() => setIsOpen(false)}>
-                <Button variant="primary" className="w-full rounded-full">
-                  {siteConfig.cta.label}
-                </Button>
-              </a>
+                </nav>
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     </nav>

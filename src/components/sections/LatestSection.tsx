@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Container } from '@/components/ui/Container';
+import { cn } from '@/lib/utils/cn';
 
 const latestItems = [
   {
@@ -120,7 +121,7 @@ export function LatestSection() {
       </div>
 
       {/* Contenido */}
-      <Container className="relative z-10 pl-4 sm:pl-6 lg:pl-8 max-w-none">
+      <Container className="relative z-10">
         {/* Título */}
         <h2 className="text-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] mb-16 md:mb-20">
           <span
@@ -131,12 +132,15 @@ export function LatestSection() {
           </span>
         </h2>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 lg:gap-20 max-w-[88rem] mx-auto px-4 sm:px-0">
+        {/* Cards - 2 arriba + 1 abajo en tablet */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-14 lg:gap-20 max-w-[88rem] mx-auto px-4 sm:px-0">
           {latestItems.map((item, index) => (
             <div
               key={index}
-              className="rounded-[42px] overflow-hidden shadow-lg bg-white flex flex-col"
+              className={cn(
+                "rounded-[42px] overflow-hidden shadow-lg bg-white flex flex-col",
+                index === 2 && "md:col-span-2 md:max-w-[600px] md:mx-auto xl:col-span-1 xl:max-w-none"
+              )}
             >
               {/* Parte superior: Imagen con overlay */}
               <div className="relative h-[175px] lg:h-[195px]">
