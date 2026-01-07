@@ -141,5 +141,101 @@
       transform: translateX(-16rem) !important;
     }
   }
+
+  /* Fix para hacer el señor más chico solo en iPad - NO afectar desktop */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .hero-man-container {
+      width: 68% !important;
+      transform: translateX(calc(2px + 1.5cm - 1cm - 3cm)) scale(0.95) !important;
+      bottom: calc(40% + 6.5cm - 15px - 1cm + 3px) !important;
+    }
+  }
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    .hero-man-container {
+      width: 70% !important;
+      transform: translateX(calc(2px - 1cm - 3cm)) scale(0.95) !important;
+      bottom: calc(35% + 6.5cm - 15px - 1cm + 3px) !important;
+    }
+  }
+  /* Desktop - NO aplicar ningún estilo, dejar que las clases de Tailwind funcionen */
+  
+  
+  /* Fix para laptop y backplate más chicos solo en iPad */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .hero-laptop-container {
+      transform: scale(0.56) translateY(-3cm) translateX(-3cm) !important;
+    }
+    .hero-backplate-container {
+      transform: scale(0.65) translateX(calc(-25% - 2cm - 5px)) !important;
+    }
+    .hero-circle-small {
+      transform: translateY(1.5cm) translateX(-1cm) scale(0.9) !important;
+    }
+    .hero-circle-large {
+      transform: scale(0.55) translateX(6cm) !important;
+    }
+    .hero-whatsapp-banner {
+      transform: translateX(-4.5cm) !important;
+    }
+  }
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    .hero-laptop-container {
+      transform: scale(0.57) translateY(-3cm) translateX(-3cm) !important;
+    }
+    .hero-backplate-container {
+      transform: scale(0.7) translateX(calc(-20% - 2cm - 5px)) !important;
+    }
+    .hero-circle-small {
+      transform: translateY(1.5cm) translateX(-1cm) scale(0.9) !important;
+    }
+    .hero-circle-large {
+      transform: scale(0.6) translateX(6cm) !important;
+    }
+    .hero-whatsapp-banner {
+      transform: translateX(-4.5cm) !important;
+    }
+  }
+  
+  /* Fix para texto más chico y más a la derecha solo en iPad */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .hero-section-container {
+      min-height: 450px !important;
+    }
+    .hero-title {
+      font-size: 2.5rem !important;
+      line-height: 1.1 !important;
+      margin-left: 4.5cm !important;
+    }
+    .hero-description {
+      font-size: 0.95rem !important;
+      margin-left: 4.5cm !important;
+      max-width: 45ch !important;
+      line-height: 1.5 !important;
+    }
+    .hero-cta-button {
+      transform: scale(0.85) !important;
+      margin-left: 4.5cm !important;
+    }
+  }
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    .hero-section-container {
+      min-height: 500px !important;
+    }
+    .hero-title {
+      font-size: 2.75rem !important;
+      line-height: 1.1 !important;
+      margin-left: 4.5cm !important;
+    }
+    .hero-description {
+      font-size: 1rem !important;
+      margin-left: 4.5cm !important;
+      max-width: 45ch !important;
+      line-height: 1.5 !important;
+    }
+    .hero-cta-button {
+      transform: scale(0.9) !important;
+      margin-left: 4.5cm !important;
+    }
+  }
 }
 
