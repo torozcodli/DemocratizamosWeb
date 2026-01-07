@@ -25,18 +25,18 @@ export function Hero() {
         <div className="hero-section-container grid grid-cols-1 md:grid-cols-2 md:gap-8 lg:gap-10 xl:gap-14 items-center relative min-h-[500px] md:min-h-[550px] xl:min-h-[700px]">
           {/* Lado izquierdo */}
           <div className="space-y-4 sm:space-y-5 md:space-y-6 xl:space-y-8 xl:-ml-18 z-10 order-1 md:order-1">
-            <h1 className="hero-title font-inter font-extrabold text-[#1E1A49] text-[clamp(32px,8vw,56px)] md:text-[clamp(40px,5vw,56px)] xl:text-[72px] leading-[1.1] tracking-[-0.02em]">
+            <h1 className="hero-title font-inter font-extrabold text-[#1E1A49] text-[42px] sm:text-[50px] md:text-[52px] lg:text-[56px] xl:text-[72px] leading-[1.1] tracking-[-0.02em]">
               Transformamos
               <br className="hidden xl:block" />
-              <span className="whitespace-nowrap">vidas a través de</span>
+              <span className="xl:whitespace-nowrap">vidas a través de</span>
               <br className="hidden xl:block" />
-              <span className="whitespace-nowrap">
+              <span className="xl:whitespace-nowrap">
                 <span>la </span>
                 <span className="tech-word text-[#6F74C9]">Tecnología.</span>
               </span>
             </h1>
 
-            <p className="hero-description mt-3 sm:mt-4 max-w-[52ch] text-left text-[clamp(16px,4vw,20px)] md:text-[clamp(17px,2.5vw,20px)] xl:text-[22px] font-medium leading-normal text-[#1E1A49]/85">
+            <p className="hero-description mt-3 sm:mt-4 max-w-[60ch] text-left text-[18px] md:text-[18px] lg:text-[18px] xl:text-[22px] font-medium leading-relaxed break-normal text-[#1E1A49]/85">
               Llevando habilidades digitales a quienes más las necesitan, contribuyendo así a la inclusión digital y disminuyendo la desigualdad social.
             </p>
 
@@ -48,8 +48,8 @@ export function Hero() {
           </div>
 
           {/* Lado derecho - Ilustración compuesta */}
-          <div className="relative md:relative xl:absolute xl:bottom-0 xl:-right-16 md:w-full xl:w-[58%] flex items-end justify-center md:justify-end order-2 md:order-2">
-            <HeroIllustration className="w-full max-w-[400px] sm:max-w-[450px] md:max-w-[480px] lg:max-w-[520px] xl:max-w-[620px] mx-auto" />
+          <div className="relative w-full flex items-end justify-end md:static xl:absolute xl:bottom-0 xl:-right-16 xl:w-[58%] order-2 md:order-2">
+            <HeroIllustration className="w-full max-w-[420px] md:max-w-[460px] lg:max-w-[520px] xl:max-w-[620px] mx-auto" />
           </div>
 
           {/* Banner WhatsApp pegado al borde derecho */}
