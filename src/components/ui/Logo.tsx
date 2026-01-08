@@ -9,7 +9,7 @@ interface LogoProps {
 export function Logo({ className }: LogoProps) {
   return (
     <Link
-      href="#inicio"
+      href="/inicio"
       className={cn(
         'flex items-center hover:opacity-90 transition-opacity',
         className

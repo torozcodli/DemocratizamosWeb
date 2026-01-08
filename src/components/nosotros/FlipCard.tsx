@@ -8,7 +8,6 @@ interface FlipCardProps {
   frontTitle: string;
   frontText: string;
   backText: string;
-  pixelPosition: 'top-left' | 'bottom-right';
 }
 
 export function FlipCard({
@@ -16,7 +15,6 @@ export function FlipCard({
   frontTitle,
   frontText,
   backText,
-  pixelPosition,
 }: FlipCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -25,30 +23,8 @@ export function FlipCard({
       {/* Sello circular */}
       <SealBadge text={sealText} />
 
-      {/* Decoración de pixeles */}
-      <div
-        className={`absolute ${
-          pixelPosition === 'top-left'
-            ? 'top-0 left-0 -translate-x-2 -translate-y-2'
-            : 'bottom-0 right-0 translate-x-2 translate-y-2'
-        } pointer-events-none z-20`}
-      >
-        <div className="flex flex-col gap-1">
-          {[0, 1, 2].map((row) => (
-            <div key={row} className="flex gap-1">
-              {[0, 1].map((col) => (
-                <div
-                  key={col}
-                  className="w-2 h-2 md:w-3 md:h-3 bg-[#CED8F4] opacity-60"
-                ></div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* Card wrapper con perspective */}
-      <div className="perspective-[1200px] w-full h-[520px] md:h-[520px]">
+      <div className="perspective-[1200px] w-full h-[480px] sm:h-[520px] md:h-[560px] lg:h-[580px]">
         <div
           className="relative w-full h-full transition-transform duration-[600ms] ease-in-out [transform-style:preserve-3d]"
           style={{
@@ -56,7 +32,7 @@ export function FlipCard({
           }}
         >
           {/* FRONT - Card naranja */}
-          <div className="absolute inset-0 [backface-visibility:hidden] rounded-[28px] bg-[#FF8948] p-8 md:p-10 flex flex-col items-center justify-between">
+          <div className="absolute inset-0 [backface-visibility:hidden] rounded-[28px] bg-[#FF8948] p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col items-center justify-between">
             <div className="flex-1 flex flex-col items-center justify-center space-y-6 text-center">
               <h3 className="text-[clamp(22px,2.6vw,34px)] font-tech font-extrabold tracking-tight text-[#1E1A49]">
                 {frontTitle}
@@ -71,7 +47,7 @@ export function FlipCard({
 
             <button
               onClick={() => setIsFlipped(true)}
-              className="rounded-full bg-[#1E1A49] text-white px-8 py-3 text-[clamp(14px,1.6vw,18px)] font-medium hover:bg-[#27225a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6F74C9] focus-visible:ring-offset-2"
+              className="rounded-full bg-[#1E1A49] text-white px-8 py-3 text-[clamp(16px,1.8vw,20px)] font-medium hover:bg-[#27225a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6F74C9] focus-visible:ring-offset-2"
               aria-expanded={isFlipped}
             >
               Conoce más
@@ -80,7 +56,7 @@ export function FlipCard({
 
           {/* BACK - Card lavanda */}
           <div
-            className="absolute inset-0 [backface-visibility:hidden] rounded-[28px] bg-[#CED8F4] p-8 md:p-10 flex flex-col items-center justify-center"
+            className="absolute inset-0 [backface-visibility:hidden] rounded-[28px] bg-[#CED8F4] p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col items-center justify-center"
             style={{ transform: 'rotateY(180deg)' }}
           >
             {/* Botón cerrar X */}

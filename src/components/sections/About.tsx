@@ -46,7 +46,7 @@ export function About() {
                   width={176}
                   height={176}
                   className="object-contain"
-                  style={{ width: 'auto', height: 'auto' }}
+                  style={{ width: '100%', height: '100%' }}
                 />
               </div>
             </div>

@@ -6,12 +6,12 @@ export const siteConfig = {
   phone: '+52 614 141 8003',
   email: 'hola@democratizamoslanovacion.org',
   navigation: [
-    { label: 'Inicio', href: '#inicio' },
-    { label: 'Nosotros', href: '#nosotros' },
-    { label: 'Programas', href: '#programas' },
-    { label: 'Blog/Publicaciones', href: '#blog' },
-    { label: 'Herramientas', href: '#herramientas' },
-    { label: 'Academia', href: '#academia' },
+    { label: 'Inicio', href: '/inicio' },
+    { label: 'Nosotros', href: '/nosotros' },
+    { label: 'Programas', href: '#' },
+    { label: 'Blog/Publicaciones', href: '#' },
+    { label: 'Herramientas', href: '#' },
+    { label: 'Academia', href: '#' },
   ],
   cta: {
     label: 'Contacto',

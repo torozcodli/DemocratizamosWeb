@@ -50,15 +50,23 @@ export function Navbar() {
             </div>
             <div className="hidden xl:flex xl:items-center xl:gap-4">
               {siteConfig.navigation.map((item, index) => {
-                const isActive = item.href === '#inicio';
+                const isActive = item.href === '/inicio';
+                const isDisabled = item.href === '#';
                 return (
                   <a
-                    key={item.href}
+                    key={`${item.label}-${index}`}
                     href={item.href}
+                    onClick={(e) => {
+                      if (isDisabled) {
+                        e.preventDefault();
+                      }
+                    }}
                     className={cn(
                       'text-lg font-medium transition-all relative px-4 py-2 rounded-full',
                       isActive
                         ? 'text-navy-900 bg-lavender hover:ring-2 hover:ring-[#6F74C9] hover:ring-offset-2'
+                        : isDisabled
+                        ? 'text-navy-900/50 cursor-not-allowed'
                         : 'text-navy-900 hover:text-navy-900 hover:bg-lavender/50 hover:ring-2 hover:ring-[#6F74C9] hover:ring-offset-2'
                     )}
                   >
@@ -100,17 +108,28 @@ export function Navbar() {
               {/* Menú centrado verticalmente */}
               <div className="flex flex-col items-center justify-center h-full px-4">
                 <nav className="space-y-6 text-center">
-                  {siteConfig.navigation.map((item) => {
-                    const isActive = item.href === '#inicio';
+                  {siteConfig.navigation.map((item, index) => {
+                    const isActive = item.href === '/inicio';
+                    const isDisabled = item.href === '#';
                     return (
                       <a
-                        key={item.href}
+                        key={`${item.label}-${index}`}
                         href={item.href}
+                        onClick={(e) => {
+                          if (isDisabled) {
+                            e.preventDefault();
+                          } else {
+                            setIsOpen(false);
+                          }
+                        }}
                         className={cn(
-                          'block text-2xl md:text-3xl font-medium transition-colors text-[#E1E6FD] hover:text-white',
-                          isActive && 'text-white'
+                          'block text-2xl md:text-3xl font-medium transition-colors',
+                          isActive
+                            ? 'text-white'
+                            : isDisabled
+                            ? 'text-[#E1E6FD]/50 cursor-not-allowed'
+                            : 'text-[#E1E6FD] hover:text-white'
                         )}
-                        onClick={() => setIsOpen(false)}
                       >
                         {item.label}
                       </a>

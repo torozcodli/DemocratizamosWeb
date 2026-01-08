@@ -24,7 +24,7 @@ export function Hero() {
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-10 xl:px-8 relative z-10">
         <div className="hero-section-container grid grid-cols-1 md:grid-cols-[1.15fr_0.85fr] md:gap-8 lg:gap-10 xl:gap-14 items-center relative min-h-[500px] md:min-h-[550px] xl:min-h-[700px]">
           {/* Lado izquierdo */}
-          <div className="space-y-4 sm:space-y-5 md:space-y-6 xl:space-y-8 xl:-ml-18 z-10 order-1 md:order-1">
+          <div className="space-y-4 sm:space-y-5 md:space-y-6 xl:space-y-8 xl:-ml-18 z-10 order-1 md:order-1 lg:pr-10 xl:pr-14">
             <h1 className="hero-title font-inter font-extrabold text-[#1E1A49] text-[42px] sm:text-[50px] md:text-[52px] lg:text-[56px] xl:text-[72px] leading-[1.1] tracking-[-0.02em]">
               Transformamos
               <br className="hidden xl:block" />
@@ -36,7 +36,7 @@ export function Hero() {
               </span>
             </h1>
 
-            <p className="hero-description mt-3 sm:mt-4 max-w-[60ch] text-left text-[18px] md:text-[18px] lg:text-[18px] xl:text-[22px] font-medium leading-relaxed break-normal text-[#1E1A49]/85">
+            <p className="hero-description mt-3 sm:mt-4 max-w-[42ch] md:max-w-[44ch] lg:max-w-[48ch] text-left text-[18px] md:text-[18px] lg:text-[18px] xl:text-[22px] font-medium leading-relaxed text-[#1E1A49]/85 text-pretty">
               Llevando habilidades digitales a quienes más las necesitan, contribuyendo así a la inclusión digital y disminuyendo la desigualdad social.
             </p>
 
