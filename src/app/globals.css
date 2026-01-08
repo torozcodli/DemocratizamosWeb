@@ -191,5 +191,33 @@
     /* ELIMINADO: min-height, transform en .hero-section-container, .hero-cta-button */
     /* Tailwind controla estos valores a través de las clases en el HTML */
   }
+
+  /* Nosotros Hero - Mobile/Tablet: valores seguros sin overflow */
+  @media (max-width: 1279px) {
+    .nosotros-circle-blue {
+      transform: translateX(calc(-33.33% + 0.5rem)) translateY(calc(33.33% - 0.5rem)) !important;
+    }
+    .nosotros-tecontamos {
+      transform: translateX(-50%) !important;
+    }
+  }
+
+  /* Nosotros Hero - Desktop (xl+) */
+  @media (min-width: 1280px) {
+    .nosotros-tecontamos {
+      transform: translate(calc(-50% - 2cm), calc(-50% + 2cm)) !important;
+    }
+    .nosotros-circle-blue {
+      transform: translateX(calc(-33.33% + 2cm)) translateY(calc(33.33% - 2cm)) !important;
+    }
+    .nosotros-whatsapp-banner {
+      transform: translateX(1cm) !important;
+    }
+  }
+
+  /* Flip Card Animation */
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
 }
 
