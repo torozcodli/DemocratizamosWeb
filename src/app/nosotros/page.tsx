@@ -3,6 +3,9 @@ import { Footer } from '@/components/sections/Footer';
 import { NosotrosHero } from '@/components/nosotros/NosotrosHero';
 import { NosotrosQuienesSomos } from '@/components/nosotros/NosotrosQuienesSomos';
 import { MissionVisionSection } from '@/components/nosotros/MissionVisionSection';
+import { ValoresSection } from '@/components/nosotros/ValoresSection';
+import { PrincipiosAccionSection } from '@/components/nosotros/PrincipiosAccionSection';
+import { UbicacionSection } from '@/components/nosotros/UbicacionSection';
 
 export default function NosotrosPage() {
   return (
@@ -11,7 +14,9 @@ export default function NosotrosPage() {
       <NosotrosHero />
       <NosotrosQuienesSomos />
       <MissionVisionSection />
-      {/* Aquí irán las demás secciones de la página Nosotros */}
+      <ValoresSection />
+      <PrincipiosAccionSection />
+      <UbicacionSection />
       <Footer />
     </main>
   );
