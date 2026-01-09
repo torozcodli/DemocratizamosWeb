@@ -23,14 +23,14 @@ export function PrincipiosAccionSection() {
   return (
     <section className="relative w-full bg-[#D7DCFF] pt-16 md:pt-20 lg:pt-24 pb-8 md:pb-10 lg:pb-12 overflow-x-clip">
       {/* Decoración full-bleed (línea + círculo grande) */}
-      <div className="pointer-events-none absolute inset-0 z-0">
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         {/* Línea horizontal desde el borde izquierdo - mucho más corta */}
         <div className="absolute left-0 top-[240px] md:top-[280px] lg:top-[320px] w-[356px] md:w-[396px] lg:w-[436px] h-[4px] bg-[#1E1A49]">
           <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-5 h-5 rounded-full bg-[#1E1A49]"></div>
         </div>
 
-        {/* Gran círculo lavanda en esquina inferior izquierda - traspasa hacia el footer */}
-        <div className="absolute left-[-179px] bottom-[-250px] w-[880px] h-[880px] rounded-full bg-[#C8D0FF]/60 hidden lg:block"></div>
+        {/* Gran círculo lavanda en esquina inferior izquierda - cortado en el borde de la sección */}
+        <div className="absolute left-[-179px] bottom-[-180px] w-[880px] h-[880px] rounded-full bg-[#C8D0FF]/60 hidden lg:block"></div>
       </div>
 
       {/* Contenido */}

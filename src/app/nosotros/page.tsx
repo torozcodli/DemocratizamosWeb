@@ -6,6 +6,8 @@ import { MissionVisionSection } from '@/components/nosotros/MissionVisionSection
 import { ValoresSection } from '@/components/nosotros/ValoresSection';
 import { PrincipiosAccionSection } from '@/components/nosotros/PrincipiosAccionSection';
 import { UbicacionSection } from '@/components/nosotros/UbicacionSection';
+import { TeamSection } from '@/components/nosotros/TeamSection';
+import { ResultsSection } from '@/components/nosotros/ResultsSection';
 
 export default function NosotrosPage() {
   return (
@@ -16,6 +18,8 @@ export default function NosotrosPage() {
       <MissionVisionSection />
       <ValoresSection />
       <PrincipiosAccionSection />
+      <TeamSection />
+      <ResultsSection />
       <UbicacionSection />
       <Footer />
     </main>

@@ -1,0 +1,94 @@
+import { TeamCard } from './TeamCard';
+
+const teamMembers = [
+  {
+    frameSrc: '/solar/icons/Pau.svg',
+    role: 'Representante Legal.',
+    name: 'Paulina García',
+    linkedinUrl: '#',
+  },
+  {
+    frameSrc: '/solar/icons/Dani.svg',
+    role: 'Director',
+    name: 'Daniel García',
+    linkedinUrl: '#',
+  },
+  {
+    frameSrc: '/solar/icons/Santi.svg',
+    role: 'Coordinador de Operaciones',
+    name: 'Daniel Santiesteban',
+    linkedinUrl: '#',
+  },
+  {
+    frameSrc: '/solar/icons/Tomy.svg',
+    role: 'Ing. Automatización de Procesos',
+    name: 'Tomás Orozco',
+    linkedinUrl: '#',
+  },
+  {
+    frameSrc: '/solar/icons/Xochitl.svg',
+    role: 'Coordinadora Administrativa',
+    name: 'Xochitl Castillo',
+    linkedinUrl: '#',
+  },
+];
+
+export function TeamSection() {
+  // Split into two rows: first 3, then last 2
+  const firstRow = teamMembers.slice(0, 3);
+  const secondRow = teamMembers.slice(3, 5);
+
+  return (
+    <section className="w-full bg-gradient-to-b from-[#090828] via-[#131039] to-[#1D194C] py-16 md:py-20 overflow-x-clip">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+        {/* Title */}
+        <h2 className="text-center text-white text-4xl md:text-5xl font-tech-alt font-extrabold tracking-tight mb-12 md:mb-16">
+          Nuestro equipo.
+        </h2>
+
+        {/* Desktop/Tablet Layout: 3 cards top, 2 cards bottom centered */}
+        <div className="hidden md:block">
+          {/* First Row: 3 cards */}
+          {/* Desktop (lg+): 3 columns, Tablet (md): 2 columns */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12 mb-10 md:mb-12">
+            {firstRow.map((member) => (
+              <TeamCard
+                key={member.name}
+                frameSrc={member.frameSrc}
+                role={member.role}
+                name={member.name}
+                linkedinUrl={member.linkedinUrl}
+              />
+            ))}
+          </div>
+
+          {/* Second Row: 2 cards centered */}
+          <div className="flex justify-center gap-10 md:gap-12 flex-wrap">
+            {secondRow.map((member) => (
+              <TeamCard
+                key={member.name}
+                frameSrc={member.frameSrc}
+                role={member.role}
+                name={member.name}
+                linkedinUrl={member.linkedinUrl}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Layout: 1 column vertical */}
+        <div className="md:hidden space-y-10">
+          {teamMembers.map((member) => (
+            <TeamCard
+              key={member.name}
+              frameSrc={member.frameSrc}
+              role={member.role}
+              name={member.name}
+              linkedinUrl={member.linkedinUrl}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

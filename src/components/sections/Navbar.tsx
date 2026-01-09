@@ -46,48 +46,48 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-10 xl:px-8">
           <div className="flex h-16 md:h-20 items-center justify-between">
             <div>
-              <Logo />
-            </div>
+            <Logo />
+          </div>
             <div className="hidden xl:flex xl:items-center xl:gap-4">
-              {siteConfig.navigation.map((item, index) => {
+            {siteConfig.navigation.map((item, index) => {
                 const isActive = item.href === '/inicio';
                 const isDisabled = item.href === '#';
-                return (
-                  <a
+              return (
+                <a
                     key={`${item.label}-${index}`}
-                    href={item.href}
+                  href={item.href}
                     onClick={(e) => {
                       if (isDisabled) {
                         e.preventDefault();
                       }
                     }}
-                    className={cn(
-                      'text-lg font-medium transition-all relative px-4 py-2 rounded-full',
-                      isActive
-                        ? 'text-navy-900 bg-lavender hover:ring-2 hover:ring-[#6F74C9] hover:ring-offset-2'
+                  className={cn(
+                    'text-lg font-medium transition-all relative px-4 py-2 rounded-full',
+                    isActive
+                      ? 'text-navy-900 bg-lavender hover:ring-2 hover:ring-[#6F74C9] hover:ring-offset-2'
                         : isDisabled
                         ? 'text-navy-900/50 cursor-not-allowed'
-                        : 'text-navy-900 hover:text-navy-900 hover:bg-lavender/50 hover:ring-2 hover:ring-[#6F74C9] hover:ring-offset-2'
-                    )}
-                  >
-                    {item.label}
-                  </a>
-                );
-              })}
+                      : 'text-navy-900 hover:text-navy-900 hover:bg-lavender/50 hover:ring-2 hover:ring-[#6F74C9] hover:ring-offset-2'
+                  )}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
               <a href={siteConfig.cta.href} target="_blank" rel="noopener noreferrer">
-                <Button variant="primary" className="ml-2 mr-4">
-                  {siteConfig.cta.label}
-                </Button>
+              <Button variant="primary" className="ml-2 mr-4">
+                {siteConfig.cta.label}
+              </Button>
               </a>
-            </div>
-            <button
+          </div>
+          <button
               className="xl:hidden h-12 w-12 rounded-full bg-indigo-200/60 hover:bg-indigo-200 flex items-center justify-center transition-colors"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label="Toggle menu"
-              aria-expanded={isOpen}
-            >
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+            aria-expanded={isOpen}
+          >
               {isOpen ? <X size={24} className="h-6 w-6 text-indigo-950/80" /> : <Menu size={24} className="h-6 w-6 text-indigo-950/80" />}
-            </button>
+          </button>
           </div>
         </div>
         {isOpen && (
@@ -130,11 +130,11 @@ export function Navbar() {
                             ? 'text-[#E1E6FD]/50 cursor-not-allowed'
                             : 'text-[#E1E6FD] hover:text-white'
                         )}
-                      >
-                        {item.label}
-                      </a>
-                    );
-                  })}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
                   <a 
                     href={siteConfig.cta.href} 
                     target="_blank" 
@@ -143,12 +143,12 @@ export function Navbar() {
                     onClick={() => setIsOpen(false)}
                   >
                     <Button variant="primary" className="text-lg md:text-xl px-8 py-3 rounded-full">
-                      {siteConfig.cta.label}
-                    </Button>
+                {siteConfig.cta.label}
+              </Button>
                   </a>
                 </nav>
               </div>
-            </div>
+          </div>
           </>
         )}
       </div>
