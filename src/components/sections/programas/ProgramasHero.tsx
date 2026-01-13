@@ -88,7 +88,7 @@ export function ProgramasHero() {
       </div>
 
       {/* WhatsApp Banner flotante */}
-      <div className="absolute bottom-4 md:bottom-8 lg:bottom-12 right-0 md:right-0 lg:right-0 z-20" style={{ transform: 'translateX(38px)' }}>
+      <div className="absolute bottom-4 md:bottom-8 lg:bottom-12 right-0 md:right-0 lg:right-0 z-20" style={{ transform: 'translateX(15px)' }}>
         <WhatsAppBanner />
       </div>
     </section>

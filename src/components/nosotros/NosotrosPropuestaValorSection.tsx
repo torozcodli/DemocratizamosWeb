@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { Container } from '@/components/ui/Container';
 
 const cards = [
   {
@@ -58,10 +57,18 @@ export function NosotrosPropuestaValorSection() {
       {/* Overlay oscuro */}
       <div className="absolute inset-0 z-[1] bg-[#1D194C]/80 backdrop-blur-[1px]"></div>
 
+      {/* Decoración línea (fuera de márgenes, desde el borde izquierdo) */}
+      <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden">
+        {/* Línea horizontal desde el borde izquierdo - igual a Principios de acción */}
+        <div className="hidden lg:block absolute left-0 top-[340px] md:top-[380px] lg:top-[420px] w-[356px] md:w-[396px] lg:w-[436px] h-[4px] bg-white">
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-5 h-5 rounded-full bg-white"></div>
+        </div>
+      </div>
+
       {/* Contenido */}
       <div className="relative z-10">
-        <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_1.25fr] gap-10 lg:gap-14 items-start">
+        <div className="w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_1.25fr] gap-10 lg:gap-14 items-start pl-6 md:pl-10 lg:pl-12 pr-6 md:pr-10 lg:pr-12">
             {/* Columna izquierda - Título + Texto */}
             <div className="relative">
               {/* Título */}
@@ -75,16 +82,8 @@ export function NosotrosPropuestaValorSection() {
                 <span className="text-white">y servicios</span>
               </h2>
 
-              {/* Línea decorativa con punto (solo desktop) */}
-              <div className="hidden lg:block relative mt-8">
-                <div className="relative h-px bg-white/35 w-full max-w-[400px]">
-                  {/* Círculo/punto en medio */}
-                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full border border-white/60 bg-white/20 shadow-[0_0_12px_rgba(255,255,255,0.25)]"></div>
-                </div>
-              </div>
-
               {/* Texto descriptivo */}
-              <p className="mt-8 text-white text-base md:text-lg leading-relaxed max-w-[90%]">
+              <p className="mt-12 md:mt-14 lg:mt-16 text-white text-base md:text-lg leading-relaxed max-w-[90%]">
                 Nuestra propuesta de valor se estructura en seis componentes principales, diseñados para atender las diferentes necesidades y oportunidades de la población en Chihuahua en materia de{' '}
                 <strong className="font-bold">inclusión digital y desarrollo tecnológico</strong>.
               </p>
@@ -95,7 +94,7 @@ export function NosotrosPropuestaValorSection() {
               {cards.map((card) => (
                 <div
                   key={card.number}
-                  className="bg-[#4A4784]/80 rounded-3xl p-6 shadow-[0_12px_30px_rgba(0,0,0,0.25)] min-h-[210px] flex flex-col"
+                  className="bg-[#4A4784]/80 rounded-3xl p-6 shadow-[0_12px_30px_rgba(0,0,0,0.25)] min-h-[280px] md:min-h-[300px] flex flex-col"
                 >
                   {/* Badge circular con número */}
                   <div className="w-10 h-10 rounded-full border border-white/60 text-white flex items-center justify-center text-sm font-bold mb-4 shrink-0">
@@ -115,7 +114,7 @@ export function NosotrosPropuestaValorSection() {
               ))}
             </div>
           </div>
-        </Container>
+        </div>
       </div>
     </section>
   );
