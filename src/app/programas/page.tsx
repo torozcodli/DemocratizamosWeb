@@ -1,5 +1,6 @@
 import { Navbar } from '@/components/sections/Navbar';
 import { ProgramasHero } from '@/components/sections/programas/ProgramasHero';
+import { NosotrosPropuestaValorSection } from '@/components/nosotros/NosotrosPropuestaValorSection';
 import { Footer } from '@/components/sections/Footer';
 
 export default function ProgramasPage() {
@@ -7,6 +8,7 @@ export default function ProgramasPage() {
     <main className="w-full overflow-x-clip">
       <Navbar />
       <ProgramasHero />
+      <NosotrosPropuestaValorSection />
       {/* Aquí irán las demás secciones de Programas */}
       <Footer />
     </main>
