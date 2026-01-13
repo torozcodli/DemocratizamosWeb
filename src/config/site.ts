@@ -8,7 +8,7 @@ export const siteConfig = {
   navigation: [
     { label: 'Inicio', href: '/inicio' },
     { label: 'Nosotros', href: '/nosotros' },
-    { label: 'Programas', href: '#' },
+    { label: 'Programas', href: '/programas' },
     { label: 'Blog/Publicaciones', href: '#' },
     { label: 'Herramientas', href: '#' },
     { label: 'Academia', href: '#' },

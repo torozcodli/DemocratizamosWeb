@@ -7,10 +7,12 @@ import { Logo } from '@/components/ui/Logo';
 import { Button } from '@/components/ui/Button';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils/cn';
+import { usePathname } from 'next/navigation';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,10 +52,10 @@ export function Navbar() {
           </div>
             <div className="hidden xl:flex xl:items-center xl:gap-4">
             {siteConfig.navigation.map((item, index) => {
-                const isActive = item.href === '/inicio';
+                const isActive = item.href === pathname;
                 const isDisabled = item.href === '#';
               return (
-                <a
+                <Link
                     key={`${item.label}-${index}`}
                   href={item.href}
                     onClick={(e) => {
@@ -71,7 +73,7 @@ export function Navbar() {
                   )}
                 >
                   {item.label}
-                </a>
+                </Link>
               );
             })}
               <a href={siteConfig.cta.href} target="_blank" rel="noopener noreferrer">
@@ -109,10 +111,10 @@ export function Navbar() {
               <div className="flex flex-col items-center justify-center h-full px-4">
                 <nav className="space-y-6 text-center">
                   {siteConfig.navigation.map((item, index) => {
-                    const isActive = item.href === '/inicio';
+                    const isActive = item.href === pathname;
                     const isDisabled = item.href === '#';
                     return (
-                      <a
+                      <Link
                         key={`${item.label}-${index}`}
                         href={item.href}
                         onClick={(e) => {
@@ -132,7 +134,7 @@ export function Navbar() {
                         )}
                 >
                   {item.label}
-                </a>
+                </Link>
               );
             })}
                   <a 
