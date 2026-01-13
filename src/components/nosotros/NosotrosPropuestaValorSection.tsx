@@ -59,9 +59,9 @@ export function NosotrosPropuestaValorSection() {
 
       {/* Decoración línea (fuera de márgenes, desde el borde izquierdo) */}
       <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden">
-        {/* Línea horizontal desde el borde izquierdo - igual a Principios de acción */}
-        <div className="hidden lg:block absolute left-0 top-[340px] md:top-[380px] lg:top-[420px] w-[356px] md:w-[396px] lg:w-[436px] h-[4px] bg-white">
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-5 h-5 rounded-full bg-white"></div>
+        {/* Línea horizontal desde el borde izquierdo - morada */}
+        <div className="hidden lg:block absolute left-0 top-[340px] md:top-[380px] lg:top-[420px] w-[356px] md:w-[396px] lg:w-[436px] h-[4px] bg-[#9DACFD]">
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-5 h-5 rounded-full bg-[#9DACFD]"></div>
         </div>
       </div>
 
