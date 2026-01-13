@@ -3,6 +3,7 @@ import { ProgramasHero } from '@/components/sections/programas/ProgramasHero';
 import { NosotrosPropuestaValorSection } from '@/components/nosotros/NosotrosPropuestaValorSection';
 import { NosotrosTestimonioVideoSection } from '@/components/nosotros/NosotrosTestimonioVideoSection';
 import { ProgramasModeloIntervencionSection } from '@/components/sections/programas/ProgramasModeloIntervencionSection';
+import { ProgramasProyectosSection } from '@/components/sections/programas/ProgramasProyectosSection';
 import { Footer } from '@/components/sections/Footer';
 
 export default function ProgramasPage() {
@@ -12,6 +13,7 @@ export default function ProgramasPage() {
       <ProgramasHero />
       <NosotrosPropuestaValorSection />
       <NosotrosTestimonioVideoSection />
+      <ProgramasProyectosSection />
       <ProgramasModeloIntervencionSection />
       {/* Aquí irán las demás secciones de Programas */}
       <Footer />
