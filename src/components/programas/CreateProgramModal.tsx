@@ -60,9 +60,12 @@ export function CreateProgramModal({
     .omit({ imageUrl: true })
     .passthrough(); // Permitir campos adicionales (como imageUrl) sin validar
 
-  type EditProgramInput = Omit<CreateProgramInput, 'imageUrl'> & {
+  type EditProgramInput = Omit<CreateProgramInput, 'imageUrl' | 'content'> & {
     imageUrl?: string;
+    content: string | string[]; // Permitir string o array para el formulario
   };
+
+  type FormInput = (CreateProgramInput & { content: string | string[] }) | EditProgramInput;
 
   const {
     register,
@@ -75,12 +78,12 @@ export function CreateProgramModal({
     trigger,
     getValues,
     unregister,
-  } = useForm<CreateProgramInput | EditProgramInput>({
+  } = useForm<FormInput>({
     // En modo edición, usar el schema de edición que omite imageUrl
     // En modo creación, usar el schema normal que requiere imageUrl
     resolver: isEditMode 
-      ? zodResolver(editProgramSchema)
-      : zodResolver(createProgramSchema),
+      ? zodResolver(editProgramSchema) as any
+      : zodResolver(createProgramSchema) as any,
     mode: 'onSubmit', // Solo validar al enviar
     shouldUnregister: false, // Mantener valores al desregistrar
     defaultValues: programToEdit
@@ -92,11 +95,11 @@ export function CreateProgramModal({
           info: programToEdit.info,
           order: programToEdit.order,
           status: programToEdit.status,
-        }
+        } as FormInput
       : {
           status: 'published',
           content: '',
-        },
+        } as FormInput,
   });
 
   // Cargar datos del programa a editar cuando se abre el modal
@@ -210,7 +213,7 @@ export function CreateProgramModal({
     }
   };
 
-  const onSubmit = async (data: CreateProgramInput | EditProgramInput) => {
+  const onSubmit = async (data: FormInput) => {
     // En modo edición, limpiar cualquier error de imageUrl antes de procesar
     if (isEditMode) {
       clearErrors('imageUrl');
@@ -472,10 +475,6 @@ export function CreateProgramModal({
                     Si no cambias la imagen, se mantendrá la actual automáticamente
                   </p>
                   {/* NO mostrar error de imageUrl en modo edición - se maneja manualmente */}
-                  {/* Forzar que el error nunca se muestre en modo edición */}
-                  {false && errors.imageUrl && (
-                    <p className="mt-1 text-sm text-red-600">{errors.imageUrl.message}</p>
-                  )}
                 </div>
               ) : (
                 // En modo creación, usar react-hook-form normalmente

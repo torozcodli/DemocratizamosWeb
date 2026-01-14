@@ -152,7 +152,7 @@ export class ProgramController {
     }
 
     // Actualizar campos (excluyendo slug que se maneja arriba)
-    const { slug, ...updateData } = validated;
+    const { slug: _, ...updateData } = validated as any;
     Object.assign(program, updateData);
     await program.save();
 
