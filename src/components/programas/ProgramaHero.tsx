@@ -9,7 +9,7 @@ export function ProgramaHero({ programa }: ProgramaHeroProps) {
   return (
     <section className="relative w-full pb-8 sm:pb-12">
       <div className="relative w-full overflow-hidden">
-        <div className="relative aspect-video w-full">
+        <div className="relative aspect-[16/7] w-full">
           <Image
             src={programa.imageSrc}
             alt={programa.title}

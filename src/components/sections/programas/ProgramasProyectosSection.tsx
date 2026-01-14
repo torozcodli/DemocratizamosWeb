@@ -1,14 +1,24 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 import { Container } from '@/components/ui/Container';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { PROGRAMAS } from '@/data/programas';
+import { AddProgramButton } from '@/components/programas/AddProgramButton';
+import { CreateProgramModal } from '@/components/programas/CreateProgramModal';
+
+interface Programa {
+  _id: string;
+  title: string;
+  slug: string;
+  shortDescription: string;
+  imageUrl: string;
+}
 
 // Componente helper para la card
-function ProyectoCard({ programa, className = '' }: { programa: typeof PROGRAMAS[0]; className?: string }) {
+function ProyectoCard({ programa, className = '' }: { programa: Programa; className?: string }) {
   return (
     <div className={className}>
       {/* Frame tipo ventana */}
@@ -28,7 +38,7 @@ function ProyectoCard({ programa, className = '' }: { programa: typeof PROGRAMAS
         {/* Área de imagen */}
         <div className="relative aspect-video w-full">
           <Image
-            src={programa.imageSrc}
+            src={programa.imageUrl}
             alt={programa.title}
             fill
             className="object-cover"
@@ -66,9 +76,31 @@ function ProyectoCard({ programa, className = '' }: { programa: typeof PROGRAMAS
 
 export function ProgramasProyectosSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { data: session } = useSession();
+  const [programs, setPrograms] = useState<Programa[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetchPrograms();
+  }, []);
+
+  const fetchPrograms = async () => {
+    try {
+      const response = await fetch('/api/programas');
+      if (response.ok) {
+        const data = await response.json();
+        setPrograms(data);
+      }
+    } catch (error) {
+      console.error('Error fetching programs:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Duplicar programas para crear efecto de carrusel infinito
-  const programasDuplicados = [...PROGRAMAS, ...PROGRAMAS, ...PROGRAMAS];
+  const programasDuplicados = [...programs, ...programs, ...programs];
 
   const scroll = (direction: 'left' | 'right') => {
     if (!containerRef.current) return;
@@ -115,25 +147,51 @@ export function ProgramasProyectosSection() {
             <ChevronRight className="w-6 h-6 text-[#1D194C]" />
           </button>
 
-          {/* Carrusel (infinito con los 4 programas) */}
-          <div
-            ref={containerRef}
-            className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide"
-            style={{
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-            }}
-          >
-            {programasDuplicados.map((programa, index) => (
-              <ProyectoCard
-                key={`${programa.slug}-${index}`}
-                programa={programa}
-                className="snap-center shrink-0 w-[280px] sm:w-[320px] lg:w-[calc(25%-24px)] flex flex-col"
-              />
-            ))}
-          </div>
+          {/* Carrusel */}
+          {isLoading ? (
+            <div className="text-center py-12 text-[#1D194C]/60">
+              <p>Cargando programas...</p>
+            </div>
+          ) : programasDuplicados.length > 0 ? (
+            <div
+              ref={containerRef}
+              className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide"
+              style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              }}
+            >
+              {programasDuplicados.map((programa, index) => (
+                <ProyectoCard
+                  key={`${programa._id}-${index}`}
+                  programa={programa}
+                  className="snap-center shrink-0 w-[280px] sm:w-[320px] lg:w-[calc(25%-24px)] flex flex-col"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-[#1D194C]/60">
+              <p>No hay programas disponibles</p>
+            </div>
+          )}
         </div>
+
+        {/* Botón + para admin (debajo del carrusel) */}
+        {session?.user?.isAdmin && (
+          <div className="flex justify-center mt-8">
+            <AddProgramButton onClick={() => setIsModalOpen(true)} />
+          </div>
+        )}
       </Container>
+
+      {/* Modal de creación */}
+      <CreateProgramModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={() => {
+          fetchPrograms();
+        }}
+      />
     </section>
   );
 }
