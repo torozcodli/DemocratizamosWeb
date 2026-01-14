@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Orbitron, Tektur } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { SessionProvider } from '@/components/providers/SessionProvider';
 import { siteConfig } from '@/config/site';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -50,7 +51,9 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${inter.variable} ${orbitron.variable} ${tektur.variable} ${inter.className}`}>
-        <ThemeProvider>{children}</ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );
