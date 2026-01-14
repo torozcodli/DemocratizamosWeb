@@ -2,34 +2,13 @@
 
 import { useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-
-const proyectos = [
-  {
-    title: 'Inclusión digital',
-    description: 'Transformamos vidas a través de la tecnología en Chihuahua.',
-    image: '/images/Proyecto_InclusionDigital.jpg',
-  },
-  {
-    title: 'Desigualdad Reducida',
-    description: 'Aprovechamos tecnología para disminuir la desigualdad en recursos.',
-    image: '/images/500.jpg',
-  },
-  {
-    title: 'Transformación Social',
-    description: 'Impulsamos proyectos que mejoran la calidad de vida comunitaria.',
-    image: '/images/CapacitacionCiber.jpg',
-  },
-  {
-    title: 'Tecnología accesible',
-    description: 'Facilitamos el acceso a herramientas digitales para todos.',
-    image: '/images/Proyecto_TecnologiaAccesible.jpg',
-  },
-];
+import { PROGRAMAS } from '@/data/programas';
 
 // Componente helper para la card
-function ProyectoCard({ proyecto, className = '' }: { proyecto: typeof proyectos[0]; className?: string }) {
+function ProyectoCard({ programa, className = '' }: { programa: typeof PROGRAMAS[0]; className?: string }) {
   return (
     <div className={className}>
       {/* Frame tipo ventana */}
@@ -49,8 +28,8 @@ function ProyectoCard({ proyecto, className = '' }: { proyecto: typeof proyectos
         {/* Área de imagen */}
         <div className="relative aspect-video w-full">
           <Image
-            src={proyecto.image}
-            alt={proyecto.title}
+            src={programa.imageSrc}
+            alt={programa.title}
             fill
             className="object-cover"
             sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 25vw"
@@ -64,21 +43,22 @@ function ProyectoCard({ proyecto, className = '' }: { proyecto: typeof proyectos
       <div className="mt-6 space-y-4">
         {/* Título */}
         <h3 className="text-[#1D194C] font-tech font-extrabold text-2xl leading-tight">
-          {proyecto.title}
+          {programa.title}
         </h3>
 
         {/* Descripción */}
         <p className="text-[#1D194C]/70 leading-relaxed text-base">
-          {proyecto.description}
+          {programa.shortDescription}
         </p>
 
         {/* Botón */}
-        <button
-          onClick={() => {}}
-          className="rounded-full px-6 py-3 bg-[#E68956] text-white font-semibold hover:bg-[#D67A45] transition-colors"
+        <Link
+          href={`/programas/${programa.slug}`}
+          className="inline-block rounded-full px-6 py-3 bg-[#E68956] text-white font-semibold hover:bg-[#D67A45] transition-colors"
+          aria-label={`Más información sobre ${programa.title}`}
         >
           Más información
-        </button>
+        </Link>
       </div>
     </div>
   );
@@ -87,8 +67,8 @@ function ProyectoCard({ proyecto, className = '' }: { proyecto: typeof proyectos
 export function ProgramasProyectosSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Duplicar proyectos para crear efecto de carrusel infinito
-  const proyectosDuplicados = [...proyectos, ...proyectos, ...proyectos];
+  // Duplicar programas para crear efecto de carrusel infinito
+  const programasDuplicados = [...PROGRAMAS, ...PROGRAMAS, ...PROGRAMAS];
 
   const scroll = (direction: 'left' | 'right') => {
     if (!containerRef.current) return;
@@ -135,7 +115,7 @@ export function ProgramasProyectosSection() {
             <ChevronRight className="w-6 h-6 text-[#1D194C]" />
           </button>
 
-          {/* Carrusel (infinito con los 4 proyectos) */}
+          {/* Carrusel (infinito con los 4 programas) */}
           <div
             ref={containerRef}
             className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide"
@@ -144,10 +124,10 @@ export function ProgramasProyectosSection() {
               msOverflowStyle: 'none',
             }}
           >
-            {proyectosDuplicados.map((proyecto, index) => (
+            {programasDuplicados.map((programa, index) => (
               <ProyectoCard
-                key={`${proyecto.title}-${index}`}
-                proyecto={proyecto}
+                key={`${programa.slug}-${index}`}
+                programa={programa}
                 className="snap-center shrink-0 w-[280px] sm:w-[320px] lg:w-[calc(25%-24px)] flex flex-col"
               />
             ))}
