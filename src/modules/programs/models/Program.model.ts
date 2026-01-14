@@ -55,10 +55,17 @@ const ProgramSchema = new Schema<IProgram>(
 );
 
 // Indexes
-ProgramSchema.index({ slug: 1 });
+// Note: slug already has unique: true which creates an index automatically
+// Only add compound index for status and order
 ProgramSchema.index({ status: 1, order: 1 });
 
-const Program: Model<IProgram> =
-  mongoose.models.Program || mongoose.model<IProgram>('Program', ProgramSchema);
+// Ensure model is only compiled once
+let Program: Model<IProgram>;
+
+if (mongoose.models.Program) {
+  Program = mongoose.models.Program as Model<IProgram>;
+} else {
+  Program = mongoose.model<IProgram>('Program', ProgramSchema);
+}
 
 export default Program;

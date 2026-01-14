@@ -3,11 +3,11 @@
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Container } from '@/components/ui/Container';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { AddProgramButton } from '@/components/programas/AddProgramButton';
-import { CreateProgramModal } from '@/components/programas/CreateProgramModal';
 
 interface Programa {
   _id: string;
@@ -76,10 +76,10 @@ function ProyectoCard({ programa, className = '' }: { programa: Programa; classN
 
 export function ProgramasProyectosSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const { data: session } = useSession();
   const [programs, setPrograms] = useState<Programa[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -89,19 +89,35 @@ export function ProgramasProyectosSection() {
   const fetchPrograms = async () => {
     try {
       setError(null);
-      const response = await fetch('/api/programas');
+      setIsLoading(true);
+      console.log('[ProgramasProyectosSection] Fetching programs from /api/programas');
+      
+      const response = await fetch('/api/programas', {
+        cache: 'no-store', // Asegurar que siempre se obtenga la versión más reciente
+      });
+      
+      console.log('[ProgramasProyectosSection] Response status:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
-        setPrograms(data || []);
+        console.log('[ProgramasProyectosSection] Received programs:', data.length);
+        setPrograms(Array.isArray(data) ? data : []);
       } else {
-        const errorData = await response.json().catch(() => ({ error: 'Error desconocido' }));
-        setError(errorData.error || `Error ${response.status}: ${response.statusText}`);
-        console.error('Error fetching programs:', response.status, errorData);
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch {
+          errorData = { error: `Error ${response.status}: ${response.statusText}` };
+        }
+        
+        const errorMessage = errorData.error || errorData.details || `Error ${response.status}: ${response.statusText}`;
+        setError(errorMessage);
+        console.error('[ProgramasProyectosSection] Error response:', response.status, errorData);
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Error al cargar programas';
       setError(errorMessage);
-      console.error('Error fetching programs:', error);
+      console.error('[ProgramasProyectosSection] Fetch error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -198,19 +214,10 @@ export function ProgramasProyectosSection() {
         {/* Botón + para admin (debajo del carrusel) */}
         {session?.user?.isAdmin && (
           <div className="flex justify-center mt-8">
-            <AddProgramButton onClick={() => setIsModalOpen(true)} />
+            <AddProgramButton onClick={() => router.push('/admin/programas')} />
           </div>
         )}
       </Container>
-
-      {/* Modal de creación */}
-      <CreateProgramModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSuccess={() => {
-          fetchPrograms();
-        }}
-      />
     </section>
   );
 }

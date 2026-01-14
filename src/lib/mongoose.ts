@@ -15,20 +15,29 @@ async function connectDB() {
   // Validar MONGODB_URI solo cuando se intenta conectar (runtime, no build time)
   const MONGODB_URI = process.env.MONGODB_URI;
   if (!MONGODB_URI) {
-    throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+    const error = new Error('Please define the MONGODB_URI environment variable inside .env.local');
+    console.error('[connectDB] MONGODB_URI is not defined');
+    throw error;
   }
 
   if (cached.conn) {
+    console.log('[connectDB] Using cached connection');
     return cached.conn;
   }
 
   if (!cached.promise) {
+    console.log('[connectDB] Creating new connection to MongoDB');
     const opts = {
       bufferCommands: false,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongooseInstance) => {
+      console.log('[connectDB] Successfully connected to MongoDB');
       return mongooseInstance;
+    }).catch((error) => {
+      console.error('[connectDB] Failed to connect to MongoDB:', error.message);
+      cached.promise = null;
+      throw error;
     }) as any;
   }
 
@@ -36,7 +45,9 @@ async function connectDB() {
     cached.conn = await cached.promise;
   } catch (e) {
     cached.promise = null;
-    throw e;
+    const error = e instanceof Error ? e : new Error(String(e));
+    console.error('[connectDB] Error awaiting connection:', error.message);
+    throw error;
   }
 
   return cached.conn;
