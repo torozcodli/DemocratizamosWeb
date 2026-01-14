@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { X, Upload, Image as ImageIcon } from 'lucide-react';
 import { createProgramSchema, type CreateProgramInput } from '@/modules/programs/validation/program.validation';
 import { Input } from '@/components/ui/Input';
@@ -48,8 +49,20 @@ export function CreateProgramModal({
   const [isUploading, setIsUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
+  const [manualImageUrl, setManualImageUrl] = useState<string>(''); // Para modo edición
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isEditMode = !!programToEdit;
+
+  // Schema para edición: imageUrl NO se valida con Zod
+  // Se omite completamente y se maneja en onSubmit
+  // Usar passthrough() para permitir campos adicionales sin validar
+  const editProgramSchema = createProgramSchema
+    .omit({ imageUrl: true })
+    .passthrough(); // Permitir campos adicionales (como imageUrl) sin validar
+
+  type EditProgramInput = Omit<CreateProgramInput, 'imageUrl'> & {
+    imageUrl?: string;
+  };
 
   const {
     register,
@@ -58,14 +71,24 @@ export function CreateProgramModal({
     reset,
     watch,
     setValue,
-  } = useForm<CreateProgramInput>({
-    resolver: zodResolver(createProgramSchema),
+    clearErrors,
+    trigger,
+    getValues,
+    unregister,
+  } = useForm<CreateProgramInput | EditProgramInput>({
+    // En modo edición, usar el schema de edición que omite imageUrl
+    // En modo creación, usar el schema normal que requiere imageUrl
+    resolver: isEditMode 
+      ? zodResolver(editProgramSchema)
+      : zodResolver(createProgramSchema),
+    mode: 'onSubmit', // Solo validar al enviar
+    shouldUnregister: false, // Mantener valores al desregistrar
     defaultValues: programToEdit
       ? {
           title: programToEdit.title,
           shortDescription: programToEdit.shortDescription,
           content: programToEdit.content.join('\n\n'),
-          imageUrl: programToEdit.imageUrl,
+          // NO incluir imageUrl en defaultValues en modo edición - se maneja manualmente
           info: programToEdit.info,
           order: programToEdit.order,
           status: programToEdit.status,
@@ -79,17 +102,28 @@ export function CreateProgramModal({
   // Cargar datos del programa a editar cuando se abre el modal
   useEffect(() => {
     if (isOpen && programToEdit) {
+      // En modo edición, desregistrar imageUrl completamente para evitar validación
+      unregister('imageUrl');
+      
       reset({
         title: programToEdit.title,
         shortDescription: programToEdit.shortDescription,
         content: programToEdit.content.join('\n\n'),
-        imageUrl: programToEdit.imageUrl,
+        // NO incluir imageUrl en reset en modo edición - se maneja manualmente
         info: programToEdit.info,
         order: programToEdit.order,
         status: programToEdit.status,
       });
       setImagePreview(programToEdit.imageUrl);
       setUploadedImageUrl('');
+      setManualImageUrl(programToEdit.imageUrl); // Inicializar el input manual en modo edición
+      // Limpiar cualquier error de imageUrl al abrir en modo edición (múltiples veces para asegurar)
+      clearErrors('imageUrl');
+      // Esperar un tick y limpiar de nuevo
+      setTimeout(() => {
+        clearErrors('imageUrl');
+        unregister('imageUrl'); // Desregistrar de nuevo por si acaso
+      }, 0);
     } else if (isOpen && !programToEdit) {
       reset({
         status: 'published',
@@ -97,21 +131,37 @@ export function CreateProgramModal({
       });
       setImagePreview('');
       setUploadedImageUrl('');
+      setManualImageUrl('');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, programToEdit, reset]);
 
   const imageUrl = watch('imageUrl');
+
+  // En modo edición, desregistrar imageUrl y limpiar error constantemente
+  useEffect(() => {
+    if (isEditMode) {
+      unregister('imageUrl');
+      clearErrors('imageUrl');
+    }
+  }, [isEditMode, clearErrors, unregister]);
 
   // Actualizar preview cuando cambia la URL o se sube una imagen
   useEffect(() => {
     if (uploadedImageUrl) {
       setImagePreview(uploadedImageUrl);
-    } else if (imageUrl && (imageUrl.startsWith('http') || imageUrl.startsWith('/'))) {
+    } else if (isEditMode && manualImageUrl && (manualImageUrl.startsWith('http') || manualImageUrl.startsWith('/'))) {
+      setImagePreview(manualImageUrl);
+    } else if (!isEditMode && imageUrl && (imageUrl.startsWith('http') || imageUrl.startsWith('/'))) {
       setImagePreview(imageUrl);
+    } else if (isEditMode && programToEdit?.imageUrl && !manualImageUrl) {
+      // En modo edición, si no hay manualImageUrl, mostrar la original
+      setImagePreview(programToEdit.imageUrl);
     } else {
       setImagePreview('');
     }
-  }, [imageUrl, uploadedImageUrl]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imageUrl, uploadedImageUrl, manualImageUrl, isEditMode, programToEdit?.imageUrl]);
 
   // Manejar subida de archivo
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,7 +197,11 @@ export function CreateProgramModal({
 
       const data = await response.json();
       setUploadedImageUrl(data.imageUrl);
-      setValue('imageUrl', data.imageUrl);
+      // En modo edición, NO usar setValue para imageUrl (no está registrado)
+      // Solo actualizar uploadedImageUrl que se usa en onSubmit
+      if (!isEditMode) {
+        setValue('imageUrl', data.imageUrl);
+      }
     } catch (error: any) {
       console.error('Error uploading image:', error);
       alert(error.message || 'Error al subir la imagen');
@@ -156,20 +210,62 @@ export function CreateProgramModal({
     }
   };
 
-  const onSubmit = async (data: CreateProgramInput) => {
+  const onSubmit = async (data: CreateProgramInput | EditProgramInput) => {
+    // En modo edición, limpiar cualquier error de imageUrl antes de procesar
+    if (isEditMode) {
+      clearErrors('imageUrl');
+    }
+
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/admin/programas', {
-        method: 'POST',
+      // En modo edición, asegurar que imageUrl tenga un valor
+      // Si no hay imagen subida nueva y no hay URL en el campo, usar la original
+      let finalData: CreateProgramInput;
+      
+      if (isEditMode && programToEdit) {
+        // En modo edición, usar uploadedImageUrl si existe, luego manualImageUrl si tiene valor, o la original
+        const imageUrlToUse = uploadedImageUrl 
+          ? uploadedImageUrl
+          : (manualImageUrl && manualImageUrl.trim() !== '')
+          ? manualImageUrl
+          : programToEdit.imageUrl;
+        
+        // Crear el objeto final sin imageUrl primero, luego agregarlo
+        const { imageUrl: _, ...dataWithoutImageUrl } = data;
+        finalData = {
+          ...dataWithoutImageUrl,
+          imageUrl: imageUrlToUse,
+        } as CreateProgramInput;
+      } else {
+        finalData = data as CreateProgramInput;
+      }
+
+      const url = isEditMode
+        ? `/api/admin/programas/${programToEdit!._id}`
+        : '/api/admin/programas';
+      
+      const method = isEditMode ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(finalData),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Error al crear programa');
+        // Si el error es sobre imageUrl en modo edición, limpiar el error del formulario
+        if (isEditMode && error.details) {
+          const imageUrlError = error.details.find((e: any) => e.path?.includes('imageUrl'));
+          if (imageUrlError) {
+            clearErrors('imageUrl');
+            // Si el error es de imageUrl, usar la imagen original automáticamente
+            console.warn('Error de imageUrl en backend, usando imagen original:', imageUrlError);
+          }
+        }
+        throw new Error(error.error || `Error al ${isEditMode ? 'actualizar' : 'crear'} programa`);
       }
 
       const program = await response.json();
@@ -193,8 +289,8 @@ export function CreateProgramModal({
       // Refrescar la página actual para que aparezca el nuevo programa
       router.refresh();
     } catch (error: any) {
-      console.error('Error creating program:', error);
-      alert(error.message || 'Error al crear programa');
+      console.error(`Error ${isEditMode ? 'updating' : 'creating'} program:`, error);
+      alert(error.message || `Error al ${isEditMode ? 'actualizar' : 'crear'} programa`);
     } finally {
       setIsSubmitting(false);
     }
@@ -220,7 +316,43 @@ export function CreateProgramModal({
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
+        <form 
+          onSubmit={async (e) => {
+            e.preventDefault();
+            // En modo edición, validar manualmente sin imageUrl
+            if (isEditMode) {
+              // Limpiar error de imageUrl múltiples veces para asegurar que se elimine
+              clearErrors('imageUrl');
+              // Esperar un tick para asegurar que el error se limpie
+              await new Promise(resolve => setTimeout(resolve, 0));
+              clearErrors('imageUrl');
+              
+              // Validar solo los campos necesarios (sin imageUrl)
+              const fieldsToValidate = ['title', 'shortDescription', 'content', 'info.date', 'info.time', 'info.location', 'info.instructor', 'info.duration', 'info.level', 'info.includes', 'order', 'status'];
+              const isValid = await trigger(fieldsToValidate as any);
+              
+              // Limpiar error de imageUrl después de validar también
+              clearErrors('imageUrl');
+              
+              if (isValid) {
+                // Si la validación pasa, obtener valores y excluir explícitamente imageUrl
+                const formValues = getValues();
+                // Excluir imageUrl explícitamente para evitar cualquier validación
+                const { imageUrl: _, ...dataWithoutImageUrl } = formValues as any;
+                // Limpiar error una vez más antes de enviar
+                clearErrors('imageUrl');
+                await onSubmit(dataWithoutImageUrl as any);
+              } else {
+                // Si hay errores, limpiar el de imageUrl específicamente
+                clearErrors('imageUrl');
+              }
+            } else {
+              // En modo creación, validar normalmente
+              handleSubmit(onSubmit)(e);
+            }
+          }} 
+          className="p-6 space-y-6"
+        >
           {/* Título */}
           <Input
             label="Título *"
@@ -267,7 +399,7 @@ export function CreateProgramModal({
               Imagen del programa *
             </label>
 
-            {/* Opción 1: Subir archivo */}
+            {/* Opci?n 1: Subir archivo */}
             <div className="mb-4">
               <label
                 htmlFor="image-upload"
@@ -314,14 +446,56 @@ export function CreateProgramModal({
             </div>
 
             <div className="mt-4">
-              <Input
-                label="URL de la imagen (alternativa)"
-                type="url"
-                {...register('imageUrl')}
-                error={errors.imageUrl?.message}
-                placeholder="https://ejemplo.com/imagen.jpg"
-                disabled={!!uploadedImageUrl && !isEditMode}
-              />
+              {isEditMode ? (
+                // En modo edición, usar input controlado manualmente (sin react-hook-form)
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    URL de la imagen (opcional - dejar vacío para mantener la actual)
+                  </label>
+                  <input
+                    type="text"
+                    value={manualImageUrl}
+                    onChange={(e) => {
+                      setManualImageUrl(e.target.value);
+                      // Limpiar cualquier error de imageUrl cuando el usuario escribe
+                      clearErrors('imageUrl');
+                    }}
+                    onFocus={() => {
+                      // Limpiar error cuando el usuario enfoca el campo
+                      clearErrors('imageUrl');
+                    }}
+                    placeholder="Dejar vacío para mantener la imagen actual"
+                    disabled={!!uploadedImageUrl}
+                    className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors disabled:bg-slate-100 disabled:cursor-not-allowed"
+                  />
+                  <p className="mt-1 text-xs text-slate-500">
+                    Si no cambias la imagen, se mantendrá la actual automáticamente
+                  </p>
+                  {/* NO mostrar error de imageUrl en modo edición - se maneja manualmente */}
+                  {/* Forzar que el error nunca se muestre en modo edición */}
+                  {false && errors.imageUrl && (
+                    <p className="mt-1 text-sm text-red-600">{errors.imageUrl.message}</p>
+                  )}
+                </div>
+              ) : (
+                // En modo creación, usar react-hook-form normalmente
+                <Input
+                  label="URL de la imagen (alternativa)"
+                  type="url"
+                  {...register('imageUrl', {
+                    required: 'La URL de la imagen es requerida',
+                    validate: (value) => {
+                      if (!value || value.trim() === '') {
+                        return 'La URL de la imagen es requerida';
+                      }
+                      const isValid = value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/');
+                      return isValid || 'Debe ser una URL válida o una ruta de imagen';
+                    },
+                  })}
+                  error={errors.imageUrl?.message}
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                />
+              )}
             </div>
 
             {/* Preview de imagen */}

@@ -8,6 +8,9 @@ export default withAuth(
     const token = req.nextauth.token;
     const pathname = req.nextUrl.pathname;
 
+    // Helper: Check if user is admin (combines token.isAdmin + hard check for revocation)
+    const isAdmin = (token?.isAdmin === true) && isAdminEmail(token.email as string | undefined);
+
     // Proteger rutas /admin/**
     if (pathname.startsWith('/admin')) {
       if (!token) {
@@ -16,9 +19,8 @@ export default withAuth(
         return NextResponse.redirect(signInUrl);
       }
 
-      // Verificar que sea admin
-      const email = token.email as string | undefined;
-      if (!isAdminEmail(email)) {
+      // Verificar que sea admin (usa token.isAdmin + hard check para revocación inmediata)
+      if (!isAdmin) {
         return NextResponse.redirect(new URL('/', req.url));
       }
     }
@@ -29,9 +31,8 @@ export default withAuth(
         return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
       }
 
-      // Verificar que sea admin
-      const email = token.email as string | undefined;
-      if (!isAdminEmail(email)) {
+      // Verificar que sea admin (usa token.isAdmin + hard check para revocación inmediata)
+      if (!isAdmin) {
         return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
       }
     }

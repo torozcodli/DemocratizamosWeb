@@ -14,14 +14,23 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
+    maxAge: 7 * 24 * 60 * 60, // 7 days (in seconds)
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
+      // On initial sign-in, set user data
       if (user) {
         token.id = user.id;
         token.email = user.email || '';
         token.isAdmin = isAdminEmail(user.email);
       }
+      
+      // Revalidate admin status on each request to allow immediate revocation
+      // This ensures that if ADMIN_EMAILS changes, access is revoked immediately
+      if (token.email) {
+        token.isAdmin = isAdminEmail(token.email);
+      }
+      
       return token;
     },
     async session({ session, token }) {

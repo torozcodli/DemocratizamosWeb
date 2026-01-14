@@ -27,8 +27,14 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    // Validar con Zod (parcial)
-    const validated = createProgramSchema.partial().parse(body);
+    // Validar con Zod (parcial) - pero hacer imageUrl opcional explícitamente
+    // Si imageUrl viene como string vacío, omitirlo completamente
+    const bodyToValidate = { ...body };
+    if (bodyToValidate.imageUrl === '' || bodyToValidate.imageUrl === null || bodyToValidate.imageUrl === undefined) {
+      delete bodyToValidate.imageUrl;
+    }
+    
+    const validated = createProgramSchema.partial().parse(bodyToValidate);
 
     // Actualizar programa
     const program = await ProgramController.updateProgram(id, validated, session);
