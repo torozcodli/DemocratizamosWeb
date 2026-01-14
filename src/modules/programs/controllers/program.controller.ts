@@ -10,11 +10,18 @@ export class ProgramController {
    * Lista programas publicados ordenados por order
    */
   static async listPublishedPrograms(): Promise<IProgram[]> {
-    await connectDB();
-    return Program.find({ status: 'published' })
-      .sort({ order: 1 })
-      .lean()
-      .exec();
+    try {
+      await connectDB();
+      const programs = await Program.find({ status: 'published' })
+        .sort({ order: 1 })
+        .lean()
+        .exec();
+      console.log(`[ProgramController] Found ${programs.length} published programs`);
+      return programs;
+    } catch (error) {
+      console.error('[ProgramController] Error in listPublishedPrograms:', error);
+      throw error;
+    }
   }
 
   /**

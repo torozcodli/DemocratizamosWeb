@@ -6,9 +6,17 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const programs = await ProgramController.listPublishedPrograms();
+    console.log(`[API /programas] Found ${programs.length} published programs`);
     return NextResponse.json(programs, { status: 200 });
   } catch (error) {
-    console.error('Error fetching programs:', error);
-    return NextResponse.json({ error: 'Error al obtener programas' }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+    console.error('[API /programas] Error fetching programs:', errorMessage, error);
+    return NextResponse.json(
+      { 
+        error: 'Error al obtener programas',
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+      },
+      { status: 500 }
+    );
   }
 }

@@ -80,6 +80,7 @@ export function ProgramasProyectosSection() {
   const [programs, setPrograms] = useState<Programa[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPrograms();
@@ -87,12 +88,19 @@ export function ProgramasProyectosSection() {
 
   const fetchPrograms = async () => {
     try {
+      setError(null);
       const response = await fetch('/api/programas');
       if (response.ok) {
         const data = await response.json();
-        setPrograms(data);
+        setPrograms(data || []);
+      } else {
+        const errorData = await response.json().catch(() => ({ error: 'Error desconocido' }));
+        setError(errorData.error || `Error ${response.status}: ${response.statusText}`);
+        console.error('Error fetching programs:', response.status, errorData);
       }
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Error al cargar programas';
+      setError(errorMessage);
       console.error('Error fetching programs:', error);
     } finally {
       setIsLoading(false);
@@ -151,6 +159,17 @@ export function ProgramasProyectosSection() {
           {isLoading ? (
             <div className="text-center py-12 text-[#1D194C]/60">
               <p>Cargando programas...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12 text-red-600">
+              <p className="font-semibold mb-2">Error al cargar programas</p>
+              <p className="text-sm">{error}</p>
+              <button
+                onClick={fetchPrograms}
+                className="mt-4 px-4 py-2 bg-[#E68956] text-white rounded-full hover:bg-[#D67A45] transition-colors"
+              >
+                Reintentar
+              </button>
             </div>
           ) : programasDuplicados.length > 0 ? (
             <div
