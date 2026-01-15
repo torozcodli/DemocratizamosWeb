@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
-    "seed": "tsx --env-file=.env.local src/scripts/seed-programs.ts"
+    "seed": "tsx --env-file=.env.local src/scripts/seed-programs.ts",
+    "fix-image": "tsx --env-file=.env.local src/scripts/fix-inclusion-digital-image.ts"
   },
   "repository": {
     "type": "git",

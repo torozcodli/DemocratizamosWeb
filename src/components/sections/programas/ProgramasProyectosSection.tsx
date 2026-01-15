@@ -21,17 +21,23 @@ interface Programa {
 function ProyectoCard({ programa, className = '' }: { programa: Programa; className?: string }) {
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState(programa.imageUrl);
+  const [hasTriedFallback, setHasTriedFallback] = useState(false);
 
   // Normalizar la ruta de la imagen
   useEffect(() => {
     if (programa.imageUrl) {
-      // Si la ruta no empieza con /, agregarla
       let normalizedPath = programa.imageUrl;
-      if (!normalizedPath.startsWith('http') && !normalizedPath.startsWith('/')) {
+      
+      // Si la ruta no empieza con http/https o /, agregar /
+      if (!normalizedPath.startsWith('http://') && 
+          !normalizedPath.startsWith('https://') && 
+          !normalizedPath.startsWith('/')) {
         normalizedPath = `/${normalizedPath}`;
       }
-      // Si empieza con /images pero no existe, intentar sin el prefijo
+      
       setImageSrc(normalizedPath);
+      setImageError(false);
+      setHasTriedFallback(false);
     }
   }, [programa.imageUrl]);
 
@@ -63,7 +69,17 @@ function ProyectoCard({ programa, className = '' }: { programa: Programa; classN
               unoptimized={imageSrc.startsWith('/images/') || imageSrc.startsWith('/')}
               onError={() => {
                 console.error('Error loading image:', imageSrc);
-                setImageError(true);
+                // Intentar fallback: si la imagen está en /images/programas/, intentar /images/
+                if (imageSrc.startsWith('/images/programas/') && !imageSrc.startsWith('http') && !hasTriedFallback) {
+                  const fileName = imageSrc.split('/').pop();
+                  const fallbackPath = `/images/${fileName}`;
+                  console.log('Trying fallback path:', fallbackPath);
+                  setImageSrc(fallbackPath);
+                  setHasTriedFallback(true);
+                  setImageError(false); // Resetear error para intentar el fallback
+                } else {
+                  setImageError(true);
+                }
               }}
             />
           ) : (
