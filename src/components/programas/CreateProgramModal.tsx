@@ -204,6 +204,10 @@ export function CreateProgramModal({
       // Solo actualizar uploadedImageUrl que se usa en onSubmit
       if (!isEditMode) {
         setValue('imageUrl', data.imageUrl);
+        // Limpiar cualquier error de validación después de establecer el valor
+        clearErrors('imageUrl');
+        // Trigger validation para asegurar que el campo se valide correctamente
+        trigger('imageUrl');
       }
     } catch (error: any) {
       console.error('Error uploading image:', error);
@@ -350,7 +354,13 @@ export function CreateProgramModal({
                 clearErrors('imageUrl');
               }
             } else {
-              // En modo creación, validar normalmente
+              // En modo creación, asegurar que imageUrl tenga valor si hay imagen subida
+              const formValues = getValues();
+              if (uploadedImageUrl && (!formValues.imageUrl || formValues.imageUrl.trim() === '')) {
+                setValue('imageUrl', uploadedImageUrl);
+                clearErrors('imageUrl');
+              }
+              // Validar normalmente
               handleSubmit(onSubmit)(e);
             }
           }} 
@@ -480,12 +490,17 @@ export function CreateProgramModal({
                 // En modo creación, usar react-hook-form normalmente
                 <Input
                   label="URL de la imagen (alternativa)"
-                  type="url"
+                  type="text"
                   {...register('imageUrl', {
-                    required: 'La URL de la imagen es requerida',
+                    required: uploadedImageUrl ? false : 'La URL de la imagen es requerida (o sube una imagen)',
                     validate: (value) => {
+                      // Si hay una imagen subida, no validar la URL
+                      if (uploadedImageUrl) {
+                        return true;
+                      }
+                      // Si no hay imagen subida, la URL es requerida
                       if (!value || value.trim() === '') {
-                        return 'La URL de la imagen es requerida';
+                        return 'La URL de la imagen es requerida (o sube una imagen)';
                       }
                       const isValid = value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/');
                       return isValid || 'Debe ser una URL válida o una ruta de imagen';
@@ -493,6 +508,7 @@ export function CreateProgramModal({
                   })}
                   error={errors.imageUrl?.message}
                   placeholder="https://ejemplo.com/imagen.jpg"
+                  disabled={!!uploadedImageUrl}
                 />
               )}
             </div>
