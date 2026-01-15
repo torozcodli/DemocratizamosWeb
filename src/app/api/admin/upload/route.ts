@@ -41,10 +41,39 @@ export async function POST(request: Request) {
       );
     }
 
-    // Crear directorio si no existe
+    // IMPORTANTE: En Vercel (serverless), el sistema de archivos es read-only
+    // NO se pueden escribir archivos de forma persistente
+    // Para producción, necesitas usar un servicio de almacenamiento en la nube:
+    // - Vercel Blob Storage
+    // - Cloudinary
+    // - AWS S3
+    // - Uploadthing
+    // 
+    // Por ahora, este código fallará en Vercel. Es solo para desarrollo local.
+    
+    const isVercel = process.env.VERCEL === '1';
+    
+    if (isVercel) {
+      console.error('[Upload] Attempting to write file in Vercel (not allowed)');
+      return NextResponse.json(
+        { 
+          error: 'Upload de archivos no está disponible en Vercel. Se requiere un servicio de almacenamiento en la nube.',
+          details: 'Por favor, usa una URL de imagen externa o integra un servicio como Cloudinary, S3, o Vercel Blob Storage.'
+        },
+        { status: 501 } // Not Implemented
+      );
+    }
+
+    // Solo para desarrollo local
     const uploadDir = join(process.cwd(), 'public', 'images', 'programas');
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
+    
+    try {
+      if (!existsSync(uploadDir)) {
+        await mkdir(uploadDir, { recursive: true });
+      }
+    } catch (mkdirError: any) {
+      console.error('[Upload] Error creating directory:', mkdirError.message);
+      throw new Error(`No se pudo crear el directorio de upload: ${mkdirError.message}`);
     }
 
     // Generar nombre único para el archivo
@@ -53,17 +82,34 @@ export async function POST(request: Request) {
     const filename = `${timestamp}-${sanitizedName}`;
     const filepath = join(uploadDir, filename);
 
-    // Convertir File a Buffer y guardar
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filepath, buffer);
+    try {
+      // Convertir File a Buffer y guardar
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      await writeFile(filepath, buffer);
 
-    // Retornar la URL pública de la imagen
-    const imageUrl = `/images/programas/${filename}`;
+      const imageUrl = `/images/programas/${filename}`;
+      console.log('[Upload] Image saved successfully:', { filepath, imageUrl });
 
-    return NextResponse.json({ imageUrl }, { status: 200 });
+      return NextResponse.json({ imageUrl }, { status: 200 });
+    } catch (writeError: any) {
+      console.error('[Upload] Error writing file:', writeError.message, writeError.stack);
+      throw new Error(`Error al guardar el archivo: ${writeError.message}`);
+    }
   } catch (error: any) {
-    console.error('Error uploading image:', error);
-    return NextResponse.json({ error: 'Error al subir la imagen' }, { status: 500 });
+    console.error('[Upload] Error uploading image:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+      vercel: process.env.VERCEL,
+      cwd: process.cwd(),
+    });
+    return NextResponse.json(
+      { 
+        error: 'Error al subir la imagen',
+        details: process.env.NODE_ENV === 'development' ? error.message : 'Revisa los logs del servidor'
+      },
+      { status: 500 }
+    );
   }
 }

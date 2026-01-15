@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Container } from '@/components/ui/Container';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
 import { AddProgramButton } from '@/components/programas/AddProgramButton';
 
 interface Programa {
@@ -19,6 +19,22 @@ interface Programa {
 
 // Componente helper para la card
 function ProyectoCard({ programa, className = '' }: { programa: Programa; className?: string }) {
+  const [imageError, setImageError] = useState(false);
+  const [imageSrc, setImageSrc] = useState(programa.imageUrl);
+
+  // Normalizar la ruta de la imagen
+  useEffect(() => {
+    if (programa.imageUrl) {
+      // Si la ruta no empieza con /, agregarla
+      let normalizedPath = programa.imageUrl;
+      if (!normalizedPath.startsWith('http') && !normalizedPath.startsWith('/')) {
+        normalizedPath = `/${normalizedPath}`;
+      }
+      // Si empieza con /images pero no existe, intentar sin el prefijo
+      setImageSrc(normalizedPath);
+    }
+  }, [programa.imageUrl]);
+
   return (
     <div className={className}>
       {/* Frame tipo ventana */}
@@ -36,14 +52,28 @@ function ProyectoCard({ programa, className = '' }: { programa: Programa; classN
         </div>
 
         {/* Área de imagen */}
-        <div className="relative aspect-video w-full">
-          <Image
-            src={programa.imageUrl}
-            alt={programa.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 25vw"
-          />
+        <div className="relative aspect-video w-full bg-gradient-to-br from-slate-200 to-slate-300">
+          {!imageError ? (
+            <Image
+              src={imageSrc}
+              alt={programa.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 25vw"
+              unoptimized={true}
+              onError={() => {
+                console.error('Error loading image:', imageSrc);
+                setImageError(true);
+              }}
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-200 to-slate-300">
+              <div className="text-center">
+                <ImageIcon className="w-12 h-12 text-slate-400 mx-auto mb-2" />
+                <p className="text-xs text-slate-500">{programa.title}</p>
+              </div>
+            </div>
+          )}
           {/* Degradado naranja abajo */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#E68956]/35 via-transparent to-transparent pointer-events-none"></div>
         </div>
