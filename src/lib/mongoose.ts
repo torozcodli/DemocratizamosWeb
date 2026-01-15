@@ -21,18 +21,15 @@ async function connectDB() {
   }
 
   if (cached.conn) {
-    console.log('[connectDB] Using cached connection');
     return cached.conn;
   }
 
   if (!cached.promise) {
-    console.log('[connectDB] Creating new connection to MongoDB');
     const opts = {
       bufferCommands: false,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongooseInstance) => {
-      console.log('[connectDB] Successfully connected to MongoDB');
       return mongooseInstance;
     }).catch((error) => {
       console.error('[connectDB] Failed to connect to MongoDB:', error.message);

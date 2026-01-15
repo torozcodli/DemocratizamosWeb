@@ -107,6 +107,7 @@ export function ProgramaDetalleTemplate({
               <div className="flex-1 w-full sm:w-auto text-center">
                 <Link
                   href="/programas"
+                  prefetch={false}
                   className="text-[#1D194C] hover:text-[#6F74C9] transition-colors font-medium text-sm sm:text-base"
                   aria-label="Ver todos los proyectos"
                 >
@@ -119,6 +120,7 @@ export function ProgramaDetalleTemplate({
                 {nextPrograma ? (
                   <Link
                     href={`/programas/${nextPrograma.slug}`}
+                    prefetch={false}
                     className="text-[#1D194C] hover:text-[#6F74C9] transition-colors font-medium text-sm sm:text-base inline-flex items-center gap-2"
                     aria-label={`Ir al programa siguiente: ${nextPrograma.title}`}
                   >

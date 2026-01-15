@@ -68,15 +68,13 @@ function ProyectoCard({ programa, className = '' }: { programa: Programa; classN
               sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 25vw"
               unoptimized={imageSrc.startsWith('/images/') || imageSrc.startsWith('/')}
               onError={() => {
-                console.error('Error loading image:', imageSrc);
                 // Intentar fallback: si la imagen está en /images/programas/, intentar /images/
                 if (imageSrc.startsWith('/images/programas/') && !imageSrc.startsWith('http') && !hasTriedFallback) {
                   const fileName = imageSrc.split('/').pop();
                   const fallbackPath = `/images/${fileName}`;
-                  console.log('Trying fallback path:', fallbackPath);
                   setImageSrc(fallbackPath);
                   setHasTriedFallback(true);
-                  setImageError(false); // Resetear error para intentar el fallback
+                  setImageError(false);
                 } else {
                   setImageError(true);
                 }
@@ -110,6 +108,7 @@ function ProyectoCard({ programa, className = '' }: { programa: Programa; classN
         {/* Botón */}
         <Link
           href={`/programas/${programa.slug}`}
+          prefetch={false}
           className="inline-block rounded-full px-6 py-3 bg-[#E68956] text-white font-semibold hover:bg-[#D67A45] transition-colors"
           aria-label={`Más información sobre ${programa.title}`}
         >
@@ -136,17 +135,13 @@ export function ProgramasProyectosSection() {
     try {
       setError(null);
       setIsLoading(true);
-      console.log('[ProgramasProyectosSection] Fetching programs from /api/programas');
       
       const response = await fetch('/api/programas', {
-        cache: 'no-store', // Asegurar que siempre se obtenga la versión más reciente
+        cache: 'no-store',
       });
-      
-      console.log('[ProgramasProyectosSection] Response status:', response.status);
       
       if (response.ok) {
         const data = await response.json();
-        console.log('[ProgramasProyectosSection] Received programs:', data.length);
         setPrograms(Array.isArray(data) ? data : []);
       } else {
         let errorData;

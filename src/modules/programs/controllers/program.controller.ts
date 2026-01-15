@@ -11,24 +11,12 @@ export class ProgramController {
    */
   static async listPublishedPrograms(): Promise<IProgram[]> {
     try {
-      console.log('[ProgramController] Starting listPublishedPrograms');
       await connectDB();
-      console.log('[ProgramController] Database connected, querying programs');
       
       const programs = await Program.find({ status: 'published' })
         .sort({ order: 1 })
         .lean()
         .exec();
-      
-      console.log(`[ProgramController] Found ${programs.length} published programs`);
-      
-      if (programs.length === 0) {
-        // También verificar si hay programas en total (para debugging)
-        const totalPrograms = await Program.countDocuments().exec();
-        console.log(`[ProgramController] Total programs in database: ${totalPrograms}`);
-        const draftPrograms = await Program.countDocuments({ status: 'draft' }).exec();
-        console.log(`[ProgramController] Draft programs: ${draftPrograms}`);
-      }
       
       return programs;
     } catch (error) {

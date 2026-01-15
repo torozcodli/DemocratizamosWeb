@@ -44,16 +44,6 @@ export async function POST(request: Request) {
     const apiKey = process.env.CLOUDINARY_API_KEY;
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
-    console.log('[Upload] Checking Cloudinary config:', {
-      hasCloudName: !!cloudName,
-      cloudNameValue: cloudName ? `${cloudName.substring(0, 4)}...` : 'missing',
-      hasApiKey: !!apiKey,
-      apiKeyValue: apiKey ? `${apiKey.substring(0, 4)}...` : 'missing',
-      hasApiSecret: !!apiSecret,
-      apiSecretValue: apiSecret ? '***' : 'missing',
-      nodeEnv: process.env.NODE_ENV,
-    });
-
     if (!cloudName || !apiKey || !apiSecret) {
       console.error('[Upload] Cloudinary configuration missing:', {
         hasCloudName: !!cloudName,
@@ -95,14 +85,6 @@ export async function POST(request: Request) {
 
     try {
       // Subir a Cloudinary
-      console.log('[Upload] Uploading to Cloudinary:', { 
-        publicId, 
-        type: file.type,
-        cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-        hasApiKey: !!process.env.CLOUDINARY_API_KEY,
-        hasApiSecret: !!process.env.CLOUDINARY_API_SECRET,
-      });
-      
       const uploadResult = await cloudinary.uploader.upload(dataUri, {
         folder: 'programas',
         public_id: publicId,
@@ -114,8 +96,6 @@ export async function POST(request: Request) {
       });
 
       const imageUrl = uploadResult.secure_url;
-      console.log('[Upload] Image uploaded successfully to Cloudinary:', { imageUrl, publicId: uploadResult.public_id });
-
       return NextResponse.json({ imageUrl }, { status: 200 });
     } catch (uploadError: any) {
       console.error('[Upload] Error uploading to Cloudinary:', {

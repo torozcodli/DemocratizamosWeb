@@ -5,11 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    console.log('[API /programas] GET request received');
-    console.log('[API /programas] MONGODB_URI exists:', !!process.env.MONGODB_URI);
-    
     const programs = await ProgramController.listPublishedPrograms();
-    console.log(`[API /programas] Successfully fetched ${programs.length} published programs`);
     return NextResponse.json(programs, { status: 200 });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Error desconocido';

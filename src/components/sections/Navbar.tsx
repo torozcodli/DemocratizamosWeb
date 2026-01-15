@@ -58,6 +58,7 @@ export function Navbar() {
                 <Link
                     key={`${item.label}-${index}`}
                   href={item.href}
+                  prefetch={false}
                     onClick={(e) => {
                       if (isDisabled) {
                         e.preventDefault();
@@ -117,6 +118,7 @@ export function Navbar() {
                       <Link
                         key={`${item.label}-${index}`}
                         href={item.href}
+                        prefetch={false}
                         onClick={(e) => {
                           if (isDisabled) {
                             e.preventDefault();
