@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
         protocol: 'http',
         hostname: '**',
       },
+      // Cloudinary
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
     ],
     unoptimized: false,
     // Permitir imágenes locales sin optimización

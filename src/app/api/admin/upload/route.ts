@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join } from 'path';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { isAdminEmail } from '@/lib/admin';
+import { cloudinary } from '@/lib/cloudinary';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,68 +39,97 @@ export async function POST(request: Request) {
       );
     }
 
-    // IMPORTANTE: En Vercel (serverless), el sistema de archivos es read-only
-    // NO se pueden escribir archivos de forma persistente
-    // Para producción, necesitas usar un servicio de almacenamiento en la nube:
-    // - Vercel Blob Storage
-    // - Cloudinary
-    // - AWS S3
-    // - Uploadthing
-    // 
-    // Por ahora, este código fallará en Vercel. Es solo para desarrollo local.
-    
-    const isVercel = process.env.VERCEL === '1';
-    
-    if (isVercel) {
-      console.error('[Upload] Attempting to write file in Vercel (not allowed)');
+    // Verificar que Cloudinary esté configurado
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const apiKey = process.env.CLOUDINARY_API_KEY;
+    const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+    console.log('[Upload] Checking Cloudinary config:', {
+      hasCloudName: !!cloudName,
+      cloudNameValue: cloudName ? `${cloudName.substring(0, 4)}...` : 'missing',
+      hasApiKey: !!apiKey,
+      apiKeyValue: apiKey ? `${apiKey.substring(0, 4)}...` : 'missing',
+      hasApiSecret: !!apiSecret,
+      apiSecretValue: apiSecret ? '***' : 'missing',
+      nodeEnv: process.env.NODE_ENV,
+    });
+
+    if (!cloudName || !apiKey || !apiSecret) {
+      console.error('[Upload] Cloudinary configuration missing:', {
+        hasCloudName: !!cloudName,
+        hasApiKey: !!apiKey,
+        hasApiSecret: !!apiSecret,
+        allEnvKeys: Object.keys(process.env).filter(key => key.includes('CLOUDINARY')),
+      });
+      
       return NextResponse.json(
         { 
-          error: 'Upload de archivos no está disponible en Vercel. Se requiere un servicio de almacenamiento en la nube.',
-          details: 'Por favor, usa una URL de imagen externa o integra un servicio como Cloudinary, S3, o Vercel Blob Storage.'
+          error: 'Configuración de Cloudinary incompleta',
+          details: process.env.NODE_ENV === 'development' 
+            ? 'Verifica que las siguientes variables estén en .env.local: NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET'
+            : 'Verifica que las siguientes variables de entorno estén configuradas en Vercel: NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET'
         },
-        { status: 501 } // Not Implemented
+        { status: 500 }
       );
     }
 
-    // Solo para desarrollo local
-    const uploadDir = join(process.cwd(), 'public', 'images', 'programas');
-    
-    try {
-      if (!existsSync(uploadDir)) {
-        await mkdir(uploadDir, { recursive: true });
-      }
-    } catch (mkdirError: any) {
-      console.error('[Upload] Error creating directory:', mkdirError.message);
-      throw new Error(`No se pudo crear el directorio de upload: ${mkdirError.message}`);
-    }
+    // Asegurar que Cloudinary esté configurado correctamente
+    cloudinary.config({
+      cloud_name: cloudName,
+      api_key: apiKey,
+      api_secret: apiSecret,
+    });
+
+    // Convertir File a Buffer
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    // Convertir buffer a base64 para Cloudinary
+    const base64 = buffer.toString('base64');
+    const dataUri = `data:${file.type};base64,${base64}`;
 
     // Generar nombre único para el archivo
     const timestamp = Date.now();
     const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const filename = `${timestamp}-${sanitizedName}`;
-    const filepath = join(uploadDir, filename);
+    const publicId = `programas/${timestamp}-${sanitizedName.replace(/\.[^/.]+$/, '')}`;
 
     try {
-      // Convertir File a Buffer y guardar
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      await writeFile(filepath, buffer);
+      // Subir a Cloudinary
+      console.log('[Upload] Uploading to Cloudinary:', { 
+        publicId, 
+        type: file.type,
+        cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+        hasApiKey: !!process.env.CLOUDINARY_API_KEY,
+        hasApiSecret: !!process.env.CLOUDINARY_API_SECRET,
+      });
+      
+      const uploadResult = await cloudinary.uploader.upload(dataUri, {
+        folder: 'programas',
+        public_id: publicId,
+        resource_type: 'image',
+        overwrite: false,
+        invalidate: true,
+        use_filename: false,
+        unique_filename: true,
+      });
 
-      const imageUrl = `/images/programas/${filename}`;
-      console.log('[Upload] Image saved successfully:', { filepath, imageUrl });
+      const imageUrl = uploadResult.secure_url;
+      console.log('[Upload] Image uploaded successfully to Cloudinary:', { imageUrl, publicId: uploadResult.public_id });
 
       return NextResponse.json({ imageUrl }, { status: 200 });
-    } catch (writeError: any) {
-      console.error('[Upload] Error writing file:', writeError.message, writeError.stack);
-      throw new Error(`Error al guardar el archivo: ${writeError.message}`);
+    } catch (uploadError: any) {
+      console.error('[Upload] Error uploading to Cloudinary:', {
+        message: uploadError.message,
+        stack: uploadError.stack,
+        error: uploadError,
+      });
+      throw new Error(`Error al subir la imagen a Cloudinary: ${uploadError.message}`);
     }
   } catch (error: any) {
     console.error('[Upload] Error uploading image:', {
       message: error.message,
       stack: error.stack,
       name: error.name,
-      vercel: process.env.VERCEL,
-      cwd: process.cwd(),
     });
     return NextResponse.json(
       { 

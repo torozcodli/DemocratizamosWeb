@@ -60,7 +60,7 @@ function ProyectoCard({ programa, className = '' }: { programa: Programa; classN
               fill
               className="object-cover"
               sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 25vw"
-              unoptimized={true}
+              unoptimized={imageSrc.startsWith('/images/') || imageSrc.startsWith('/')}
               onError={() => {
                 console.error('Error loading image:', imageSrc);
                 setImageError(true);
