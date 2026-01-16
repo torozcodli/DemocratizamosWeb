@@ -1,0 +1,171 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Session } from 'next-auth';
+import { Container } from '@/components/ui/Container';
+import { FeaturedBlogCard } from './FeaturedBlogCard';
+import { BlogCard } from './BlogCard';
+import { AddBlogButton } from './AddBlogButton';
+import { CreateBlogModal } from './CreateBlogModal';
+import { PostController, PostSortOption } from '@/modules/posts/controllers/post.controller';
+
+interface Post {
+  _id: string;
+  title: string;
+  slug: string;
+  imageUrl: string;
+  excerpt: string;
+  authorName: string;
+  readTime: string;
+  likes: number;
+  createdAt: string;
+}
+
+interface BlogPageContentProps {
+  session: Session | null;
+}
+
+export function BlogPageContent({ session }: BlogPageContentProps) {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [latestPost, setLatestPost] = useState<Post | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [sort, setSort] = useState<PostSortOption>('recent');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetchPosts();
+    fetchLatestPost();
+  }, [sort]);
+
+  const fetchPosts = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`/api/blog?sort=${sort}`, {
+        cache: 'no-store',
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Asegurar que _id y createdAt sean strings
+        const adaptedData = data.map((p: any) => ({
+          ...p,
+          _id: p._id?.toString() || p._id,
+          createdAt: p.createdAt?.toString() || p.createdAt,
+        }));
+        setPosts(adaptedData);
+      }
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchLatestPost = async () => {
+    try {
+      // Obtener todos los posts recientes y tomar el primero
+      const response = await fetch('/api/blog?sort=recent', {
+        cache: 'no-store',
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.length > 0) {
+          const latest = data[0];
+          setLatestPost({
+            ...latest,
+            _id: latest._id?.toString() || latest._id,
+            createdAt: latest.createdAt?.toString() || latest.createdAt,
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching latest post:', error);
+    }
+  };
+
+  const handleSuccess = () => {
+    fetchPosts();
+    fetchLatestPost();
+  };
+
+  // Filtrar posts para el grid (excluir el latest si existe)
+  const gridPosts = latestPost 
+    ? posts.filter(p => p._id !== latestPost._id)
+    : posts;
+
+  return (
+    <div className="w-full">
+      {/* Sección del último blog con fondo específico */}
+      <div className="w-full py-12 sm:py-16 lg:py-20 relative overflow-hidden bg-[#CED8F4]">
+        {/* Círculo decorativo */}
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-gradient-to-br from-[#6F74C9]/20 via-[#9DACFF]/15 to-transparent blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+        
+        <Container className="relative">
+          {/* Título */}
+          <h1 className="text-center text-[clamp(2.2rem,5vw,4.2rem)] font-tech font-extrabold tracking-tight text-[#1D194C] mb-12 lg:mb-16">
+            Lo último de nuestro blog...
+          </h1>
+
+          {/* Hero - Último post */}
+          {latestPost && (
+            <div className="mb-12 lg:mb-16">
+              <FeaturedBlogCard post={latestPost} />
+            </div>
+          )}
+        </Container>
+      </div>
+
+      {/* Resto del contenido (grid, dropdown, etc.) */}
+      <div className="w-full py-12 sm:py-16 lg:py-20 bg-[#E7E9FF]">
+        <Container>
+          {/* Dropdown y Grid */}
+          <div className="space-y-8">
+            {/* Dropdown de ordenamiento */}
+            <div className="flex justify-end">
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value as PostSortOption)}
+                className="px-4 py-2 border border-[#1D194C]/20 rounded-lg bg-white text-[#1D194C] focus:outline-none focus:ring-2 focus:ring-[#6F74C9] focus:border-transparent"
+              >
+                <option value="recent">Más reciente</option>
+                <option value="recommended">Recomendado</option>
+              </select>
+            </div>
+
+            {/* Grid de posts */}
+            {isLoading ? (
+              <div className="text-center py-12 text-[#1D194C]/60">
+                <p>Cargando posts...</p>
+              </div>
+            ) : gridPosts.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                {gridPosts.map((post) => (
+                  <BlogCard key={post._id} post={post} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 text-[#1D194C]/60">
+                <p>No hay posts disponibles</p>
+              </div>
+            )}
+
+            {/* Botón + para admin */}
+            {session?.user?.isAdmin && (
+              <div className="flex justify-center mt-8">
+                <AddBlogButton onClick={() => setIsModalOpen(true)} />
+              </div>
+            )}
+          </div>
+        </Container>
+      </div>
+
+      {/* Modal de creación */}
+      <CreateBlogModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleSuccess}
+      />
+    </div>
+  );
+}
