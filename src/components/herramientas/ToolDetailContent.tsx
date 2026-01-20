@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, Calendar } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { ToolCard } from './ToolCard';
 
@@ -41,9 +41,10 @@ export function ToolDetailContent({ tool, relatedTools }: ToolDetailContentProps
 
   return (
     <div className="w-full">
-      {/* Hero Image */}
-      <section className="relative w-full">
-        <div className="relative aspect-[21/9] w-full">
+      {/* Hero con imagen blur y card flotante */}
+      <section className="relative w-full h-[320px] md:h-[420px] lg:h-[520px] overflow-hidden">
+        {/* Background image con blur */}
+        <div className="absolute inset-0 z-0">
           <Image
             src={tool.imageUrl}
             alt={tool.title}
@@ -52,71 +53,120 @@ export function ToolDetailContent({ tool, relatedTools }: ToolDetailContentProps
             sizes="100vw"
             priority
             unoptimized={tool.imageUrl.startsWith('/images/') || tool.imageUrl.startsWith('/')}
+            style={{
+              filter: 'blur(14px)',
+              transform: 'scale(1.1)',
+              opacity: 0.65,
+            }}
           />
-          {/* Overlay degradado inferior */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1D194C]/60 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+
+        {/* Overlay gradiente navy */}
+        <div 
+          className="absolute inset-0 z-10"
+          style={{
+            background: 'linear-gradient(90deg, rgba(17,18,61,0.75) 0%, rgba(17,18,61,0.65) 50%, rgba(17,18,61,0.75) 100%)',
+          }}
+        />
+
+        {/* Círculo decorativo */}
+        <div className="absolute bottom-[-140px] right-[-140px] w-[420px] h-[420px] bg-[#9DACFF] opacity-20 blur-sm z-10 rounded-full" />
+
+        {/* Card flotante */}
+        <div className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 z-20 w-[92%] max-w-[980px] min-h-[220px] rounded-3xl shadow-xl overflow-hidden bg-white">
+          <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
+            {/* Columna izquierda - Info */}
+            <div className="bg-[#484A88] p-8 lg:p-10 flex flex-col justify-between">
+              {/* Meta info */}
+              <div className="flex items-center gap-4 text-sm text-white/80 mb-4">
+                <div className="flex items-center gap-1">
+                  <Calendar size={14} />
+                  <span>{formatDate(tool.date)}</span>
+                </div>
+                <span className="text-white/40">•</span>
+                <div className="flex items-center gap-1">
+                  <Clock size={14} />
+                  <span>— min</span>
+                </div>
+              </div>
+
+              {/* Título */}
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-tech font-extrabold text-[#E68956] mb-4">
+                {tool.title}
+              </h1>
+
+              {/* Resumen */}
+              {tool.description && (
+                <p className="text-white/90 text-sm sm:text-base leading-relaxed line-clamp-3 mb-6">
+                  {tool.description}
+                </p>
+              )}
+
+              {/* Divider */}
+              <div className="border-t border-white/20 pt-4 mt-auto">
+                {/* Espacio para futuro autor si se agrega */}
+              </div>
+            </div>
+
+            {/* Columna derecha - Imagen nítida */}
+            <div className="relative bg-white overflow-hidden border-l border-[#1D194C]/10 lg:border-l">
+              <Image
+                src={tool.imageUrl}
+                alt={tool.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                unoptimized={tool.imageUrl.startsWith('/images/') || tool.imageUrl.startsWith('/')}
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Línea naranja brillante entre imagen y contenido */}
-      <div className="w-full h-1 bg-[#E68956]"></div>
+      {/* Espacio para que el contenido no se encime con el card */}
+      <div className="mt-28 md:mt-32" />
 
-      {/* Contenido */}
-      <Container>
-        <div className="py-8 sm:py-12 lg:py-16">
-          {/* Botón Regresar */}
+      {/* Contenido principal con fondo punteado */}
+      <div
+        className="w-full py-12 sm:py-16 lg:py-20"
+        style={{
+          backgroundImage: "url('/images/FondoPunteado.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <Container>
+          {/* Link Regresar */}
           <Link
             href="/herramientas"
             prefetch={false}
-            className="inline-flex items-center gap-2 text-[#1D194C] hover:text-[#6F74C9] transition-colors mb-8"
+            className="inline-block text-[#1D194C] hover:text-[#6F74C9] transition-colors mb-8 underline hover:no-underline text-sm"
           >
-            <ArrowLeft size={20} />
-            <span className="font-medium">Regresar</span>
+            ← Regresar a Herramientas
           </Link>
 
-          {/* Título */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-tech font-extrabold text-[#1D194C] mb-6 text-center">
-            {tool.title}
-          </h1>
-
-          {/* Meta info - Solo fecha */}
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-[#1D194C]/60 mb-8">
-            <div className="flex items-center gap-1">
-              <Calendar size={16} />
-              <span>{formatDate(tool.date)}</span>
-            </div>
-          </div>
-
-          {/* Descripción como resumen */}
-          {tool.description && (
-            <div className="max-w-3xl mx-auto mb-12">
-              <p className="text-lg sm:text-xl text-[#1D194C]/80 leading-relaxed text-center italic">
-                {tool.description}
-              </p>
-            </div>
-          )}
-
           {/* Separador */}
-          <div className="flex items-center justify-center mb-12 pb-8 border-b border-[#1D194C]/40">
-            {/* Línea horizontal fina */}
-          </div>
+          <div className="max-w-4xl mx-auto border-t border-[#1D194C]/20 mb-12" />
 
-          {/* Contenido */}
-          <div className="max-w-3xl mx-auto prose prose-lg">
-            {contentParagraphs.length > 0 ? (
-              contentParagraphs.map((paragraph, index) => (
-                <p
-                  key={index}
-                  className="text-[#1D194C]/80 leading-relaxed mb-6 text-base sm:text-lg"
-                >
-                  {paragraph}
+          {/* Contenido largo */}
+          <div className="max-w-4xl mx-auto px-4 md:px-8">
+            <div className="space-y-4">
+              {contentParagraphs.length > 0 ? (
+                contentParagraphs.map((paragraph, index) => (
+                  <p
+                    key={index}
+                    className="text-[#1D194C]/80 leading-relaxed text-base sm:text-lg"
+                  >
+                    {paragraph}
+                  </p>
+                ))
+              ) : (
+                <p className="text-[#1D194C]/80 leading-relaxed text-base sm:text-lg">
+                  {tool.content}
                 </p>
-              ))
-            ) : (
-              <p className="text-[#1D194C]/80 leading-relaxed mb-6 text-base sm:text-lg">
-                {tool.content}
-              </p>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Herramientas relacionadas */}
@@ -132,8 +182,8 @@ export function ToolDetailContent({ tool, relatedTools }: ToolDetailContentProps
               </div>
             </section>
           )}
-        </div>
-      </Container>
+        </Container>
+      </div>
     </div>
   );
 }
