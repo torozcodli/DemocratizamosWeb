@@ -77,6 +77,9 @@ export function BlogDetailContent({ post, relatedPosts }: BlogDetailContentProps
         </div>
       </section>
 
+      {/* Línea naranja brillante entre imagen y contenido */}
+      <div className="w-full h-1 bg-[#E68956]"></div>
+
       {/* Contenido */}
       <Container>
         <div className="py-8 sm:py-12 lg:py-16">
@@ -122,7 +125,7 @@ export function BlogDetailContent({ post, relatedPosts }: BlogDetailContentProps
           </div>
 
           {/* Acciones (Likes) */}
-          <div className="flex items-center justify-center gap-6 mb-12 pb-8 border-b border-[#1D194C]/10">
+          <div className="flex items-center justify-center gap-6 mb-12 pb-8 border-b border-[#1D194C]/40">
             <button
               onClick={handleLike}
               disabled={isLiking}
@@ -147,7 +150,7 @@ export function BlogDetailContent({ post, relatedPosts }: BlogDetailContentProps
 
           {/* Artículos relacionados */}
           {relatedPosts.length > 0 && (
-            <section className="mt-16 pt-12 border-t border-[#1D194C]/10">
+            <section className="mt-16 pt-12 border-t border-[#1D194C]/40">
               <h2 className="text-2xl sm:text-3xl font-tech font-extrabold text-[#1D194C] mb-8">
                 Artículos relacionados
               </h2>

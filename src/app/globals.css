@@ -135,6 +135,19 @@
     }
   }
 
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+
   /* Fix para logo en About section - mover a la izquierda en desktop */
   @media (min-width: 1024px) {
     .about-logo-container {

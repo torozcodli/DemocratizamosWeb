@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Session } from 'next-auth';
 import { Container } from '@/components/ui/Container';
 import { FeaturedBlogCard } from './FeaturedBlogCard';
 import { BlogCard } from './BlogCard';
-import { AddBlogButton } from './AddBlogButton';
-import { CreateBlogModal } from './CreateBlogModal';
+import { WhatsAppBanner } from '@/components/ui/WhatsAppBanner';
 import { PostController, PostSortOption } from '@/modules/posts/controllers/post.controller';
+import { Plus } from 'lucide-react';
 
 interface Post {
   _id: string;
@@ -15,6 +16,7 @@ interface Post {
   slug: string;
   imageUrl: string;
   excerpt: string;
+  content?: string[];
   authorName: string;
   readTime: string;
   likes: number;
@@ -84,10 +86,6 @@ export function BlogPageContent({ session }: BlogPageContentProps) {
     }
   };
 
-  const handleSuccess = () => {
-    fetchPosts();
-    fetchLatestPost();
-  };
 
   // Filtrar posts para el grid (excluir el latest si existe)
   const gridPosts = latestPost 
@@ -96,21 +94,41 @@ export function BlogPageContent({ session }: BlogPageContentProps) {
 
   return (
     <div className="w-full">
-      {/* Sección del último blog con fondo específico */}
-      <div className="w-full py-12 sm:py-16 lg:py-20 relative overflow-hidden bg-[#CED8F4]">
-        {/* Círculo decorativo */}
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-gradient-to-br from-[#6F74C9]/20 via-[#9DACFF]/15 to-transparent blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+      {/* Sección del último blog con fondo punteado */}
+      <div 
+        className="w-full py-14 md:py-16 relative overflow-hidden"
+        style={{
+          backgroundImage: "url('/images/FondoPunteado.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        {/* Overlay sutil para legibilidad */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/0 to-white/10 pointer-events-none"></div>
+
+        {/* Círculo gigante en esquina inferior derecha */}
+        <div className="pointer-events-none absolute -bottom-72 -right-72 h-[960px] w-[960px] rounded-full bg-[#9DACFF]/60"></div>
+
+        {/* WhatsApp Banner flotante */}
+        <div className="absolute bottom-4 md:bottom-8 lg:bottom-12 right-0 md:right-0 lg:right-0 z-20" style={{ transform: 'translateX(15px)' }}>
+          <WhatsAppBanner />
+        </div>
         
-        <Container className="relative">
-          {/* Título */}
-          <h1 className="text-center text-[clamp(2.2rem,5vw,4.2rem)] font-tech font-extrabold tracking-tight text-[#1D194C] mb-12 lg:mb-16">
+        <Container className="relative max-w-7xl">
+          {/* Título - Mantener estilo actual */}
+          <h1 className="text-left text-[clamp(2.5rem,6vw,5rem)] font-tech font-extrabold tracking-tight text-[#1D194C] mb-8 lg:mb-12">
             Lo último de nuestro blog...
           </h1>
 
           {/* Hero - Último post */}
-          {latestPost && (
+          {latestPost ? (
             <div className="mb-12 lg:mb-16">
               <FeaturedBlogCard post={latestPost} />
+            </div>
+          ) : (
+            <div className="mb-12 lg:mb-16 text-center py-12 text-[#1D194C]/60">
+              <p>Aún no hay publicaciones</p>
             </div>
           )}
         </Container>
@@ -153,19 +171,18 @@ export function BlogPageContent({ session }: BlogPageContentProps) {
             {/* Botón + para admin */}
             {session?.user?.isAdmin && (
               <div className="flex justify-center mt-8">
-                <AddBlogButton onClick={() => setIsModalOpen(true)} />
+                <Link
+                  href="/admin/blog"
+                  className="w-12 h-12 rounded-full bg-[#FF6A00] text-white shadow-lg hover:shadow-xl hover:bg-[#FF7A1A] transition-all flex items-center justify-center"
+                  aria-label="Administrar blogs"
+                >
+                  <Plus size={24} className="text-white" />
+                </Link>
               </div>
             )}
           </div>
         </Container>
       </div>
-
-      {/* Modal de creación */}
-      <CreateBlogModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSuccess={handleSuccess}
-      />
     </div>
   );
 }
