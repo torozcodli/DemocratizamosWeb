@@ -60,8 +60,14 @@ export async function POST(request: Request) {
 
     // Errores de validación Zod
     if (error.name === 'ZodError') {
+      console.error('Zod validation errors:', error.errors);
+      const errorDetails = error.errors.map((err: any) => ({
+        field: err.path.join('.'),
+        message: err.message,
+        received: err.received,
+      }));
       return NextResponse.json(
-        { error: 'Datos inválidos', details: error.errors },
+        { error: 'Datos inválidos', details: errorDetails },
         { status: 400 }
       );
     }
