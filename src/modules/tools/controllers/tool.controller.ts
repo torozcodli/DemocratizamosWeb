@@ -64,6 +64,31 @@ export class ToolController {
   }
 
   /**
+   * Obtiene herramientas relacionadas (excluyendo la actual)
+   */
+  static async getRelatedTools(currentSlug: string, limit: number = 6): Promise<ITool[]> {
+    try {
+      await connectDB();
+      return Tool.find({ 
+        isPublished: true,
+        slug: { $ne: currentSlug }
+      })
+        .sort({ date: -1, createdAt: -1 })
+        .limit(limit)
+        .lean()
+        .exec();
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('[ToolController] Error in getRelatedTools:', {
+        message: errorMessage,
+        error,
+        currentSlug
+      });
+      throw error;
+    }
+  }
+
+  /**
    * Crea una nueva herramienta (solo admin)
    */
   static async createTool(
