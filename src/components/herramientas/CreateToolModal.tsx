@@ -77,9 +77,11 @@ export function CreateToolModal({
           isPublished: toolToEdit.isPublished,
         } as FormInput
       : {
-        isPublished: true,
-        content: '',
+        title: '',
         description: '',
+        content: '',
+        date: new Date().toISOString().split('T')[0],
+        isPublished: true,
       },
   });
 
@@ -131,6 +133,8 @@ export function CreateToolModal({
       setUploadedImageUrl(data.imageUrl);
       setImagePreview(data.imageUrl);
       setManualImageUrl('');
+      // Establecer el valor en el formulario
+      setValue('imageUrl', data.imageUrl, { shouldValidate: true });
       clearErrors('imageUrl');
       trigger('imageUrl');
     } catch (error: any) {
@@ -160,11 +164,45 @@ export function CreateToolModal({
           date: data.date ? new Date(data.date) : undefined,
         } as Partial<CreateToolInput>;
       } else {
+        // Para crear, necesitamos imageUrl obligatorio
+        const imageUrlToUse = uploadedImageUrl || manualImageUrl;
+        if (!imageUrlToUse || imageUrlToUse.trim() === '') {
+          alert('Por favor, sube una imagen o ingresa una URL de imagen');
+          setIsSubmitting(false);
+          return;
+        }
+        
+        // Asegurar que todos los campos requeridos estén presentes
+        // Manejar date que puede ser string o undefined
+        let dateValue: Date;
+        if (data.date && typeof data.date === 'string' && data.date.trim() !== '') {
+          dateValue = new Date(data.date);
+        } else {
+          dateValue = new Date();
+        }
+        
+        // Construir el objeto final asegurando que todos los campos requeridos estén presentes
+        // Convertir date a ISO string para que Zod pueda procesarlo con z.coerce.date()
+        const dateString = dateValue.toISOString();
+        
+        // Construir objeto final sin campos undefined
+        // date se envía como string ISO, Zod lo convertirá con z.coerce.date()
         finalData = {
-          ...data,
-          imageUrl: uploadedImageUrl || (data as any).imageUrl,
-          date: data.date ? new Date(data.date) : new Date(),
+          title: String(data.title || '').trim(),
+          description: String(data.description || '').trim(),
+          content: String(data.content || '').trim(),
+          imageUrl: String(imageUrlToUse || '').trim(),
+          date: dateString as any, // Zod convertirá el string a Date
+          isPublished: data.isPublished ?? true,
         } as CreateToolInput;
+        
+        // Validar que todos los campos requeridos estén presentes
+        if (!finalData.title || !finalData.description || !finalData.content || !finalData.imageUrl) {
+          alert('Por favor, completa todos los campos requeridos');
+          setIsSubmitting(false);
+          return;
+        }
+        
       }
 
       const url = isEditMode
@@ -183,6 +221,12 @@ export function CreateToolModal({
 
       if (!response.ok) {
         const error = await response.json();
+        console.error('API Error:', error);
+        // Si hay detalles de validación, mostrarlos
+        if (error.details && Array.isArray(error.details)) {
+          const errorMessages = error.details.map((d: any) => `${d.field}: ${d.message}`).join('\n');
+          throw new Error(`Error de validación:\n${errorMessages}`);
+        }
         throw new Error(error.error || `Error al ${isEditMode ? 'actualizar' : 'crear'} herramienta`);
       }
 
@@ -289,7 +333,8 @@ export function CreateToolModal({
             </label>
             <Input
               type="date"
-              {...register('date')}
+              {...register('date', { required: false })}
+              defaultValue={new Date().toISOString().split('T')[0]}
               className={errors.date ? 'border-red-500' : ''}
             />
             {errors.date && (

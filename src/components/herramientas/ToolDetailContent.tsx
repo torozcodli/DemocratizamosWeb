@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, Calendar, Clock } from 'lucide-react';
+import { Calendar, Clock } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { ToolCard } from './ToolCard';
 
@@ -69,9 +69,6 @@ export function ToolDetailContent({ tool, relatedTools }: ToolDetailContentProps
           }}
         />
 
-        {/* Círculo decorativo */}
-        <div className="absolute bottom-[-140px] right-[-140px] w-[420px] h-[420px] bg-[#9DACFF] opacity-20 blur-sm z-10 rounded-full" />
-
         {/* Card flotante */}
         <div className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 z-20 w-[92%] max-w-[980px] min-h-[220px] rounded-3xl shadow-xl overflow-hidden bg-white">
           <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
@@ -123,20 +120,11 @@ export function ToolDetailContent({ tool, relatedTools }: ToolDetailContentProps
         </div>
       </section>
 
-      {/* Espacio para que el contenido no se encime con el card */}
-      <div className="mt-28 md:mt-32" />
-
-      {/* Contenido principal con fondo punteado */}
-      <div
-        className="w-full py-12 sm:py-16 lg:py-20"
-        style={{
-          backgroundImage: "url('/images/FondoPunteado.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        <Container>
+      {/* Contenido principal con fondo morado */}
+      <div className="w-full py-12 sm:py-16 lg:py-20 bg-[#E7E9FF] relative overflow-hidden">
+        {/* Círculo decorativo - parte del fondo */}
+        <div className="absolute top-[-80px] right-[-200px] w-[800px] h-[800px] bg-[#e1cef2] z-0 rounded-full pointer-events-none" />
+        <Container className="relative z-10">
           {/* Link Regresar */}
           <Link
             href="/herramientas"
