@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { siteConfig } from '@/config/site';
 import { Facebook, Instagram, Linkedin, Mail, Phone } from 'lucide-react';
@@ -181,7 +182,13 @@ export function Footer() {
 
       <Container>
         {/* Copyright */}
-        <div className="mt-6 sm:mt-8 md:mt-8 text-center text-xs sm:text-sm text-[#E1E6FD]/70">
+        <div className="mt-6 sm:mt-8 md:mt-8 text-center text-xs sm:text-sm text-[#E1E6FD]/70 space-y-2">
+          <Link
+            href="/aviso-de-privacidad"
+            className="text-[#E1E6FD]/70 hover:text-[#E1E6FD] hover:underline transition-colors inline-block"
+          >
+            Aviso de privacidad
+          </Link>
           <p>© {currentYear}. Todos los derechos reservados</p>
         </div>
       </Container>

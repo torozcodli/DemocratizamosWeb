@@ -4,7 +4,7 @@ export const siteConfig = {
     'Transformamos vidas a través de la Tecnología. Llevando habilidades digitales a quienes más las necesitan.',
   url: 'https://democratizamoslanovacion.org',
   phone: '+52 614 141 8003',
-  email: 'hola@democratizamoslanovacion.org',
+  email: 'administracion@democratizamoslanovacion.org',
   navigation: [
     { label: 'Inicio', href: '/inicio' },
     { label: 'Nosotros', href: '/nosotros' },
@@ -12,6 +12,7 @@ export const siteConfig = {
     { label: 'Blog/Publicaciones', href: '/blog' },
     { label: 'Herramientas', href: '/herramientas' },
     { label: 'Academia', href: '#' },
+    { label: 'Aviso de privacidad', href: '/aviso-de-privacidad' },
   ],
   cta: {
     label: 'Contacto',
