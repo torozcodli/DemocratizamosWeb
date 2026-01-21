@@ -5,31 +5,31 @@ const teamMembers = [
     frameSrc: '/solar/icons/Pau.svg',
     role: 'Representante Legal.',
     name: 'Paulina García',
-    linkedinUrl: '#',
+    linkedinUrl: 'https://www.linkedin.com/in/paulina-garcia-saenz-a88762261/',
   },
   {
     frameSrc: '/solar/icons/Dani.svg',
     role: 'Director',
     name: 'Daniel García',
-    linkedinUrl: '#',
+    linkedinUrl: 'https://www.linkedin.com/in/dany-garcia/',
   },
   {
     frameSrc: '/solar/icons/Santi.svg',
     role: 'Coordinador de Operaciones',
     name: 'Daniel Santiesteban',
-    linkedinUrl: '#',
+    linkedinUrl: 'https://www.linkedin.com/in/daniel-santiesteban-453875131/',
   },
   {
     frameSrc: '/solar/icons/Tomy.svg',
     role: 'Ing. Automatización de Procesos',
     name: 'Tomás Orozco',
-    linkedinUrl: '#',
+    linkedinUrl: 'https://www.linkedin.com/in/tomas-orozco-9b5023224',
   },
   {
     frameSrc: '/solar/icons/Xochitl.svg',
     role: 'Coordinadora Administrativa',
     name: 'Xochitl Castillo',
-    linkedinUrl: '#',
+    linkedinUrl: 'https://www.linkedin.com/in/xochitl-castillo-d-12271410a/',
   },
 ];
 

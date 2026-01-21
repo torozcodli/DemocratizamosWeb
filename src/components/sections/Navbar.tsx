@@ -45,7 +45,7 @@ export function Navbar() {
       )}
     >
       <div className="w-full">
-        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-10 xl:px-8">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-6 xl:px-8">
           <div className="flex h-16 md:h-20 items-center justify-between">
             <div>
             <Logo />

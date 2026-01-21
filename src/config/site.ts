@@ -12,7 +12,6 @@ export const siteConfig = {
     { label: 'Blog/Publicaciones', href: '/blog' },
     { label: 'Herramientas', href: '/herramientas' },
     { label: 'Academia', href: '#' },
-    { label: 'Aviso de privacidad', href: '/aviso-de-privacidad' },
   ],
   cta: {
     label: 'Contacto',

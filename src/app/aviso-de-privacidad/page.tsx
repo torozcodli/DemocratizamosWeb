@@ -1,8 +1,12 @@
 import { Container } from '@/components/ui/Container';
+import { Navbar } from '@/components/sections/Navbar';
+import { Footer } from '@/components/sections/Footer';
 
 export default function AvisoPrivacidadPage() {
   return (
-    <div className="min-h-screen w-full relative overflow-hidden bg-gradient-to-br from-[#E7E9FF] via-[#F5F6FF] to-[#E1E6FD]">
+    <main className="min-h-screen w-full p-0 m-0">
+      <Navbar />
+      <div className="w-full relative overflow-hidden bg-gradient-to-br from-[#E7E9FF] via-[#F5F6FF] to-[#E1E6FD]">
       {/* Círculos decorativos con blur */}
       <div className="absolute top-[-100px] right-[-150px] w-[600px] h-[600px] bg-gradient-to-br from-[#6F74C9]/20 to-[#484A88]/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-[-200px] left-[-200px] w-[700px] h-[700px] bg-gradient-to-tr from-[#E1CEF2]/30 to-[#AAB3FF]/20 rounded-full blur-3xl pointer-events-none" />
@@ -407,6 +411,8 @@ export default function AvisoPrivacidadPage() {
           </div>
         </div>
       </Container>
-    </div>
+      </div>
+      <Footer />
+    </main>
   );
 }
