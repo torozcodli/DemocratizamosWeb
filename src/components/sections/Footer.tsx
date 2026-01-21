@@ -71,6 +71,8 @@ export function Footer() {
               <div className="flex gap-3 sm:gap-4">
                 <a
                   href={siteConfig.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-9 h-9 sm:w-8 sm:h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors active:bg-white/20"
                   aria-label="LinkedIn"
                 >
@@ -78,6 +80,8 @@ export function Footer() {
                 </a>
                 <a
                   href={siteConfig.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-9 h-9 sm:w-8 sm:h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors active:bg-white/20"
                   aria-label="Instagram"
                 >
@@ -85,17 +89,12 @@ export function Footer() {
                 </a>
                 <a
                   href={siteConfig.social.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-9 h-9 sm:w-8 sm:h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors active:bg-white/20"
                   aria-label="Facebook"
                 >
                   <Facebook size={16} className="sm:w-[14px] sm:h-[14px]" />
-                </a>
-                <a
-                  href="#"
-                  className="w-9 h-9 sm:w-8 sm:h-8 rounded-full border border-[#E1E6FD] flex items-center justify-center text-[#E1E6FD] hover:bg-white/10 transition-colors active:bg-white/20"
-                  aria-label="TikTok"
-                >
-                  <TikTokIcon className="w-5 h-5 sm:w-4 sm:h-4" />
                 </a>
               </div>
             </div>

@@ -18,10 +18,10 @@ export const siteConfig = {
     href: 'https://wa.me/+5216145871758',
   },
   social: {
-    facebook: '#',
+    facebook: 'https://www.facebook.com/share/1ANP7cJHGf/?mibextid=wwXIfr',
     twitter: '#',
-    instagram: '#',
-    linkedin: '#',
+    instagram: 'https://www.instagram.com/democratizamoslainnovacion?igsh=NXJ3YjFudTFnZmNn',
+    linkedin: 'https://www.linkedin.com/company/democratizamoslainnovacion/posts/?feedView=all',
   },
 } as const;
 
