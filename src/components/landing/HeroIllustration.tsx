@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import { cn } from '@/lib/utils/cn';
 import { BgPixelBlocks } from '@/components/ui/BgPixelBlocks';

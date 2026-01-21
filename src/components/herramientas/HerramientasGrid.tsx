@@ -1,5 +1,3 @@
-'use client';
-
 import { Container } from '@/components/ui/Container';
 import { ToolCard } from './ToolCard';
 

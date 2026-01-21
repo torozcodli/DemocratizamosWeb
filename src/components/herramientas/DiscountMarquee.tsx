@@ -1,5 +1,3 @@
-'use client';
-
 export function DiscountMarquee() {
   return (
     <div className="w-full bg-[#E68956] overflow-hidden">
