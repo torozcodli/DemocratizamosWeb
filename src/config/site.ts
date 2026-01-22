@@ -1,8 +1,26 @@
+// Get base URL dynamically based on environment
+// This function is evaluated at module load time, which works for both build and runtime
+function getBaseUrl(): string {
+  // In Vercel preview deployments, use VERCEL_URL (automatically set by Vercel)
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  // Allow override via environment variable
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+  // Fallback to production domain
+  return 'https://democratizamoslanovacion.org';
+}
+
+// Calculate base URL once at module load
+const baseUrl = getBaseUrl();
+
 export const siteConfig = {
   name: 'Democratizamos la Innovación',
   description:
     'Transformamos vidas a través de la Tecnología. Llevando habilidades digitales a quienes más las necesitan.',
-  url: 'https://democratizamoslanovacion.org',
+  url: baseUrl,
   phone: '+52 614 141 8003',
   email: 'administracion@democratizamoslanovacion.org',
   navigation: [
