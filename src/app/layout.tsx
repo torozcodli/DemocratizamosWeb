@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { Inter, Orbitron, Tektur } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
@@ -19,39 +20,57 @@ const tektur = Tektur({
   weight: ['700'] 
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    default: siteConfig.name,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  keywords: [
-    'tecnología',
-    'inclusión digital',
-    'educación',
-    'México',
-    'brecha digital',
-    'capacitación',
-  ],
-  authors: [{ name: siteConfig.name }],
-  openGraph: {
-    type: 'website',
-    locale: 'es_MX',
-    url: '/',
-    siteName: siteConfig.name,
-    title: siteConfig.name,
+// Generate metadata dynamically based on request headers
+// This ensures og:image and og:url use the same host as the request
+export async function generateMetadata(): Promise<Metadata> {
+  const h = await headers();
+  // Get host from x-forwarded-host (Vercel) or host header
+  const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000';
+  // Get protocol from x-forwarded-proto (Vercel) or default to https
+  const proto = h.get('x-forwarded-proto') ?? 'https';
+  // Construct base URL from request headers
+  const base = new URL(`${proto}://${host}`);
+
+  return {
+    metadataBase: base,
+    title: {
+      default: siteConfig.name,
+      template: `%s | ${siteConfig.name}`,
+    },
     description: siteConfig.description,
-    images: [
-      {
-        url: '/og/og-default.png',
-        width: 1200,
-        height: 630,
-        alt: siteConfig.name,
-      },
+    keywords: [
+      'tecnología',
+      'inclusión digital',
+      'educación',
+      'México',
+      'brecha digital',
+      'capacitación',
     ],
-  },
-};
+    authors: [{ name: siteConfig.name }],
+    openGraph: {
+      type: 'website',
+      locale: 'es_MX',
+      url: new URL('/', base).toString(),
+      siteName: siteConfig.name,
+      title: siteConfig.name,
+      description: siteConfig.description,
+      images: [
+        {
+          url: new URL('/og/og-default.png', base).toString(),
+          width: 1200,
+          height: 630,
+          alt: siteConfig.name,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: siteConfig.name,
+      description: siteConfig.description,
+      images: [new URL('/og/og-default.png', base).toString()],
+    },
+  };
+}
 
 export default function RootLayout({
   children,
