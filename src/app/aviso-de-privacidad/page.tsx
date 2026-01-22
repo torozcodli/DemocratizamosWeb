@@ -1,6 +1,26 @@
+import type { Metadata } from 'next';
 import { Container } from '@/components/ui/Container';
 import { Navbar } from '@/components/sections/Navbar';
 import { Footer } from '@/components/sections/Footer';
+
+export const metadata: Metadata = {
+  title: 'Aviso de Privacidad',
+  description: 'Aviso de Privacidad para beneficiarios de programas.',
+  openGraph: {
+    title: 'Aviso de Privacidad',
+    description: 'Aviso de Privacidad para beneficiarios de programas.',
+    url: '/aviso-de-privacidad',
+    type: 'article',
+    images: [
+      {
+        url: '/og/og-default.png',
+        width: 1200,
+        height: 630,
+        alt: 'Aviso de Privacidad',
+      },
+    ],
+  },
+};
 
 export default function AvisoPrivacidadPage() {
   return (
