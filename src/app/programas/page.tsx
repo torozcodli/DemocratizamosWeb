@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { Navbar } from '@/components/sections/Navbar';
 import { ProgramasHero } from '@/components/sections/programas/ProgramasHero';
 import { NosotrosPropuestaValorSection } from '@/components/nosotros/NosotrosPropuestaValorSection';
@@ -26,14 +28,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ProgramasPage() {
+export default async function ProgramasPage() {
+  // Obtener sesión en el servidor para pasar como prop y evitar llamadas cliente
+  const session = await getServerSession(authOptions);
+
   return (
     <main className="w-full overflow-x-clip">
       <Navbar />
       <ProgramasHero />
       <NosotrosPropuestaValorSection />
       <NosotrosTestimonioVideoSection />
-      <ProgramasProyectosSection />
+      <ProgramasProyectosSection session={session} />
       <ProgramasModeloIntervencionSection />
       {/* Aquí irán las demás secciones de Programas */}
       <Footer />

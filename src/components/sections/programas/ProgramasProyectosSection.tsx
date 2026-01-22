@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import type { Session } from 'next-auth';
 import { Container } from '@/components/ui/Container';
 import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
 import { AddProgramButton } from '@/components/programas/AddProgramButton';
@@ -119,10 +119,13 @@ function ProyectoCard({ programa, className = '' }: { programa: Programa; classN
   );
 }
 
-export function ProgramasProyectosSection() {
+interface ProgramasProyectosSectionProps {
+  session?: Session | null;
+}
+
+export function ProgramasProyectosSection({ session }: ProgramasProyectosSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const { data: session } = useSession();
   const [programs, setPrograms] = useState<Programa[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

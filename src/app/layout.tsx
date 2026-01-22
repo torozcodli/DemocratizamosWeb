@@ -5,6 +5,8 @@ import './globals.css';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { siteConfig } from '@/config/site';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 // Fuente tech principal: Orbitron Bold (700) - estilo cuadrado/futurista
@@ -72,15 +74,18 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Obtener sesión UNA VEZ en el servidor para evitar múltiples llamadas a /api/auth/session
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${inter.variable} ${orbitron.variable} ${tektur.variable} ${inter.className}`}>
-        <SessionProvider>
+        <SessionProvider session={session}>
           <ThemeProvider>{children}</ThemeProvider>
         </SessionProvider>
       </body>
