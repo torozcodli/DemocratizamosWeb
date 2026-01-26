@@ -4,6 +4,7 @@ import { Inter, Orbitron, Tektur } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { SessionProvider } from '@/components/providers/SessionProvider';
+import { PostHogProvider } from '@/components/providers/PostHogProvider';
 import { siteConfig } from '@/config/site';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -86,7 +87,9 @@ export default async function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <body className={`${inter.variable} ${orbitron.variable} ${tektur.variable} ${inter.className}`}>
         <SessionProvider session={session}>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            <PostHogProvider>{children}</PostHogProvider>
+          </ThemeProvider>
         </SessionProvider>
       </body>
     </html>

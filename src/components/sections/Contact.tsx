@@ -6,6 +6,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { contactEmailSchema } from '@/lib/validation/contact.schemas';
+import { track } from '@/lib/analytics';
 
 export function Contact() {
   const [email, setEmail] = useState('');
@@ -31,6 +32,11 @@ export function Contact() {
       setSuccess(true);
       setEmail('');
       setIsSubmitting(false);
+      
+      // Track form submission
+      track('contact_form_submit', {
+        location: 'contact_section',
+      });
     }, 500);
   };
 

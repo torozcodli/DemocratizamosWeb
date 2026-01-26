@@ -1,8 +1,11 @@
+'use client';
+
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { siteConfig } from '@/config/site';
 import { Facebook, Instagram, Linkedin, Mail, Phone } from 'lucide-react';
 import Image from 'next/image';
+import { track } from '@/lib/analytics';
 // import { useState } from 'react'; // Deshabilitado - newsletter desactivado
 
 // Simple TikTok icon component
@@ -182,6 +185,11 @@ export function Footer() {
         <div className="mt-6 sm:mt-8 md:mt-8 text-center text-xs sm:text-sm text-[#E1E6FD]/70 space-y-2">
           <Link
             href="/aviso-de-privacidad"
+            onClick={() => {
+              track('footer_click', {
+                item: 'aviso_privacidad',
+              });
+            }}
             className="text-[#E1E6FD]/70 hover:text-[#E1E6FD] hover:underline transition-colors inline-block"
           >
             Aviso de privacidad

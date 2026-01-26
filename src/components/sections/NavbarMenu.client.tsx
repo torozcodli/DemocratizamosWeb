@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils/cn';
 import { usePathname } from 'next/navigation';
+import { track } from '@/lib/analytics';
 
 export function NavbarMenuClient() {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,6 +39,14 @@ export function NavbarMenuClient() {
               onClick={(e) => {
                 if (isDisabled) {
                   e.preventDefault();
+                } else {
+                  // Track CTA clicks for Programas and Herramientas
+                  if (item.label === 'Programas' || item.label === 'Herramientas') {
+                    track('cta_click', {
+                      cta: item.label,
+                      location: 'navbar',
+                    });
+                  }
                 }
               }}
               className={cn(
@@ -99,6 +108,13 @@ export function NavbarMenuClient() {
                           e.preventDefault();
                         } else {
                           setIsOpen(false);
+                          // Track CTA clicks for Programas and Herramientas
+                          if (item.label === 'Programas' || item.label === 'Herramientas') {
+                            track('cta_click', {
+                              cta: item.label,
+                              location: 'navbar_mobile',
+                            });
+                          }
                         }
                       }}
                       className={cn(
