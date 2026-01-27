@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
 import { Inter, Orbitron, Tektur } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
@@ -8,6 +7,10 @@ import { PostHogProvider } from '@/components/providers/PostHogProvider';
 import { siteConfig } from '@/config/site';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { buildBaseMetadata } from '@/lib/seo/metadata';
+import { robotsDirectives } from '@/lib/seo/env';
+import { getCanonicalBaseUrl } from '@/config/site';
+import { organizationJsonLd, websiteJsonLd } from '@/lib/seo/jsonld';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 // Fuente tech principal: Orbitron Bold (700) - estilo cuadrado/futurista
@@ -23,19 +26,14 @@ const tektur = Tektur({
   weight: ['700'] 
 });
 
-// Generate metadata dynamically based on request headers
-// This ensures og:image and og:url use the same host as the request
+// Generate metadata for root layout
+// Uses canonical base URL (production domain) for consistency
 export async function generateMetadata(): Promise<Metadata> {
-  const h = await headers();
-  // Get host from x-forwarded-host (Vercel) or host header
-  const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000';
-  // Get protocol from x-forwarded-proto (Vercel) or default to https
-  const proto = h.get('x-forwarded-proto') ?? 'https';
-  // Construct base URL from request headers
-  const base = new URL(`${proto}://${host}`);
+  const robots = robotsDirectives();
+  const canonicalBase = getCanonicalBaseUrl();
 
   return {
-    metadataBase: base,
+    metadataBase: new URL(canonicalBase),
     title: {
       default: siteConfig.name,
       template: `%s | ${siteConfig.name}`,
@@ -50,16 +48,25 @@ export async function generateMetadata(): Promise<Metadata> {
       'capacitación',
     ],
     authors: [{ name: siteConfig.name }],
+    robots: {
+      index: robots.index,
+      follow: robots.follow,
+      ...(robots.noarchive && { archive: false }),
+      ...(robots.nocache && { 'max-image-preview': 'none' }),
+    },
+    alternates: {
+      canonical: canonicalBase,
+    },
     openGraph: {
       type: 'website',
       locale: 'es_MX',
-      url: new URL('/', base).toString(),
+      url: canonicalBase,
       siteName: siteConfig.name,
       title: siteConfig.name,
       description: siteConfig.description,
       images: [
         {
-          url: new URL('/og/og-default.png', base).toString(),
+          url: `${canonicalBase}/og/og-default.png`,
           width: 1200,
           height: 630,
           alt: siteConfig.name,
@@ -70,7 +77,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title: siteConfig.name,
       description: siteConfig.description,
-      images: [new URL('/og/og-default.png', base).toString()],
+      images: [`${canonicalBase}/og/og-default.png`],
     },
   };
 }
@@ -83,8 +90,22 @@ export default async function RootLayout({
   // Obtener sesión UNA VEZ en el servidor para evitar múltiples llamadas a /api/auth/session
   const session = await getServerSession(authOptions);
 
+  // JSON-LD structured data
+  const organizationSchema = organizationJsonLd();
+  const websiteSchema = websiteJsonLd();
+
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+      </head>
       <body className={`${inter.variable} ${orbitron.variable} ${tektur.variable} ${inter.className}`}>
         <SessionProvider session={session}>
           <ThemeProvider>

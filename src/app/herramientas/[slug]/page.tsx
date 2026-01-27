@@ -4,7 +4,8 @@ import { Footer } from '@/components/sections/Footer';
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
 import { ToolController } from '@/modules/tools/controllers/tool.controller';
 import { ToolDetailContent } from '@/components/herramientas/ToolDetailContent';
-import type { Metadata } from 'next';
+import { buildBaseMetadata } from '@/lib/seo/metadata';
+import { breadcrumbJsonLd } from '@/lib/seo/jsonld';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +13,7 @@ interface ToolPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ToolPageProps) {
   const { slug } = await params;
   const tool = await ToolController.getToolBySlug(slug);
 
@@ -22,15 +23,12 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     };
   }
 
-  return {
+  return buildBaseMetadata({
     title: tool.title,
     description: tool.description,
-    openGraph: {
-      title: tool.title,
-      description: tool.description,
-      images: [tool.imageUrl],
-    },
-  };
+    path: `/herramientas/${slug}`,
+    ogImage: tool.imageUrl,
+  });
 }
 
 export default async function ToolDetailPage({ params }: ToolPageProps) {
@@ -61,12 +59,25 @@ export default async function ToolDetailPage({ params }: ToolPageProps) {
     updatedAt: t.updatedAt ? new Date(t.updatedAt).toString() : new Date().toString(),
   }));
 
+  // Breadcrumb JSON-LD
+  const breadcrumbSchema = breadcrumbJsonLd([
+    { name: 'Inicio', url: '/inicio' },
+    { name: 'Herramientas', url: '/herramientas' },
+    { name: tool.title, url: `/herramientas/${slug}` },
+  ]);
+
   return (
-    <main className="w-full overflow-x-clip bg-[#E7E9FF] min-h-screen">
-      <Navbar />
-      <ToolDetailContent tool={toolAdapted} relatedTools={relatedToolsAdapted} />
-      <Footer />
-      <WhatsAppButton />
-    </main>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <main className="w-full overflow-x-clip bg-[#E7E9FF] min-h-screen">
+        <Navbar />
+        <ToolDetailContent tool={toolAdapted} relatedTools={relatedToolsAdapted} />
+        <Footer />
+        <WhatsAppButton />
+      </main>
+    </>
   );
 }

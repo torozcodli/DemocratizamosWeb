@@ -4,7 +4,8 @@ import { Footer } from '@/components/sections/Footer';
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
 import { ProgramaDetalleTemplate } from '@/components/programas/ProgramaDetalleTemplate';
 import { ProgramController } from '@/modules/programs/controllers/program.controller';
-import type { Metadata } from 'next';
+import { buildBaseMetadata } from '@/lib/seo/metadata';
+import { breadcrumbJsonLd } from '@/lib/seo/jsonld';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +13,7 @@ interface ProgramaPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: ProgramaPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ProgramaPageProps) {
   const { slug } = await params;
   const programa = await ProgramController.getProgramBySlug(slug);
 
@@ -22,15 +23,12 @@ export async function generateMetadata({ params }: ProgramaPageProps): Promise<M
     };
   }
 
-  return {
+  return buildBaseMetadata({
     title: programa.title,
     description: programa.shortDescription,
-    openGraph: {
-      title: programa.title,
-      description: programa.shortDescription,
-      images: [programa.imageUrl],
-    },
-  };
+    path: `/programas/${slug}`,
+    ogImage: programa.imageUrl,
+  });
 }
 
 export default async function ProgramaPage({ params }: ProgramaPageProps) {
@@ -83,16 +81,29 @@ export default async function ProgramaPage({ params }: ProgramaPageProps) {
       }
     : null;
 
+  // Breadcrumb JSON-LD
+  const breadcrumbSchema = breadcrumbJsonLd([
+    { name: 'Inicio', url: '/inicio' },
+    { name: 'Programas', url: '/programas' },
+    { name: programa.title, url: `/programas/${slug}` },
+  ]);
+
   return (
-    <main className="w-full overflow-x-clip">
-      <Navbar />
-      <ProgramaDetalleTemplate
-        programa={programaAdapted}
-        previousPrograma={previousAdapted}
-        nextPrograma={nextAdapted}
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <Footer />
-      <WhatsAppButton />
-    </main>
+      <main className="w-full overflow-x-clip">
+        <Navbar />
+        <ProgramaDetalleTemplate
+          programa={programaAdapted}
+          previousPrograma={previousAdapted}
+          nextPrograma={nextAdapted}
+        />
+        <Footer />
+        <WhatsAppButton />
+      </main>
+    </>
   );
 }

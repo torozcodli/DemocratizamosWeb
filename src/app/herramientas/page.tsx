@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { buildBaseMetadata } from '@/lib/seo/metadata';
 import { Navbar } from '@/components/sections/Navbar';
 import { Footer } from '@/components/sections/Footer';
 import { HerramientasHero } from '@/components/herramientas/HerramientasHero';
@@ -9,24 +9,11 @@ import { authOptions } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
+export const metadata = buildBaseMetadata({
   title: 'Herramientas',
   description: 'Accede a herramientas digitales y recursos para impulsar tu crecimiento profesional y personal.',
-  openGraph: {
-    title: 'Herramientas',
-    description: 'Accede a herramientas digitales y recursos para impulsar tu crecimiento profesional y personal.',
-    url: '/herramientas',
-    type: 'website',
-    images: [
-      {
-        url: '/og/og-default.png',
-        width: 1200,
-        height: 630,
-        alt: 'Herramientas',
-      },
-    ],
-  },
-};
+  path: '/herramientas',
+});
 
 export default async function HerramientasPage() {
   const session = await getServerSession(authOptions);

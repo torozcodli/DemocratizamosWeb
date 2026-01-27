@@ -1,11 +1,9 @@
-// Get base URL dynamically based on environment
-// This function is evaluated at module load time, which works for both build and runtime
-function getBaseUrl(): string {
-  // In Vercel preview deployments, use VERCEL_URL (automatically set by Vercel)
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
-  }
-  // Allow override via environment variable
+/**
+ * Get canonical base URL (production domain)
+ * NEVER uses VERCEL_URL - always returns production domain for canonical URLs
+ */
+export function getCanonicalBaseUrl(): string {
+  // Allow override via environment variable (for canonical URLs)
   if (process.env.NEXT_PUBLIC_SITE_URL) {
     return process.env.NEXT_PUBLIC_SITE_URL;
   }
@@ -13,8 +11,22 @@ function getBaseUrl(): string {
   return 'https://democratizamoslanovacion.org';
 }
 
-// Calculate base URL once at module load
-const baseUrl = getBaseUrl();
+/**
+ * Get request base URL (can use VERCEL_URL for previews)
+ * Use this for non-canonical purposes (logs, previews, etc.)
+ */
+export function getRequestBaseUrl(): string {
+  // In Vercel preview deployments, use VERCEL_URL
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  // Fallback to canonical base
+  return getCanonicalBaseUrl();
+}
+
+// Calculate base URL once at module load (for backward compatibility)
+// This is used by siteConfig.url but should be replaced with getCanonicalBaseUrl() where appropriate
+const baseUrl = getCanonicalBaseUrl();
 
 export const siteConfig = {
   name: 'Democratizamos la Innovación',
