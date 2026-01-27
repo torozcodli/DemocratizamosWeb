@@ -107,12 +107,14 @@ export function InclusionDigitalSection() {
               label="Personas capacitadas"
               imageSrc="/images/2500.jpg"
               imageAlt="Personas en capacitación"
+              animateOnScroll
             />
             <StatCard
               value="+190"
               label="Proyectos realizados"
               imageSrc="/images/500.jpg"
               imageAlt="Proyectos de inclusión digital"
+              animateOnScroll
             />
           </div>
         </div>

@@ -62,6 +62,18 @@
 }
 
 @layer utilities {
+  /* Logo sección 2 /inicio: oculto al cargar para que GSAP lo revele; visible si reduced-motion */
+  .inicio-sec2-logo-init {
+    opacity: 0;
+    visibility: hidden;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .inicio-sec2-logo-init {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
   .font-inter {
     font-family: var(--font-inter);
   }

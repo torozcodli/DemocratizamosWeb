@@ -1,22 +1,57 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { homeContent } from '@/content/home';
+
+const SOLAR_ICONS: Record<number, string> = {
+  0: '/solar/icons/Eductaion.svg',
+  1: '/solar/icons/Collaboration.svg',
+  2: '/solar/icons/Inclusion.svg',
+  3: '/solar/icons/Employability.svg',
+  4: '/solar/icons/Equity.svg',
+  5: '/solar/icons/Innovation.svg',
+};
 
 export function SolarSystem() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const toggle = (i: number) => setOpenIndex((p) => (p === i ? null : i));
+
+  // Cerrar modal al hacer clic fuera (en cualquier parte de la pantalla)
+  useEffect(() => {
+    if (openIndex === null) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (modalRef.current && !modalRef.current.contains(target)) {
+        setOpenIndex(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [openIndex]);
+
   return (
-    <div className="flex items-center justify-center w-full py-8 md:py-12 mb-16 md:mb-24">
+    <div className="flex flex-col items-center w-full py-8 md:py-12 mb-16 md:mb-24">
       <div className="relative w-full max-w-[600px] md:max-w-[700px] lg:max-w-[804px]">
-        <div className="absolute left-1/2 -top-24 -translate-x-1/2 z-20 pointer-events-none select-none">
+        <button
+          type="button"
+          onClick={() => toggle(0)}
+          aria-label="Ver objetivo e impacto: Educación y alfabetización digital"
+          aria-expanded={openIndex === 0}
+          className="absolute left-1/2 -top-24 -translate-x-1/2 z-20 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#F0B07C] focus:ring-offset-2 rounded-lg"
+        >
           <Image
             src="/solar/icons/Eductaion.svg"
             alt=""
-            aria-hidden="true"
+            aria-hidden
             width={120}
             height={120}
-            className="h-auto w-48 sm:w-56 lg:w-64"
+            className="h-auto w-48 sm:w-56 lg:w-64 pointer-events-none select-none"
             priority
           />
-        </div>
-        <svg width="804" height="853" viewBox="0 0 804 853" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        </button>
+        <svg width="804" height="853" viewBox="0 0 804 853" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className="pointer-events-none" aria-hidden>
 <g clipPath="url(#clip0_69_676)">
 <path d="M401.76 802.77C623.232 802.77 802.77 623.232 802.77 401.76C802.77 180.288 623.232 0.75 401.76 0.75C180.288 0.75 0.75 180.288 0.75 401.76C0.75 623.232 180.288 802.77 401.76 802.77Z" stroke="#9DACFD" strokeWidth="1.5" strokeMiterlimit="10"/>
 <path d="M401.76 694.71C563.552 694.71 694.71 563.552 694.71 401.76C694.71 239.968 563.552 108.81 401.76 108.81C239.968 108.81 108.81 239.968 108.81 401.76C108.81 563.552 239.968 694.71 401.76 694.71Z" stroke="#ABC1FF" strokeWidth="1.5" strokeMiterlimit="10"/>
@@ -56,70 +91,180 @@ export function SolarSystem() {
 </defs>
         </svg>
         {/* Icono encima de la card izquierda - Innovación con propósito social */}
-        <div className="absolute left-[12%] top-[42%] -translate-x-1/2 -translate-y-full z-20 pointer-events-none select-none" style={{ marginTop: '-2.5rem' }}>
+        <button
+          type="button"
+          onClick={() => toggle(5)}
+          aria-label="Ver objetivo e impacto: Innovación con propósito social"
+          aria-expanded={openIndex === 5}
+          className="absolute left-[12%] top-[42%] -translate-x-1/2 -translate-y-full z-20 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#F0B07C] focus:ring-offset-2 rounded-lg"
+          style={{ marginTop: '-2.5rem' }}
+        >
           <Image
             src="/solar/icons/Innovation.svg"
             alt=""
             aria-hidden="true"
             width={120}
             height={120}
-            className="h-auto w-56 sm:w-64 lg:w-72"
+            className="h-auto w-56 sm:w-64 lg:w-72 pointer-events-none select-none"
             priority
           />
-        </div>
+        </button>
         {/* Icono encima de la card inferior - Equidad y participación */}
-        <div className="absolute -right-16 top-[42%] -translate-y-full z-20 pointer-events-none select-none" style={{ marginTop: '-2.5rem' }}>
+        <button
+          type="button"
+          onClick={() => toggle(4)}
+          aria-label="Ver objetivo e impacto: Equidad y participación"
+          aria-expanded={openIndex === 4}
+          className="absolute -right-16 top-[42%] -translate-y-full z-20 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#F0B07C] focus:ring-offset-2 rounded-lg"
+          style={{ marginTop: '-2.5rem' }}
+        >
           <Image
             src="/solar/icons/Equity.svg"
             alt=""
             aria-hidden="true"
             width={256}
             height={256}
-            className="w-48 sm:w-56 lg:w-64"
+            className="w-48 sm:w-56 lg:w-64 pointer-events-none select-none"
             style={{ width: '100%', height: 'auto' }}
             priority
           />
-        </div>
+        </button>
         {/* Icono de Colaboración y ecosistema - más abajo y más a la izquierda */}
-        <div className="absolute left-[20%] top-[85%] -translate-x-1/2 -translate-y-full z-20 pointer-events-none select-none" style={{ marginTop: '-2.5rem' }}>
+        <button
+          type="button"
+          onClick={() => toggle(1)}
+          aria-label="Ver objetivo e impacto: Colaboración y ecosistema"
+          aria-expanded={openIndex === 1}
+          className="absolute left-[20%] top-[85%] -translate-x-1/2 -translate-y-full z-20 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#F0B07C] focus:ring-offset-2 rounded-lg"
+          style={{ marginTop: '-2.5rem' }}
+        >
           <Image
             src="/solar/icons/Collaboration.svg"
             alt=""
             aria-hidden="true"
             width={272}
             height={272}
-            className="w-52 sm:w-60 lg:w-68"
+            className="w-52 sm:w-60 lg:w-68 pointer-events-none select-none"
             style={{ width: '100%', height: 'auto' }}
             priority
           />
-        </div>
+        </button>
         {/* Icono de Empleabilidad y emprendimiento - misma altura que Collaboration, más a la derecha */}
-        <div className="absolute right-[5%] top-[85%] -translate-y-full z-20 pointer-events-none select-none" style={{ marginTop: '-2.5rem' }}>
+        <button
+          type="button"
+          onClick={() => toggle(3)}
+          aria-label="Ver objetivo e impacto: Empleabilidad y emprendimiento"
+          aria-expanded={openIndex === 3}
+          className="absolute right-[5%] top-[85%] -translate-y-full z-20 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#F0B07C] focus:ring-offset-2 rounded-lg"
+          style={{ marginTop: '-2.5rem' }}
+        >
           <Image
             src="/solar/icons/Employability.svg"
             alt=""
             aria-hidden="true"
             width={288}
             height={288}
-            className="w-56 sm:w-64 lg:w-72"
+            className="w-56 sm:w-64 lg:w-72 pointer-events-none select-none"
             style={{ width: '100%', height: 'auto' }}
             priority
           />
-        </div>
+        </button>
         {/* Icono de Inclusión digital y acceso equitativo - centro del sistema solar, grande */}
-        <div className="absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none select-none">
+        <button
+          type="button"
+          onClick={() => toggle(2)}
+          aria-label="Ver objetivo e impacto: Inclusión digital y acceso equitativo"
+          aria-expanded={openIndex === 2}
+          className="absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#F0B07C] focus:ring-offset-2 rounded-lg"
+        >
           <Image
             src="/solar/icons/Inclusion.svg"
             alt=""
             aria-hidden="true"
             width={1200}
             height={1200}
-            className="h-auto"
+            className="h-auto pointer-events-none select-none"
             style={{ width: '40rem', minWidth: '40rem' }}
             priority
           />
-        </div>
+        </button>
 
+        {/* Modal centrado en el sistema solar: card con header navy + Objetivo/Impacto */}
+        {openIndex !== null && (() => {
+          const v = homeContent.values[openIndex] as {
+            title: string;
+            objetivo?: string;
+            impactoEsperado?: string;
+            description?: string;
+          };
+          const objetivo = typeof v?.objetivo === 'string' ? v.objetivo : '';
+          const impactoEsperado = typeof v?.impactoEsperado === 'string' ? v.impactoEsperado : '';
+          const hasContent = objetivo || impactoEsperado || (v?.description ?? '');
+          if (!hasContent) return null;
+          const iconSrc = SOLAR_ICONS[openIndex] ?? '/solar/icons/Inclusion.svg';
+          const closeModal = () => setOpenIndex(null);
+          return (
+            <>
+              {/* Fondo clicable: cerrar al hacer clic fuera del modal */}
+              <button
+                type="button"
+                onClick={closeModal}
+                aria-label="Cerrar modal (clic fuera)"
+                className="absolute inset-0 z-[109] bg-transparent cursor-pointer focus:outline-none"
+              />
+              <div
+                ref={modalRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="solar-modal-title"
+                aria-label={`Objetivo e impacto: ${v.title}`}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[110] w-[85%] max-w-lg min-h-[280px] rounded-xl overflow-hidden border border-[#9DACFD]/40 bg-white/95 shadow-xl"
+              >
+                <div className="flex items-center gap-3 px-4 py-4 bg-[#0E0D2B] rounded-t-xl">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#1E1A49] flex items-center justify-center">
+                    <Image
+                      src={iconSrc}
+                      alt=""
+                      width={24}
+                      height={24}
+                      className="w-6 h-6 object-contain"
+                    />
+                  </div>
+                  <span id="solar-modal-title" className="flex-1 text-[#E7ECFF] font-semibold text-base md:text-lg">
+                    {v.title}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    aria-label="Cerrar"
+                    className="flex-shrink-0 p-1 -m-1 rounded text-[#F0B07C] hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#F0B07C] focus:ring-offset-2 focus:ring-offset-[#0E0D2B]"
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="rotate-180" aria-hidden>
+                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+              <div className="px-5 py-6 bg-[#E7ECFF]/30 text-[#1E1A49] text-sm md:text-base leading-relaxed space-y-4 rounded-b-xl min-h-[180px] flex flex-col justify-center">
+                {objetivo ? (
+                  <p>
+                    <span className="font-bold text-[#F0B07C]">Objetivo.</span>{' '}
+                    <span className="text-[#1E1A49]">{objetivo}</span>
+                  </p>
+                ) : null}
+                {impactoEsperado ? (
+                  <p>
+                    <span className="font-bold text-[#F0B07C]">Impacto esperado.</span>{' '}
+                    <span className="text-[#1E1A49]">{impactoEsperado}</span>
+                  </p>
+                ) : null}
+                {!objetivo && !impactoEsperado && v?.description ? (
+                  <p>{v.description}</p>
+                ) : null}
+              </div>
+            </div>
+            </>
+          );
+        })()}
       </div>
     </div>
   );

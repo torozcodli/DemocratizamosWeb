@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { siteConfig } from '@/config/site';
+import { contactBtnClass } from '@/lib/styles/buttons';
 import { cn } from '@/lib/utils/cn';
 import { usePathname } from 'next/navigation';
 import { track } from '@/lib/analytics';
@@ -62,12 +63,11 @@ export function NavbarMenuClient() {
             </Link>
           );
         })}
-        {/* Botón Contacto deshabilitado */}
-        {/* <a href={siteConfig.cta.href} target="_blank" rel="noopener noreferrer">
-          <Button variant="primary" className="ml-2 mr-4">
+        <a href={siteConfig.cta.href} target="_blank" rel="noopener noreferrer">
+          <Button variant="primary" className={contactBtnClass + ' ml-2 mr-4'}>
             {siteConfig.cta.label}
           </Button>
-        </a> */}
+        </a>
       </div>
       <button
         className="xl:hidden h-12 w-12 rounded-full bg-indigo-200/60 hover:bg-indigo-200 flex items-center justify-center transition-colors"
@@ -130,18 +130,17 @@ export function NavbarMenuClient() {
                     </Link>
                   );
                 })}
-                {/* Botón Contacto deshabilitado */}
-                {/* <a 
+                <a 
                   href={siteConfig.cta.href} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="block mt-8"
                   onClick={() => setIsOpen(false)}
                 >
-                  <Button variant="primary" className="text-lg md:text-xl px-8 py-3 rounded-full">
+                  <Button variant="primary" className={contactBtnClass + ' text-lg md:text-xl px-8 py-3 rounded-full'}>
                     {siteConfig.cta.label}
                   </Button>
-                </a> */}
+                </a>
               </nav>
             </div>
           </div>

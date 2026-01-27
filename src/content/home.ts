@@ -18,27 +18,50 @@ export const homeContent = {
     {
       title: 'Educación y alfabetización digital',
       description: 'Capacitamos en habilidades digitales esenciales.',
+      objetivo:
+        'Reducir la brecha digital formando a personas en habilidades tecnológicas básicas y avanzadas.',
+      impactoEsperado:
+        'Personas con confianza y autonomía para acceder al mundo digital.',
     },
     {
       title: 'Colaboración y ecosistema',
       description: 'Construimos redes de apoyo y colaboración.',
+      objetivo:
+        'Construir alianzas público-privadas que impulsen la digitalización social.',
+      impactoEsperado:
+        'Un ecosistema conectado que promueva la igualdad digital como política de desarrollo sostenible.',
     },
     {
       title: 'Inclusión digital y acceso equitativo',
       description: 'Garantizamos que todos tengan acceso a la tecnología.',
       highlight: true,
+      objetivo: 'Garantizar acceso equitativo a la tecnología para todas las personas.',
+      impactoEsperado:
+        'Comunidades con igualdad de oportunidades en el mundo digital.',
     },
     {
       title: 'Empleabilidad y emprendimiento',
       description: 'Preparamos para el mercado laboral digital.',
+      objetivo:
+        'Convertir las habilidades digitales en oportunidades económicas reales.',
+      impactoEsperado:
+        'Más personas generando ingresos y empleos a través de la innovación.',
     },
     {
       title: 'Equidad y participación',
       description: 'Promovemos la igualdad de oportunidades.',
+      objetivo:
+        'Asegurar que mujeres, jóvenes y comunidades vulnerables participen activamente en la transformación digital.',
+      impactoEsperado:
+        'Más mujeres y grupos vulnerables ocupando espacios digitales con confianza y liderazgo.',
     },
     {
       title: 'Innovación con propósito social',
       description: 'Usamos la tecnología para el bien común.',
+      objetivo:
+        'Promover el desarrollo y uso de tecnología para resolver problemas comunitarios.',
+      impactoEsperado:
+        'Comunidades que usan la innovación para mejorar su entorno social y ambiental.',
     },
   ],
   stats: [

@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/Button';
 import { WhatsAppBanner } from '@/components/ui/WhatsAppBanner';
+import { contactBtnClass } from '@/lib/styles/buttons';
 import { homeContent } from '@/content/home';
 import HeroIllustration from '@/components/landing/HeroIllustration';
 
@@ -41,7 +42,7 @@ export function Hero() {
             </p>
 
             <a href="https://wa.me/+5216145871758" target="_blank" rel="noopener noreferrer">
-              <Button variant="primary" className="hero-cta-button -mt-1 text-[clamp(16px,4vw,20px)] md:text-lg xl:text-xl px-6 md:px-7 py-2 md:py-2.5">
+              <Button variant="primary" className={contactBtnClass + ' hero-cta-button -mt-1 text-[clamp(16px,4vw,20px)] md:text-lg xl:text-xl px-6 md:px-7 py-2 md:py-2.5'}>
                 {homeContent.hero.cta}
               </Button>
             </a>

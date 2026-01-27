@@ -30,13 +30,15 @@ export default function HeroIllustration({ className }: HeroIllustrationProps) {
       {/* Capa 3 (z-10): Círculos naranja (atrás) */}
       {/* circle-orange-bottom (bottom: smaller => lower) */}
       <div
-        className="hero-circle-large absolute left-[calc(4%-1cm)] bottom-[calc(12%-2cm)] lg:left-[calc(0%-1cm)] lg:bottom-[calc(14%-2cm)] w-[46%] lg:w-[42%] aspect-square rounded-full opacity-90 z-10 pointer-events-none"
+        data-hero-circle
+        className="hero-circle-large absolute left-[calc(4%-1cm)] bottom-[calc(12%-2cm)] lg:left-[calc(0%-1cm)] lg:bottom-[calc(14%-2cm)] w-[50%] lg:w-[46%] aspect-square rounded-full opacity-90 z-10 pointer-events-none will-change-transform"
         style={{
           background: 'linear-gradient(180deg, #FF8948 0%, #FFD1BD 100%)',
         }}
       />
       <div
-        className="hero-circle-small absolute left-[48%] top-[6%] lg:left-[44%] lg:top-[4%] w-[24%] lg:w-[22%] aspect-square rounded-full opacity-85 z-10 pointer-events-none"
+        data-hero-circle
+        className="hero-circle-small absolute left-[48%] top-[6%] lg:left-[44%] lg:top-[4%] w-[28%] lg:w-[26%] aspect-square rounded-full opacity-85 z-10 pointer-events-none will-change-transform"
         style={{
           background: 'linear-gradient(180deg, #FF8948 0%, #FFD1BD 100%)',
         }}

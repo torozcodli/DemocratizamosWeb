@@ -2,19 +2,22 @@ const principles = [
   {
     number: 1,
     title: 'Agilidad.',
-    description: 'Evitamos la burocracia innecesaria. Actuamos rápido, decididos y enfocados en soluciones que generen valor social.',
+    description:
+      'Evitamos la burocracia innecesaria. Actuamos rápido, decididos y enfocados en soluciones que generen valor social.',
     bgColor: '#4B4A78',
   },
   {
     number: 2,
     title: 'Resiliencia.',
-    description: 'Ante los retos, encontramos alternativas creativas. Nos adaptamos, aprendemos, y seguimos adelante sin perder el rumbo.',
+    description:
+      'Ante los retos, encontramos alternativas creativas. Nos adaptamos, aprendemos, y seguimos adelante sin perder el rumbo.',
     bgColor: '#98A7FF',
   },
   {
     number: 3,
     title: 'Convicción.',
-    description: 'Cada acción tiene propósito. Creemos profundamente en el impacto que la innovación puede tener en la vida de las personas.',
+    description:
+      'Cada acción tiene propósito. Creemos profundamente en el impacto que la innovación puede tener en la vida de las personas.',
     bgColor: '#1D194C',
   },
 ];
@@ -60,7 +63,7 @@ export function PrincipiosAccionSection() {
                   const translateY = index === 0 ? '' : index === 1 ? 'md:translate-y-8' : 'md:translate-y-16';
                   // Scale: ligera reducción para profundidad
                   const scale = index === 0 ? '' : index === 1 ? 'md:scale-[0.98]' : 'md:scale-[0.96]';
-                  
+
                   return (
                     <div
                       key={principle.number}

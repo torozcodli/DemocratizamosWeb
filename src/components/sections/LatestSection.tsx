@@ -1,6 +1,11 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Container } from '@/components/ui/Container';
 import { cn } from '@/lib/utils/cn';
+import { getGsap } from '@/lib/gsap/gsapClient';
+import { usePrefersReducedMotion } from '@/lib/motion/usePrefersReducedMotion';
 
 const latestItems = [
   {
@@ -24,15 +29,91 @@ const latestItems = [
 ];
 
 export function LatestSection() {
+  const ref = useRef<HTMLElement | null>(null);
+  const reduced = usePrefersReducedMotion();
+
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+
+    if (reduced) {
+      const overlays = root.querySelectorAll('[data-orange-overlay]');
+      overlays.forEach((el) => {
+        const e = el as HTMLElement;
+        e.style.transformOrigin = 'bottom';
+        e.style.transform = 'scaleY(1)';
+        e.style.opacity = '1';
+      });
+      return;
+    }
+
+    let ctx: { revert: () => void } | null = null;
+    let cancelled = false;
+    getGsap().then((gsap) => {
+      if (cancelled) return;
+      ctx = gsap.context(() => {
+        // (1) Overlays por card
+        const cards = gsap.utils.toArray<HTMLElement>('[data-lmn-card]', root);
+        cards.forEach((card) => {
+          const overlay = card.querySelector<HTMLElement>('[data-orange-overlay]');
+          if (!overlay) return;
+          gsap.set(overlay, { transformOrigin: '50% 100%', scaleY: 0 });
+          gsap.to(overlay, {
+            scaleY: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 80%',
+              end: 'top 45%',
+              scrub: true,
+            },
+          });
+        });
+
+        // (2) Parallax círculos fondo
+        const circles = gsap.utils.toArray<HTMLElement>('[data-parallax-circle]', root);
+        circles.forEach((el) => {
+          const speed = parseFloat(el.getAttribute('data-speed') ?? '0.3');
+          const distance = -140 * speed;
+          gsap.to(el, {
+            y: distance,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: root,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          });
+        });
+      }, root);
+    });
+
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
+  }, [reduced]);
+
   return (
-    <section className="relative py-20 md:py-28 lg:py-32 overflow-hidden">
+    <section
+      id="inicio-lomasnuevo"
+      data-lomasnuevo-section
+      ref={ref}
+      className="relative py-20 md:py-28 lg:py-32 overflow-hidden"
+    >
       {/* Capa base: Color lavanda/púrpura claro */}
       <div className="absolute inset-0 z-0 bg-[#B5BBEF]" />
 
       {/* Wrapper para decoraciones */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Círculo 1: bottom-left (grande, parcialmente cortado) - más morado */}
-        <div className="absolute bottom-0 left-0 z-[1] opacity-60" style={{ filter: 'blur(1px)' }}>
+        <div
+          data-parallax-circle
+          data-speed="0.2"
+          className="absolute bottom-0 left-0 z-[1] opacity-60 will-change-transform"
+          style={{ filter: 'blur(1px)' }}
+        >
           <svg
             width="1000"
             height="1000"
@@ -58,7 +139,12 @@ export function LatestSection() {
         </div>
 
         {/* Círculo 2: right, más arriba (pequeño) - más morado */}
-        <div className="absolute right-[5%] top-[10%] z-[1] opacity-55" style={{ filter: 'blur(1px)' }}>
+        <div
+          data-parallax-circle
+          data-speed="0.35"
+          className="absolute right-[5%] top-[10%] z-[1] opacity-55 will-change-transform"
+          style={{ filter: 'blur(1px)' }}
+        >
           <svg
             width="500"
             height="500"
@@ -137,13 +223,14 @@ export function LatestSection() {
           {latestItems.map((item, index) => (
             <div
               key={index}
+              data-lmn-card
               className={cn(
                 "rounded-[42px] overflow-hidden shadow-lg bg-white flex flex-col",
                 index === 2 && "md:col-span-2 md:max-w-[600px] md:mx-auto xl:col-span-1 xl:max-w-none"
               )}
             >
               {/* Parte superior: Imagen con overlay */}
-              <div className="relative h-[175px] lg:h-[195px]">
+              <div className="relative h-[175px] lg:h-[195px] overflow-hidden">
                 <Image
                   src={item.image}
                   alt={item.title}
@@ -151,11 +238,19 @@ export function LatestSection() {
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 400px"
                 />
-                {/* Overlay degradado */}
+                {/* Overlay degradado navy (debajo) */}
                 <div
-                  className="absolute inset-0 rounded-t-[42px]"
+                  className="absolute inset-0 z-[1] rounded-t-[42px] pointer-events-none"
                   style={{
                     background: 'linear-gradient(to bottom, transparent 0%, rgba(30, 26, 73, 0.1) 30%, rgba(30, 26, 73, 0.6) 100%)',
+                  }}
+                />
+                {/* Overlay naranja: encima del navy, se revela con scroll (GSAP scaleY) */}
+                <div
+                  data-orange-overlay
+                  className="pointer-events-none absolute inset-0 z-[2] origin-bottom will-change-transform scale-y-0 rounded-t-[42px]"
+                  style={{
+                    background: 'linear-gradient(to top, rgba(251,146,60,0.75) 0%, rgba(251,146,60,0.4) 35%, rgba(251,146,60,0.12) 65%, transparent 100%)',
                   }}
                 />
               </div>

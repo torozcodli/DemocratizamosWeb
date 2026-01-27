@@ -2,6 +2,7 @@ import { buildBaseMetadata } from '@/lib/seo/metadata';
 import { Navbar } from '@/components/sections/Navbar';
 import { Hero } from '@/components/sections/Hero';
 import { About } from '@/components/sections/About';
+import { HeroCirclesScrollEffect } from '@/components/sections/HeroCirclesScrollEffect.client';
 import { InclusionDigitalSection } from '@/components/sections/InclusionDigitalSection';
 import { Ribbon } from '@/components/ui/Ribbon';
 import { AlliesSection } from '@/components/sections/AlliesSection';
@@ -19,7 +20,8 @@ export default function InicioPage() {
     <main className="min-h-screen w-full p-0 m-0">
       <Navbar />
       <Hero />
-      <About />
+      <About sectionId="inicio-sec2" />
+      <HeroCirclesScrollEffect />
       <InclusionDigitalSection />
       <Ribbon />
       <AlliesSection />
