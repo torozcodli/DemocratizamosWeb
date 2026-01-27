@@ -5,6 +5,7 @@ import { SealBadge } from './SealBadge';
 
 interface FlipCardProps {
   sealText: string;
+  sealSrc?: string; // logo del sello: por defecto Demologo, Visión puede usar vision.svg
   frontTitle: string;
   frontText: string;
   backText: string;
@@ -12,6 +13,7 @@ interface FlipCardProps {
 
 export function FlipCard({
   sealText,
+  sealSrc,
   frontTitle,
   frontText,
   backText,
@@ -21,7 +23,7 @@ export function FlipCard({
   return (
     <div className="relative w-full">
       {/* Sello circular */}
-      <SealBadge text={sealText} />
+      <SealBadge text={sealText} src={sealSrc} />
 
       {/* Card wrapper con perspective */}
       <div className="perspective-[1200px] w-full h-[480px] sm:h-[520px] md:h-[560px] lg:h-[580px]">

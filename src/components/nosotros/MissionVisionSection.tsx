@@ -13,9 +13,10 @@ export function MissionVisionSection() {
             backText="Impulsamos a las personas hacia mejores oportunidades económicas, fortaleciendo su autonomía mediante habilidades digitales que potencian su desarrollo personal, profesional y social. Democratizamos la innovación y la tecnología como herramientas de inclusión, enfocándonos en quienes enfrentan mayores barreras, para construir una sociedad más equitativa, creativa y resiliente."
           />
 
-          {/* Tarjeta Visión */}
+          {/* Tarjeta Visión — logo superior con vision.svg */}
           <FlipCard
             sealText="Visión"
+            sealSrc="/solar/vision.svg"
             frontTitle="Un mundo donde innovar es un derecho."
             frontText="Queremos ser una fuerza global que inspira, transforma y abre caminos para que todas las personas puedan construir un futuro sostenible e inclusivo."
             backText="Democratizamos la Innovación se visualiza como una fuerza transformadora y revolucionaria, líder en la promoción del desarrollo humano y la innovación social. Buscamos trascender fronteras y barreras, siendo reconocidos por nuestro impacto radical y positivo en la vida de las personas y comunidades a nivel global. Aspiramos a ser pioneros en la creación de un mundo más sostenible, inclusivo y vibrante, donde cada individuo tenga la oportunidad y el poder de convertir sus sueños en realidad y contribuir activamente a la construcción de un futuro mejor para todos."

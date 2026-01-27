@@ -50,7 +50,7 @@ export function Footer() {
       </div>
 
       <Container>
-        <div className="grid gap-8 sm:gap-10 md:gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-[1.25fr_1fr_.75fr] xl:gap-x-16 xl:gap-y-0 items-start">
+        <div className="grid gap-8 sm:gap-10 md:gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-[1.1fr_1.6fr_.75fr] xl:gap-x-16 xl:gap-y-0 items-start">
           {/* Column 1: Branding */}
           <div className="space-y-4 sm:col-span-2 md:col-span-1">
             <div className="w-full max-w-[200px] sm:max-w-[220px] md:max-w-[240px]">
@@ -65,8 +65,8 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Social Media & Contact */}
-          <div className="space-y-6 sm:space-y-8">
+          {/* Column 2: Social Media & Contact — más ancho para que el correo no se corte */}
+          <div className="space-y-6 sm:space-y-8 min-w-0 xl:min-w-[320px]">
             <div>
               <h4 className="font-semibold text-[#E1E6FD] mb-4 sm:mb-6 text-base sm:text-lg">Redes sociales</h4>
               <div className="flex gap-3 sm:gap-4">

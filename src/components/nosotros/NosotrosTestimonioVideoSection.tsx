@@ -8,6 +8,11 @@ export function NosotrosTestimonioVideoSection() {
   return (
     <section className="relative w-full overflow-x-clip bg-[#1D194C] py-14 sm:py-16 lg:py-20">
       <Container className="relative z-10">
+        {/* Título de sección — tema testimonial, paleta web */}
+        <h2 className="font-tech font-extrabold tracking-tight text-center text-[#E1E6FD] text-[clamp(32px,5vw,48px)] sm:text-[clamp(36px,5.5vw,56px)] md:text-[clamp(40px,5vw,60px)] mb-10 md:mb-12">
+          <span className="text-[#FF8948]">Testimonios</span>
+        </h2>
+
         {/* Decoración pixel blocks (derecha, fondo) */}
         <div className="pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 hidden md:block z-0">
           <Image
