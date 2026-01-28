@@ -117,9 +117,9 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 3: Explore */}
+          {/* Column 3: Explorar */}
           <div className="sm:col-start-1 sm:row-start-2 md:col-start-3 md:row-start-1">
-            <h4 className="font-semibold text-[#E1E6FD] mb-4 sm:mb-6 text-base sm:text-lg">Explore</h4>
+            <h4 className="font-semibold text-[#E1E6FD] mb-4 sm:mb-6 text-base sm:text-lg">Explorar</h4>
             <ul className="space-y-3 sm:space-y-4">
               <li>
                 <a

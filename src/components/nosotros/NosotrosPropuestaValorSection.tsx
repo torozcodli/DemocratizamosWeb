@@ -5,37 +5,37 @@ const cards = [
     number: 1,
     title: 'Profesionalización',
     description:
-      'Talleres de IA, Ventas Online, Ciberseguridad, Marketing Digital y más para emprendedores, mujeres, MiPyMEs y público general.',
+      'Fortalecemos las capacidades de personas autoempleadas, emprendedoras y equipos locales mediante procesos formativos que les permiten mejorar la gestión de su actividad económica, adaptarse a entornos digitales y tomar mejores decisiones para su sustento y crecimiento.',
   },
   {
     number: 2,
     title: 'Habilidades Tecnológicas',
     description:
-      'Talleres como CodeHeros y Programación para niños, adolescentes, mujeres adultas y público general.',
+      'Impulsamos la alfabetización digital y fortalecemos habilidades tecnológicas en personas con distintas necesidades, brindando conocimientos prácticos para desenvolverse con autonomía en entornos digitales, mejorar su participación económica y adaptarse a los cambios tecnológicos.',
   },
   {
     number: 3,
     title: 'Acompañamiento',
     description:
-      'Plataforma de incubación, consultoría, mentoría y apoyo en implementación tecnológica.',
+      'Acompañamos a personas y proyectos productivos en la implementación de soluciones tecnológicas y procesos de innovación, brindando orientación, mentoría y seguimiento para reducir barreras y facilitar la adopción de tecnología de forma accesible y pertinente.',
   },
   {
     number: 4,
     title: 'Sensibilización',
     description:
-      'Pláticas sobre uso de tecnología y propiedad intelectual para diversos sectores.',
+      'Promovemos una cultura de uso responsable y consciente de la tecnología, fomentando la comprensión de su valor social, económico y creativo, así como el conocimiento básico sobre derechos, innovación y protección de ideas.',
   },
   {
     number: 5,
     title: 'Orientación',
     description:
-      'Canalización a servicios externos y acceso a equipos de cómputo.',
+      'Canalizamos a las personas hacia redes de apoyo, servicios complementarios y recursos tecnológicos que fortalecen su desarrollo, facilitando el acceso a herramientas, equipos y oportunidades que de otra forma serían inaccesibles.',
   },
   {
     number: 6,
     title: 'Protección',
     description:
-      'Orientación en trámites ante IMPI e INDAUTOR para protección de innovaciones.',
+      'Orientamos a personas y proyectos en la comprensión de mecanismos básicos de protección de sus ideas e innovaciones, contribuyendo a que el conocimiento y la creatividad generen valor sostenible y reconocimiento justo.',
   },
 ];
 
@@ -84,8 +84,7 @@ export function NosotrosPropuestaValorSection() {
 
               {/* Texto descriptivo */}
               <p className="mt-12 md:mt-14 lg:mt-16 text-white text-base md:text-lg leading-relaxed max-w-[90%]">
-                Nuestra propuesta de valor se estructura en seis componentes principales, diseñados para atender las diferentes necesidades y oportunidades de la población en Chihuahua en materia de{' '}
-                <strong className="font-bold">inclusión digital y desarrollo tecnológico</strong>.
+                Nuestra propuesta se articula en seis componentes que fortalecen las capacidades de las personas para mejorar su autonomía económica, su participación en la economía digital y su bienestar, con un enfoque de inclusión social y desarrollo local.
               </p>
             </div>
 
