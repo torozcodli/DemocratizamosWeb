@@ -122,18 +122,80 @@ export function Footer() {
             <h4 className="font-semibold text-[#E1E6FD] mb-4 sm:mb-6 text-base sm:text-lg">Explorar</h4>
             <ul className="space-y-3 sm:space-y-4">
               <li>
-                <a
-                  href="#nosotros"
+                <Link
+                  href="/inicio"
+                  onClick={() => {
+                    track('footer_click', {
+                      item: 'inicio',
+                    });
+                  }}
+                  className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
+                >
+                  Inicio
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/nosotros"
+                  onClick={() => {
+                    track('footer_click', {
+                      item: 'nosotros',
+                    });
+                  }}
                   className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
                 >
                   Nosotros
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/programas"
+                  onClick={() => {
+                    track('footer_click', {
+                      item: 'programas',
+                    });
+                  }}
+                  className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
+                >
+                  Programas
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/blog"
+                  onClick={() => {
+                    track('footer_click', {
+                      item: 'blog',
+                    });
+                  }}
+                  className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
+                >
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/herramientas"
+                  onClick={() => {
+                    track('footer_click', {
+                      item: 'herramientas',
+                    });
+                  }}
+                  className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
+                >
+                  Herramientas
+                </Link>
               </li>
               <li>
                 <a
                   href="https://wa.me/+5216145871758"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => {
+                    track('footer_click', {
+                      item: 'contactanos',
+                    });
+                  }}
                   className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
                 >
                   Contáctanos
