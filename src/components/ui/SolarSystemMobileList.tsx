@@ -103,7 +103,7 @@ function MobileCardItem({
   return (
     <div
       ref={rootRef}
-      className="rounded-xl overflow-hidden border border-[#9DACFD]/40 bg-white/95 shadow-sm flex flex-col min-h-[clamp(260px,65vw,340px)]"
+      className="rounded-xl overflow-hidden border border-transparent bg-[#C6CBF5] flex flex-col min-h-[clamp(260px,65vw,340px)]"
     >
       <button
         type="button"
@@ -112,7 +112,7 @@ function MobileCardItem({
         aria-expanded={isOpen}
         aria-controls={hasContent ? `solar-mobile-panel-${id}` : undefined}
         aria-label={`Ver objetivo e impacto: ${item.title}`}
-        className="w-full flex-1 flex flex-col min-h-0 bg-[#0E0D2B] hover:bg-[#12113A] transition-colors text-left"
+        className="w-full flex-1 flex flex-col min-h-0 bg-[#C6CBF5] hover:opacity-90 transition-opacity text-left"
       >
         {/* Zona visual: SVG ocupa 60–75% del card, centrado */}
         <div className="flex-1 flex items-center justify-center min-h-0 w-full px-2 pt-4">
@@ -160,7 +160,7 @@ function MobileCardItem({
           className="overflow-hidden will-change-[height,opacity]"
           style={{ height: 0, opacity: 0 }}
         >
-          <div className="px-4 py-4 bg-[#E7ECFF]/30 text-[#1E1A49] text-sm leading-relaxed space-y-3">
+          <div className="px-4 py-4 bg-white text-[#1E1A49] text-sm leading-relaxed space-y-3">
             {objetivo ? (
               <p>
                 <span className="font-bold text-[#F0B07C]">Objetivo.</span>{' '}

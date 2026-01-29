@@ -20,15 +20,22 @@ export function NavbarScrollClient({ children }: NavbarScrollClientProps) {
   }, []);
 
   return (
-    <nav
-      className={cn(
-        'sticky top-0 z-50 w-full transition-all duration-300',
-        isScrolled
-          ? 'border-b border-navy-200/20 bg-lavender/80 backdrop-blur-md'
-          : 'border-b border-transparent bg-[#E1E6FD] backdrop-blur-none'
-      )}
-    >
-      {children}
-    </nav>
+    <>
+      <nav
+        className={cn(
+          'top-0 z-50 w-full transition-all duration-300',
+          // En móvil/tablet (< xl): fixed para que la hamburguesa siempre sea visible y el menú abra desde cualquier scroll
+          'fixed left-0 right-0 xl:static',
+          'xl:sticky',
+          isScrolled
+            ? 'border-b border-navy-200/20 bg-lavender/80 backdrop-blur-md'
+            : 'border-b border-transparent bg-[#E1E6FD] backdrop-blur-none'
+        )}
+      >
+        {children}
+      </nav>
+      {/* Espaciador cuando el nav es fixed (móvil/tablet) para que el contenido no quede bajo la barra */}
+      <div className="xl:hidden h-16 md:h-20 flex-shrink-0" aria-hidden />
+    </>
   );
 }
