@@ -4,8 +4,6 @@ import { useEffect, useRef } from 'react';
 import { getGsap, refreshScrollTrigger } from '@/lib/gsap/gsapClient';
 import { usePrefersReducedMotion } from '@/lib/motion/usePrefersReducedMotion';
 
-type GsapContextRevert = () => void;
-
 /**
  * Runs on /inicio only. When Section 2 (#inicio-sec2) enters view (top 80%),
  * the two hero circles [data-hero-circle] scale up slightly; reverse on scroll back.
@@ -13,7 +11,7 @@ type GsapContextRevert = () => void;
  */
 export function HeroCirclesScrollEffect() {
   const prefersReducedMotion = usePrefersReducedMotion();
-  const ctxRef = useRef<{ revert: GsapContextRevert } | null>(null);
+  const ctxRef = useRef<{ revert: () => void } | null>(null);
   const unmountedRef = useRef(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 

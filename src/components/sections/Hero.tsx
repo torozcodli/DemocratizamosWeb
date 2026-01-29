@@ -8,7 +8,7 @@ export function Hero() {
   return (
     <section 
       id="inicio" 
-      className="relative w-full overflow-x-clip pt-[calc(env(safe-area-inset-top)+76px)] sm:pt-[calc(env(safe-area-inset-top)+96px)] lg:pt-28 pb-6 sm:pb-8 md:pb-12 xl:pb-16"
+      className="relative w-full overflow-x-clip pt-[calc(env(safe-area-inset-top)+76px)] sm:pt-[calc(env(safe-area-inset-top)+96px)] lg:pt-28 pb-6 sm:pb-8 md:pb-12 lg:pb-[calc(8rem-1cm+27px)] xl:pb-[calc(10rem-1cm+27px)] 2xl:pb-[calc(12rem-1cm+27px)]"
     >
       {/* Background */}
       <div
@@ -25,28 +25,35 @@ export function Hero() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-10 xl:px-8 relative z-10">
+      <div className="max-w-7xl lg:max-w-[1500px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto w-full px-4 sm:px-6 md:px-10 xl:px-8 relative z-10">
         {/* Mobile: columna (collage arriba, texto abajo) */}
         {/* md/tablet: mantiene columna pero con mejor spacing */}
         {/* lg+: grid de 2 columnas (texto izquierda, collage derecha) centrado verticalmente */}
-        <div className="hero-section-container flex flex-col lg:grid lg:grid-cols-[1.15fr_0.85fr] gap-6 sm:gap-8 lg:gap-10 xl:gap-14 lg:items-center">
-          {/* Contenedor de texto - NO overflow-hidden ni altura fija */}
-          <div className="flex flex-col space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8 min-w-0 lg:pr-10 xl:pr-14 order-2 lg:order-1">
-            <h1 
-              className="font-inter font-extrabold text-[#1E1A49] leading-[0.95] tracking-tight min-w-0"
+        {/* Desktop: texto usa todo el espacio hasta el collage; gap evita que choquen */}
+        <div className="hero-section-container flex flex-col lg:grid lg:grid-cols-[1fr_minmax(820px,1fr)] lg:items-center gap-6 sm:gap-8 lg:gap-12 xl:gap-16">
+          {/* Columna texto: se expande a la derecha (1fr); padding derecho = separación del collage */}
+          <div className="flex flex-col space-y-3 sm:space-y-4 lg:space-y-5 min-w-0 pl-2 sm:pl-4 lg:pl-6 lg:pr-4 xl:pl-8 xl:pr-6 lg:pb-6 lg:pt-[2cm] order-2 lg:order-1 lg:w-full">
+            <h1
+              className="font-inter font-extrabold text-[#1E1A49] leading-[1.05] tracking-tight min-w-0"
               style={{
                 fontSize: 'clamp(2.15rem, 8.2vw, 4.6rem)',
-                textWrap: 'balance',
               }}
             >
-              <span className="block max-w-[18ch] sm:max-w-[20ch] lg:max-w-[16ch]">
-                Transformamos vidas a través de la{' '}
-                <span className="text-[#6F74C9]">Tecnología.</span>
+              <span className="block">
+                Transformamos
+                <br />
+                vidas a través de
+                <br />
+                la <span className="font-tech-alt font-bold text-[#807AC9]">Tecnología.</span>
               </span>
             </h1>
 
-            <p className="mt-3 sm:mt-4 max-w-[42ch] md:max-w-[44ch] lg:max-w-[48ch] text-left text-[18px] md:text-[18px] lg:text-[18px] xl:text-[22px] font-medium leading-relaxed text-[#1E1A49]/85 text-pretty">
-              Llevando habilidades digitales a quienes más las necesitan, contribuyendo así a la inclusión digital y disminuyendo la desigualdad social.
+            <p className="mt-1 sm:mt-2 max-w-[65ch] lg:max-w-none text-left text-[18px] md:text-[18px] lg:text-[18px] xl:text-[22px] font-medium leading-snug text-[#5C5C77]">
+              Llevando habilidades digitales a quienes más las necesitan,
+              <br />
+              contribuyendo así a la inclusión digital y disminuyendo la
+              <br />
+              desigualdad social.
             </p>
 
             <a 
@@ -61,14 +68,14 @@ export function Hero() {
             </a>
           </div>
 
-          <div className="flex justify-center lg:justify-end order-1 lg:order-2 min-w-0 hero-collage-wrapper">
-            <HeroIllustration className="w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[520px]" />
+          <div className="flex justify-center lg:flex lg:justify-end lg:items-center lg:ml-auto order-1 lg:order-2 w-full min-w-0 hero-collage-wrapper lg:overflow-visible lg:min-w-[820px] xl:min-w-[860px] 2xl:min-w-[920px] lg:-translate-x-16 lg:translate-y-[3px] xl:-translate-x-[4.5rem] xl:translate-y-[3px] 2xl:-translate-x-20 2xl:translate-y-[3px]">
+            <HeroIllustration className="w-full max-w-[360px] sm:max-w-[420px] lg:max-w-none lg:w-full xl:max-w-none 2xl:max-w-none" />
           </div>
         </div>
 
-        {/* Banner WhatsApp pegado al borde derecho */}
-        <div className="hero-whatsapp-banner absolute bottom-0 right-4 md:right-6 xl:right-0 z-50">
-          <div className="xl:translate-x-[calc(100%-3rem)]">
+        {/* Banner WhatsApp: anclado al borde derecho; 2cm abajo y 2cm a la izquierda */}
+        <div className="hero-whatsapp-banner absolute bottom-0 right-4 md:right-6 xl:right-0 2xl:right-0 z-50 translate-y-[3cm] -translate-x-[5cm]">
+          <div className="xl:translate-x-[calc(100%-3.5rem)]">
             <WhatsAppBanner />
           </div>
         </div>

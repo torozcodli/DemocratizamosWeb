@@ -53,7 +53,7 @@ export function LatestSection() {
       if (cancelled) return;
       ctx = gsap.context(() => {
         // (1) Overlays por card
-        const cards = gsap.utils.toArray<HTMLElement>('[data-lmn-card]', root);
+        const cards = gsap.utils.toArray('[data-lmn-card]', root) as HTMLElement[];
         cards.forEach((card) => {
           const overlay = card.querySelector<HTMLElement>('[data-orange-overlay]');
           if (!overlay) return;
@@ -71,7 +71,7 @@ export function LatestSection() {
         });
 
         // (2) Parallax círculos fondo
-        const circles = gsap.utils.toArray<HTMLElement>('[data-parallax-circle]', root);
+        const circles = gsap.utils.toArray('[data-parallax-circle]', root) as HTMLElement[];
         circles.forEach((el) => {
           const speed = parseFloat(el.getAttribute('data-speed') ?? '0.3');
           const distance = -140 * speed;
