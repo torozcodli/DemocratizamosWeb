@@ -5,15 +5,14 @@ import { getGsap, refreshScrollTrigger } from '@/lib/gsap/gsapClient';
 import { usePrefersReducedMotion } from '@/lib/motion/usePrefersReducedMotion';
 
 /**
- * Runs on /inicio only. When Section 2 (#inicio-sec2) enters view (top 80%),
- * the two hero circles [data-hero-circle] scale up slightly; reverse on scroll back.
- * No-op if prefers-reduced-motion or if circles/sec2 are missing.
+ * On /inicio: when Section 2 (#inicio-sec2) enters view, hero circles [data-hero-circle]
+ * scale up; reverse when scrolling back. Runs after DOM/layout ready.
  */
 export function HeroCirclesScrollEffect() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const ctxRef = useRef<{ revert: () => void } | null>(null);
   const unmountedRef = useRef(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -28,6 +27,7 @@ export function HeroCirclesScrollEffect() {
         const sec2 = document.querySelector<HTMLElement>('#inicio-sec2');
         if (!circles.length || !sec2) return;
 
+        ctxRef.current?.revert();
         ctxRef.current = gsap.context(() => {
           gsap.to(circles, {
             scale: 1.12,
@@ -36,7 +36,9 @@ export function HeroCirclesScrollEffect() {
             transformOrigin: '50% 50%',
             scrollTrigger: {
               trigger: sec2,
-              start: 'top bottom',
+              start: 'top 90%',
+              end: 'top 60%',
+              scrub: 0.8,
               toggleActions: 'play none none reverse',
             },
           });
@@ -45,20 +47,29 @@ export function HeroCirclesScrollEffect() {
         refreshScrollTrigger();
       };
 
-      requestAnimationFrame(() => {
+      // Run after paint and retry so circles (HeroIllustration) are in the DOM
+      const schedule = () => {
         if (unmountedRef.current) return;
         run();
-        timeoutRef.current = setTimeout(() => {
-          if (!unmountedRef.current) refreshScrollTrigger();
-          timeoutRef.current = null;
-        }, 300);
+        const t = setTimeout(() => {
+          if (!unmountedRef.current) {
+            refreshScrollTrigger();
+            run();
+          }
+          timeoutsRef.current = timeoutsRef.current.filter((x) => x !== t);
+        }, 400);
+        timeoutsRef.current.push(t);
+      };
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(schedule);
       });
     });
 
     return () => {
       unmountedRef.current = true;
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
+      timeoutsRef.current.forEach((t) => clearTimeout(t));
+      timeoutsRef.current = [];
       ctxRef.current?.revert();
       ctxRef.current = null;
     };

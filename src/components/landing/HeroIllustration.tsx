@@ -16,10 +16,12 @@ export default function HeroIllustration({ className }: HeroIllustrationProps) {
           </div>
 
           <div
+            data-hero-circle
             className="absolute left-[-8%] bottom-[8%] w-[46%] aspect-square rounded-full z-20 pointer-events-none"
             style={{ background: 'linear-gradient(180deg, #FF8948 0%, #FFD1BD 100%)' }}
           />
           <div
+            data-hero-circle
             className="absolute right-[10%] top-[8%] w-[32%] aspect-square rounded-full z-20 pointer-events-none"
             style={{ background: 'linear-gradient(180deg, #FF8948 0%, #FFD1BD 100%)' }}
           />
@@ -67,12 +69,14 @@ export default function HeroIllustration({ className }: HeroIllustrationProps) {
           />
         </div>
 
-        {/* 2. Círculos — z-20; desktop: círculo grande +1cm derecha; chico +3% a la izquierda */}
+        {/* 2. Círculos naranjas — z-20; animación scale al scroll (HeroCirclesScrollEffect) */}
         <div
+          data-hero-circle
           className="absolute left-[-8%] bottom-[8%] w-[46%] aspect-square rounded-full z-20 pointer-events-none lg:left-[calc(3%+2cm)] lg:bottom-[-3cm] lg:w-[32%] xl:left-[calc(4%+2cm)] xl:bottom-[-3cm] xl:w-[30%] 2xl:left-[calc(4%+2cm)] 2xl:bottom-[-3cm] 2xl:w-[28%]"
           style={{ background: 'linear-gradient(180deg, #FF8948 0%, #FFD1BD 100%)' }}
         />
         <div
+          data-hero-circle
           className="absolute right-[10%] top-[8%] w-[32%] aspect-square rounded-full z-20 pointer-events-none lg:right-[calc(17%+6cm)] lg:top-[6%] lg:w-[12%] xl:right-[calc(17%+6cm)] xl:top-[6%] xl:w-[14%] 2xl:right-[calc(17%+6cm)] 2xl:top-[6%] 2xl:w-[13%]"
           style={{ background: 'linear-gradient(180deg, #FF8948 0%, #FFD1BD 100%)' }}
         />
