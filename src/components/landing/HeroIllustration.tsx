@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { cn } from '@/lib/utils/cn';
-import { BgPixelBlocks } from '@/components/ui/BgPixelBlocks';
 
 type HeroIllustrationProps = {
   className?: string;
@@ -8,70 +7,74 @@ type HeroIllustrationProps = {
 
 export default function HeroIllustration({ className }: HeroIllustrationProps) {
   return (
-    <div
-      className={cn(
-        'relative w-full max-w-[640px] mx-auto aspect-[804/853] min-h-[360px] overflow-visible',
-        className
-      )}
-    >
-      {/* Capa 1 (z-0): Backplate SVG */}
-      <div className="hero-backplate-container absolute inset-0 m-auto w-[100%] lg:w-[98%] h-auto translate-x-[25%] pointer-events-none z-0 max-w-full overflow-hidden">
-        <img
-          src="/hero/hero-backplate.svg"
-          alt=""
-          className="w-full h-auto"
-        />
+    <>
+      {/* Mobile only: backplate + circles + laptop + man */}
+      <div className="sm:hidden w-full">
+        <div className="relative mx-auto w-full max-w-[340px] aspect-[10/11] overflow-visible">
+          <div className="absolute inset-[-4%] z-10 pointer-events-none">
+            <img src="/hero/hero-backplate.svg" alt="" className="w-full h-full object-contain" />
+          </div>
+
+          <div
+            className="absolute left-[-8%] bottom-[8%] w-[46%] aspect-square rounded-full z-20 pointer-events-none"
+            style={{ background: 'linear-gradient(180deg, #FF8948 0%, #FFD1BD 100%)' }}
+          />
+          <div
+            className="absolute right-[10%] top-[8%] w-[32%] aspect-square rounded-full z-20 pointer-events-none"
+            style={{ background: 'linear-gradient(180deg, #FF8948 0%, #FFD1BD 100%)' }}
+          />
+
+          <div className="hero-mobile-laptop absolute left-[-4%] top-[14%] w-[108%] z-30 pointer-events-none">
+            <Image
+              src="/hero/hero-laptop.png"
+              alt="Laptop con letra D"
+              width={800}
+              height={600}
+              className="w-full h-auto object-contain"
+              sizes="(max-width: 768px) 80vw, 420px"
+              priority
+            />
+          </div>
+
+          <div className="hero-mobile-man absolute right-0 w-[70%] z-40 pointer-events-none" style={{ bottom: '-0.3cm' }}>
+            <Image
+              src="/hero/hero-man.png"
+              alt="Persona"
+              width={400}
+              height={600}
+              className="w-full h-auto object-contain object-right-bottom"
+              sizes="(max-width: 768px) 80vw, 420px"
+              priority
+            />
+          </div>
+        </div>
       </div>
 
-      {/* Capa 2 (z-10): Pixel blocks - reusar el mismo de sección 5 */}
-      <BgPixelBlocks className="absolute left-[42%] top-[38%] lg:left-[18%] lg:top-[20%] z-10 w-[176px] h-[85px] opacity-70 drop-shadow-sm pointer-events-none" />
-      <BgPixelBlocks className="absolute left-[46%] top-[62%] lg:left-[10%] lg:top-[65%] z-10 w-[176px] h-[85px] opacity-60 drop-shadow-sm pointer-events-none" />
-
-      {/* Capa 3 (z-10): Círculos naranja (atrás) */}
-      {/* circle-orange-bottom (bottom: smaller => lower) */}
-      <div
-        data-hero-circle
-        className="hero-circle-large absolute left-[calc(4%-1cm)] bottom-[calc(12%-2cm)] lg:left-[calc(0%-1cm)] lg:bottom-[calc(14%-2cm)] w-[50%] lg:w-[46%] aspect-square rounded-full opacity-90 z-10 pointer-events-none will-change-transform"
-        style={{
-          background: 'linear-gradient(180deg, #FF8948 0%, #FFD1BD 100%)',
-        }}
-      />
-      <div
-        data-hero-circle
-        className="hero-circle-small absolute left-[48%] top-[6%] lg:left-[44%] lg:top-[4%] w-[28%] lg:w-[26%] aspect-square rounded-full opacity-85 z-10 pointer-events-none will-change-transform"
-        style={{
-          background: 'linear-gradient(180deg, #FF8948 0%, #FFD1BD 100%)',
-        }}
-      />
-
-      {/* Capa 4 (z-20): Círculos morado/azul translúcido (al centro) */}
-      <div className="absolute left-[40%] top-[36%] lg:left-[40%] lg:top-[34%] w-[20%] aspect-square rounded-full bg-[#9DACFD]/45 z-20 pointer-events-none" />
-      <div className="absolute left-[46%] top-[56%] lg:left-[46%] lg:top-[54%] w-[24%] aspect-square rounded-full bg-[#9DACFD]/35 z-20 pointer-events-none" />
-
-      {/* Capa 5 (z-30): Laptop (con D incluida) */}
-      <div className="hero-laptop-container absolute left-[-2%] top-[8%] md:left-[-4%] md:top-[10%] lg:left-[-6%] lg:top-[12%] w-[135%] md:w-[135%] lg:w-[130%] aspect-[4/3] relative z-30 pointer-events-none">
-        <Image
-          src="/hero/hero-laptop.png"
-          alt=""
-          fill
-          className="object-contain object-left-top"
-          sizes="(max-width: 768px) 80vw, 620px"
-          priority
-        />
+      {/* Tablet + desktop */}
+      <div className={cn('hidden sm:block relative w-full aspect-[4/5] sm:aspect-[16/17] lg:aspect-[4/5] overflow-visible', className)}>
+        <div className="absolute left-[6%] top-[4%] w-[88%] h-auto z-30 pointer-events-none">
+          <Image
+            src="/hero/hero-laptop.png"
+            alt="Laptop con letra D"
+            width={800}
+            height={600}
+            className="w-full h-auto object-contain"
+            sizes="(max-width: 768px) 80vw, 520px"
+            priority
+          />
+        </div>
+        <div className="absolute right-[2%] bottom-[0%] w-[45%] h-auto z-40 pointer-events-none">
+          <Image
+            src="/hero/hero-man.png"
+            alt="Persona"
+            width={400}
+            height={600}
+            className="w-full h-auto object-contain object-right-bottom"
+            sizes="(max-width: 768px) 80vw, 520px"
+            priority
+          />
+        </div>
       </div>
-
-      {/* Capa 6 (z-40): Hombre - posicionamiento fijo independiente */}
-      {/* man (bottom: bigger => higher) */}
-      <div className="hero-man-container absolute right-[-54%] translate-x-[2px] bottom-[calc(30%+4.5cm-15px)] md:right-[-54%] md:translate-x-[2px] md:bottom-[calc(40%+6.5cm-15px)] lg:right-[-54%] lg:translate-x-[2px] lg:bottom-[calc(35%+6.5cm-15px)] xl:bottom-[calc(35%+6.5cm-15px)] w-[64%] xl:w-[70%] aspect-[3/4] relative z-40 pointer-events-none">
-        <Image
-          src="/hero/hero-man.png"
-          alt=""
-          fill
-          className="object-contain object-right-bottom"
-          sizes="(max-width: 768px) 80vw, 620px"
-          priority
-        />
-      </div>
-    </div>
+    </>
   );
 }
