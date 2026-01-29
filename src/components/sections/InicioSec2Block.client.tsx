@@ -130,7 +130,7 @@ export function InicioSec2Block() {
         <span className="text-[#E7ECFF]"> para todos.</span>
       </h2>
 
-      <div className="relative flex justify-center md:justify-center xl:justify-end items-center -mt-12 overflow-visible">
+      <div className="relative flex justify-center md:justify-center xl:justify-end items-center mt-[1cm] md:mt-0 md:-mt-12 overflow-visible">
         <div className="relative h-36 w-36 md:h-40 md:w-40 lg:h-44 lg:w-44 z-10 about-logo-container">
           <div
             ref={logoRef}
