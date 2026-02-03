@@ -217,11 +217,26 @@
     /* Tailwind controla estos valores a través de las clases en el HTML */
   }
 
+  /* iPad horizontal (cuando el wrapper tiene .ipad-h-landscape): solo el backplate un poco a la derecha */
+  #inicio .hero-collage-wrapper.ipad-h-landscape .hero-illustration-backplate {
+    transform: translateX(0.7cm) !important;
+  }
+
   /* iPad vertical: ocultar líneas decorativas (curva + línea con círculo) sin depender de any-pointer */
   @media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
     .tech-card-decorative-line,
     .inicio-sec2-line-wrap {
       display: none !important;
+    }
+  }
+
+  /* iPad horizontal: línea sobre Quiénes Somos 2px a la derecha; logo circular 3cm a la derecha */
+  @media (min-width: 1024px) and (max-width: 1370px) and (orientation: landscape) and (any-pointer: coarse) {
+    #inicio-sec2 .tech-card-decorative-line {
+      transform: translateX(4px) !important;
+    }
+    #inicio-sec2 .about-logo-container {
+      transform: translateX(0.2cm) !important;
     }
   }
 
@@ -238,13 +253,12 @@
     #nosotros-page section [class*="min-h-"]:not(.nosotros-hero-desktop) {
       min-height: 180px !important;
     }
-    /* Título "Nosotros." y banner WhatsApp más abajo en iPad vertical */
+    /* Ocultar título "Nosotros." y banner WhatsApp en iPad vertical */
     #nosotros-page .nosotros-hero-desktop h1 {
-      bottom: 0.25rem !important;
+      display: none !important;
     }
     #nosotros-page .nosotros-whatsapp-banner {
-      bottom: 0.5rem !important;
-      transform: translateX(1cm) !important;
+      display: none !important;
     }
   }
 
@@ -259,9 +273,11 @@
     /* Título "Nosotros." y banner WhatsApp más abajo en tablet/móvil */
     #nosotros-page .nosotros-hero-desktop h1 {
       bottom: 0.5rem !important;
+      transform: translateY(6cm) !important;
     }
     #nosotros-page .nosotros-whatsapp-banner {
       bottom: 0.5rem !important;
+      transform: translateX(1cm) translateY(5.5cm) !important;
     }
   }
 
@@ -273,8 +289,11 @@
     .nosotros-circle-blue {
       transform: translateX(calc(-33.33% + 2cm)) translateY(calc(33.33% - 2cm)) !important;
     }
+    #nosotros-page .nosotros-hero-desktop h1 {
+      transform: translateY(6cm) !important;
+    }
     .nosotros-whatsapp-banner {
-      transform: translateX(1cm) !important;
+      transform: translateX(2cm) translateY(5.5cm) !important;
     }
   }
 

@@ -21,6 +21,10 @@ const config: Config = {
       ipadL: {
         raw: '(min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (any-pointer: coarse)',
       },
+      // iPad normal horizontal only (1024x768 landscape)
+      ipadNH: {
+        raw: '(min-width: 1024px) and (max-width: 1024px) and (min-height: 768px) and (max-height: 768px) and (orientation: landscape) and (any-pointer: coarse)',
+      },
     },
     extend: {
       colors: {

@@ -3,12 +3,13 @@ import { WhatsAppBanner } from '@/components/ui/WhatsAppBanner';
 import { contactBtnClass } from '@/lib/styles/buttons';
 import { homeContent } from '@/content/home';
 import HeroIllustration from '@/components/landing/HeroIllustration';
+import { HeroCollageWrapper } from '@/components/sections/HeroCollageWrapper.client';
 
 export function Hero() {
   return (
     <section 
       id="inicio" 
-      className="relative w-full overflow-x-clip pt-[calc(env(safe-area-inset-top)+76px)] sm:pt-[calc(env(safe-area-inset-top)+96px)] ipadP:py-12 lg:pt-[calc(7rem-1px)] pb-6 sm:pb-8 md:pb-12 lg:pb-[calc(8rem-1cm+26px)] xl:pb-[calc(10rem-1cm+26px)] 2xl:pb-[calc(12rem-1cm+26px)]"
+      className="relative w-full overflow-x-clip pt-[calc(env(safe-area-inset-top)+44px)] sm:pt-[calc(env(safe-area-inset-top)+56px)] ipadP:py-6 lg:pt-[calc(6.75rem+2px)] pb-4 sm:pb-5 md:pb-8 lg:pb-[calc(8.5rem-1cm+26px)] xl:pb-[calc(10rem-1cm+26px)] 2xl:pb-[calc(11.5rem-1cm+26px)]"
     >
       {/* Background */}
       <div
@@ -27,9 +28,9 @@ export function Hero() {
 
       <div className="max-w-7xl lg:max-w-[1500px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto w-full px-4 sm:px-6 ipadP:px-6 md:px-10 xl:px-8 relative z-10">
         {/* Mobile: stacked. ipadP: stacked + centrado. ipadL: 2 columnas. lg+ (desktop): 2 columnas como siempre */}
-        <div className="hero-section-container grid grid-cols-1 gap-6 sm:gap-8 ipadP:grid-cols-1 ipadP:gap-12 ipadP:place-items-center ipadL:grid-cols-2 ipadL:items-center ipadL:gap-14 lg:grid lg:grid-cols-[1fr_minmax(820px,1fr)] lg:items-center lg:gap-12 xl:gap-16">
+        <div className="hero-section-container grid grid-cols-1 gap-4 sm:gap-5 ipadP:grid-cols-1 ipadP:gap-6 ipadP:place-items-center ipadL:grid-cols-2 ipadL:items-center ipadL:gap-8 lg:grid lg:grid-cols-[1fr_minmax(820px,1fr)] lg:items-center lg:gap-[4.5rem] xl:gap-[5rem] 2xl:gap-[5.5rem]">
           {/* Columna texto — iPad: centrado; desktop: izquierda */}
-          <div className="flex flex-col space-y-3 sm:space-y-4 lg:space-y-5 min-w-0 pl-2 sm:pl-4 lg:pl-6 lg:pr-4 xl:pl-8 xl:pr-6 lg:pb-6 lg:pt-[2cm] order-2 ipadL:order-1 lg:order-1 ipadP:max-w-[620px] ipadP:mx-auto ipadP:items-center ipadP:text-center ipadL:items-center ipadL:text-center lg:items-start lg:text-left lg:w-full z-10">
+          <div className="relative z-20 flex flex-col space-y-3 sm:space-y-4 lg:space-y-5 xl:space-y-5 min-w-0 pl-2 sm:pl-4 lg:pl-6 lg:pr-4 xl:pl-8 xl:pr-6 lg:pb-6 lg:pt-[1.85cm] order-2 ipadL:order-1 lg:order-1 ipadP:max-w-[620px] ipadP:mx-auto ipadP:items-center ipadP:text-center ipadL:items-center ipadL:text-center lg:items-start lg:text-left lg:w-full">
             <div className="max-w-[520px] ipadP:max-w-[620px]">
               <h1
                 className="font-inter font-extrabold text-[#1E1A49] leading-[1.05] tracking-tight min-w-0 text-[clamp(2.15rem,8.2vw,4.6rem)] ipadP:text-[clamp(44px,5vw,64px)] ipadP:leading-[0.95] ipadL:text-[clamp(44px,5vw,64px)] ipadL:leading-[0.95]"
@@ -44,7 +45,7 @@ export function Hero() {
               </h1>
             </div>
 
-            <p className="mt-1 sm:mt-2 max-w-[65ch] ipadP:max-w-[560px] ipadP:text-[clamp(16px,2vw,18px)] lg:max-w-none text-left text-[18px] md:text-[18px] lg:text-[18px] xl:text-[22px] font-medium leading-snug text-[#5C5C77]">
+            <p className="mt-0.5 sm:mt-1 max-w-[65ch] ipadP:max-w-[560px] ipadP:text-[clamp(16px,2vw,18px)] lg:max-w-none text-left text-[18px] md:text-[18px] lg:text-[18px] xl:text-[22px] font-medium leading-snug text-[#5C5C77]">
               Llevando habilidades digitales a quienes más las necesitan,
               <br />
               contribuyendo así a la inclusión digital y disminuyendo la
@@ -64,11 +65,11 @@ export function Hero() {
             </a>
           </div>
 
-          <div className="relative flex w-full justify-center mx-auto ipadP:justify-center ipadL:justify-center ipadL:items-center lg:flex lg:justify-end lg:items-center lg:ml-auto order-1 ipadL:order-2 lg:order-2 min-w-0 hero-collage-wrapper lg:overflow-visible lg:min-w-[820px] xl:min-w-[860px] 2xl:min-w-[920px] lg:-translate-x-16 lg:translate-y-[3px] xl:-translate-x-[4.5rem] xl:translate-y-[3px] 2xl:-translate-x-20 2xl:translate-y-[3px] z-0">
-            <div className="relative w-full max-w-[360px] sm:max-w-[420px] ipadP:max-w-[440px] ipadL:max-w-[320px] mx-auto lg:max-w-none">
+          <HeroCollageWrapper className="relative z-10 flex w-full justify-center mx-auto ipadP:justify-center ipadL:justify-center ipadL:items-center ipadNH:max-w-[460px] ipadNH:ml-auto ipadNH:justify-self-end lg:flex lg:justify-end lg:items-center lg:ml-auto order-1 ipadL:order-2 lg:order-2 min-w-0 hero-collage-wrapper lg:overflow-visible lg:min-w-[820px] xl:min-w-[860px] 2xl:min-w-[920px] lg:-translate-x-16 lg:translate-y-[6px] xl:-translate-x-[4.5rem] xl:translate-y-[6px] 2xl:-translate-x-20 2xl:translate-y-[6px]">
+            <div className="relative w-full max-w-[360px] sm:max-w-[420px] ipadP:max-w-[440px] ipadL:max-w-[320px] ipadNH:max-w-[380px] mx-auto lg:max-w-none">
               <HeroIllustration className="w-full max-w-full lg:max-w-none lg:w-full xl:max-w-none 2xl:max-w-none" />
             </div>
-          </div>
+          </HeroCollageWrapper>
         </div>
 
         {/* Banner WhatsApp: anclado al borde derecho; 2cm abajo y 2cm a la izquierda */}
@@ -120,7 +121,7 @@ export function Hero() {
             justify-self: center !important;
             position: relative !important;
             left: calc(50% - 144px) !important;
-            transform: translate(-50%, -0.75rem) !important;
+            transform: translate(-50%, -2rem) !important;
           }
           #inicio .hero-section-container > div:not(.hero-collage-wrapper) {
             order: 2 !important;
