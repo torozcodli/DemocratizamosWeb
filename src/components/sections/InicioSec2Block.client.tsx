@@ -147,7 +147,7 @@ export function InicioSec2Block() {
         </div>
       </div>
 
-      <div className="relative hidden xl:block -mt-18">
+      <div className="inicio-sec2-line-wrap relative hidden xl:block -mt-18">
         <div
           className="absolute right-0 h-[2px] top-1/2 -translate-y-1/2 w-[70%] max-w-[500px]"
           style={{ right: '-13rem' }}

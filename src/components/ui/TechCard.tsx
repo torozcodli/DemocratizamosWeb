@@ -22,8 +22,8 @@ export function TechCard({ title, children, className }: TechCardProps) {
 
       {/* Card principal: overflow-hidden solo en móvil para que nada invada; md+ intacto */}
       <div className="relative bg-[#5A5E8C]/55 backdrop-blur-sm border-2 border-[#E1E6FD]/55 rounded-3xl pt-14 pb-8 px-6 sm:px-8 md:px-10 md:pt-20 md:pb-10 overflow-hidden md:overflow-visible">
-        {/* Línea decorativa: oculta en móvil para no salir/cruzar header; visible desde tablet */}
-        <div className="pointer-events-none absolute left-0 right-0 -top-5 md:-top-4 z-0 hidden md:block">
+        {/* Línea decorativa: oculta en móvil y en iPad vertical; visible desde tablet y desktop */}
+        <div className="tech-card-decorative-line pointer-events-none absolute left-0 right-0 -top-5 md:-top-4 z-0 hidden md:block ipadP:hidden">
           <DecorativeLine
             className="w-full -ml-[36px] scale-[0.70] md:scale-[0.75] origin-left"
             title="Decorative line"

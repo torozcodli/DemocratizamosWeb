@@ -77,7 +77,7 @@ export default function HeroIllustration({ className }: HeroIllustrationProps) {
         />
         <div
           data-hero-circle
-          className="absolute right-[10%] top-[8%] w-[32%] aspect-square rounded-full z-20 pointer-events-none ipadP:w-[28%] ipadL:w-[28%] lg:right-[calc(17%+6cm)] lg:top-[6%] lg:w-[12%] xl:right-[calc(17%+6cm)] xl:top-[6%] xl:w-[14%] 2xl:right-[calc(17%+6cm)] 2xl:top-[6%] 2xl:w-[13%]"
+          className="hero-illustration-circle-top absolute right-[10%] top-[8%] w-[32%] aspect-square rounded-full z-20 pointer-events-none ipadP:w-[28%] ipadL:w-[28%] lg:right-[calc(17%+6cm)] lg:top-[6%] lg:w-[12%] xl:right-[calc(17%+6cm)] xl:top-[6%] xl:w-[14%] 2xl:right-[calc(17%+6cm)] 2xl:top-[6%] 2xl:w-[13%]"
           style={{ background: 'linear-gradient(180deg, #FF8948 0%, #FFD1BD 100%)' }}
         />
 

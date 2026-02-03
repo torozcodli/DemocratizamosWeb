@@ -27,7 +27,7 @@ export function Hero() {
 
       <div className="max-w-7xl lg:max-w-[1500px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto w-full px-4 sm:px-6 ipadP:px-6 md:px-10 xl:px-8 relative z-10">
         {/* Mobile: stacked. ipadP: stacked + centrado. ipadL: 2 columnas. lg+ (desktop): 2 columnas como siempre */}
-        <div className="hero-section-container grid grid-cols-1 gap-6 sm:gap-8 ipadP:grid-cols-1 ipadP:gap-8 ipadP:place-items-center ipadL:grid-cols-2 ipadL:items-center ipadL:gap-12 lg:grid lg:grid-cols-[1fr_minmax(820px,1fr)] lg:items-center lg:gap-12 xl:gap-16">
+        <div className="hero-section-container grid grid-cols-1 gap-6 sm:gap-8 ipadP:grid-cols-1 ipadP:gap-12 ipadP:place-items-center ipadL:grid-cols-2 ipadL:items-center ipadL:gap-14 lg:grid lg:grid-cols-[1fr_minmax(820px,1fr)] lg:items-center lg:gap-12 xl:gap-16">
           {/* Columna texto — iPad: centrado; desktop: izquierda */}
           <div className="flex flex-col space-y-3 sm:space-y-4 lg:space-y-5 min-w-0 pl-2 sm:pl-4 lg:pl-6 lg:pr-4 xl:pl-8 xl:pr-6 lg:pb-6 lg:pt-[2cm] order-2 ipadL:order-1 lg:order-1 ipadP:max-w-[620px] ipadP:mx-auto ipadP:items-center ipadP:text-center ipadL:items-center ipadL:text-center lg:items-start lg:text-left lg:w-full z-10">
             <div className="max-w-[520px] ipadP:max-w-[620px]">
@@ -64,8 +64,10 @@ export function Hero() {
             </a>
           </div>
 
-          <div className="relative flex justify-center ipadP:justify-center ipadL:justify-center ipadL:items-center lg:flex lg:justify-end lg:items-center lg:ml-auto order-1 ipadL:order-2 lg:order-2 w-full min-w-0 hero-collage-wrapper w-full mx-auto ipadP:max-w-[960px] ipadL:max-w-[520px] lg:overflow-visible lg:min-w-[820px] xl:min-w-[860px] 2xl:min-w-[920px] lg:-translate-x-16 lg:translate-y-[3px] xl:-translate-x-[4.5rem] xl:translate-y-[3px] 2xl:-translate-x-20 2xl:translate-y-[3px] z-0">
-            <HeroIllustration className="w-full max-w-[360px] sm:max-w-[420px] ipadP:max-w-[960px] ipadL:max-w-[520px] lg:max-w-none lg:w-full xl:max-w-none 2xl:max-w-none" />
+          <div className="relative flex w-full justify-center mx-auto ipadP:justify-center ipadL:justify-center ipadL:items-center lg:flex lg:justify-end lg:items-center lg:ml-auto order-1 ipadL:order-2 lg:order-2 min-w-0 hero-collage-wrapper lg:overflow-visible lg:min-w-[820px] xl:min-w-[860px] 2xl:min-w-[920px] lg:-translate-x-16 lg:translate-y-[3px] xl:-translate-x-[4.5rem] xl:translate-y-[3px] 2xl:-translate-x-20 2xl:translate-y-[3px] z-0">
+            <div className="relative w-full max-w-[360px] sm:max-w-[420px] ipadP:max-w-[440px] ipadL:max-w-[320px] mx-auto lg:max-w-none">
+              <HeroIllustration className="w-full max-w-full lg:max-w-none lg:w-full xl:max-w-none 2xl:max-w-none" />
+            </div>
           </div>
         </div>
 
@@ -95,24 +97,30 @@ export function Hero() {
             width: 42% !important;
           }
         }
-        /* iPad vertical: centrar todo el Hero, collage centrado, backplate/laptop/señor más grandes */
+        /* iPad vertical: collage completo centrado arriba del texto, laptop más grande */
         @media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
           #inicio .hero-section-container {
             display: grid !important;
             grid-template-columns: 1fr !important;
             justify-items: center !important;
             align-items: start !important;
-            gap: 2rem !important;
+            gap: 2.5rem !important;
           }
-          /* Collage centrado: ancho definido + margin auto para que quede al centro como el texto */
+          /* Collage centrado arriba del texto, un poco a la izquierda para quedar en el centro visual */
           #inicio .hero-section-container > .hero-collage-wrapper {
             order: 1 !important;
-            width: min(90vw, 960px) !important;
-            max-width: 960px !important;
+            width: min(70vw, 440px) !important;
+            max-width: 440px !important;
             margin-left: auto !important;
             margin-right: auto !important;
             display: flex !important;
             justify-content: center !important;
+            align-items: center !important;
+            align-self: center !important;
+            justify-self: center !important;
+            position: relative !important;
+            left: calc(50% - 144px) !important;
+            transform: translate(-50%, -0.75rem) !important;
           }
           #inicio .hero-section-container > div:not(.hero-collage-wrapper) {
             order: 2 !important;
@@ -125,29 +133,40 @@ export function Hero() {
           #inicio .hero-section-container > div:not(.hero-collage-wrapper) a {
             align-self: center !important;
           }
-          /* Contenedor de la ilustración centrado dentro del wrapper */
+          /* Ilustración centrada dentro del wrapper */
           #inicio .hero-section-container .hero-collage-wrapper > div {
             max-width: 100% !important;
             width: 100% !important;
             margin-left: auto !important;
             margin-right: auto !important;
+            display: block !important;
           }
-          /* Backplate más grande en iPad vertical */
+          /* Backplate un poco más chico en iPad vertical */
           #inicio .hero-collage-wrapper .hero-illustration-backplate {
-            inset: -20% !important;
+            inset: -8% !important;
             transform: none !important;
           }
-          /* Laptop más grande en iPad vertical */
+          /* Laptop un poco más abajo dentro del collage en iPad vertical */
           #inicio .hero-collage-wrapper .hero-illustration-laptop {
-            left: 0 !important;
-            top: 0 !important;
-            width: 100% !important;
+            left: -7% !important;
+            top: 4% !important;
+            width: 114% !important;
           }
           /* Señor más grande en iPad vertical */
           #inicio .hero-collage-wrapper .hero-illustration-man {
             width: 70% !important;
             right: 0 !important;
             bottom: -8% !important;
+          }
+          /* Círculo chiquito más arriba en iPad vertical */
+          #inicio .hero-collage-wrapper .hero-illustration-circle-top {
+            top: 0% !important;
+          }
+        }
+        /* Ocultar banner WhatsApp en iPad (portrait y landscape) */
+        @media (min-width: 768px) and (max-width: 1366px) {
+          #inicio .hero-whatsapp-banner {
+            display: none !important;
           }
         }
       `}} />

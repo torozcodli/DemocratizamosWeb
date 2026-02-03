@@ -217,6 +217,14 @@
     /* Tailwind controla estos valores a través de las clases en el HTML */
   }
 
+  /* iPad vertical: ocultar líneas decorativas (curva + línea con círculo) sin depender de any-pointer */
+  @media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+    .tech-card-decorative-line,
+    .inicio-sec2-line-wrap {
+      display: none !important;
+    }
+  }
+
   /* Nosotros Hero - Mobile/Tablet: valores seguros sin overflow */
   @media (max-width: 1279px) {
     .nosotros-circle-blue {
