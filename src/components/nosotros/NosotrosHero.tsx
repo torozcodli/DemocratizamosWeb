@@ -77,7 +77,7 @@ export function NosotrosHero() {
       </div>
 
       {/* ========== TABLET / DESKTOP (md+): diseño actual sin cambios ========== */}
-      <div className="relative hidden min-h-[calc(100vh-80px)] flex items-center overflow-x-clip pb-[env(safe-area-inset-bottom)] md:block">
+      <div className="nosotros-hero-desktop relative hidden min-h-[calc(100vh-80px)] flex items-center overflow-x-clip pb-[env(safe-area-inset-bottom)] md:block">
         {/* Background gradiente oscuro */}
         <div
           className="absolute inset-0 z-0"

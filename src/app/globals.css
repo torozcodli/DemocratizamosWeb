@@ -225,6 +225,29 @@
     }
   }
 
+  /* Nosotros página en iPad vertical: reducir bastante altura y espaciado (menos espacio extra abajo) */
+  @media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+    #nosotros-page .nosotros-hero-desktop {
+      min-height: 38vh !important;
+    }
+    #nosotros-page section {
+      padding-top: 0.5rem !important;
+      padding-bottom: 0.5rem !important;
+    }
+    /* Bloques con min-height dentro de secciones (no el hero) */
+    #nosotros-page section [class*="min-h-"]:not(.nosotros-hero-desktop) {
+      min-height: 180px !important;
+    }
+    /* Título "Nosotros." y banner WhatsApp más abajo en iPad vertical */
+    #nosotros-page .nosotros-hero-desktop h1 {
+      bottom: 0.25rem !important;
+    }
+    #nosotros-page .nosotros-whatsapp-banner {
+      bottom: 0.5rem !important;
+      transform: translateX(1cm) !important;
+    }
+  }
+
   /* Nosotros Hero - Mobile/Tablet: valores seguros sin overflow */
   @media (max-width: 1279px) {
     .nosotros-circle-blue {
@@ -232,6 +255,13 @@
     }
     .nosotros-tecontamos {
       transform: translateX(-50%) !important;
+    }
+    /* Título "Nosotros." y banner WhatsApp más abajo en tablet/móvil */
+    #nosotros-page .nosotros-hero-desktop h1 {
+      bottom: 0.5rem !important;
+    }
+    #nosotros-page .nosotros-whatsapp-banner {
+      bottom: 0.5rem !important;
     }
   }
 

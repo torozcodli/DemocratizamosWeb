@@ -1,6 +1,6 @@
 import { Container } from '@/components/ui/Container';
 import { BgPixelBlocks } from '@/components/ui/BgPixelBlocks';
-import { SolarSystem } from '@/components/ui/SolarSystem';
+import { SolarSystemResponsive } from '@/components/solar/SolarSystemResponsive';
 import { SolarSystemMobileList } from '@/components/ui/SolarSystemMobileList';
 import { StatCard } from '@/components/ui/StatCard';
 
@@ -95,10 +95,10 @@ export function InclusionDigitalSection() {
 
       {/* Contenido */}
       <Container className="relative z-10">
-        {/* Sistema solar: desktop/tablet (md+) — órbitas y animación; móvil: lista vertical */}
+        {/* Sistema solar: desktop/tablet (md+) — escala uniforme; móvil: lista vertical */}
         <div className="mb-20 md:mb-32">
           <div className="hidden md:block">
-            <SolarSystem />
+            <SolarSystemResponsive />
           </div>
           <div className="md:hidden">
             <SolarSystemMobileList />

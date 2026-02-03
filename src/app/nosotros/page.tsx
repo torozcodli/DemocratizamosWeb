@@ -18,7 +18,7 @@ export const metadata = buildBaseMetadata({
 
 export default function NosotrosPage() {
   return (
-    <main className="w-full overflow-x-clip">
+    <main id="nosotros-page" className="w-full overflow-x-clip">
       <Navbar />
       <NosotrosHero />
       <NosotrosQuienesSomos />
