@@ -54,6 +54,10 @@ export async function generateMetadata(): Promise<Metadata> {
       ...(robots.noarchive && { archive: false }),
       ...(robots.nocache && { 'max-image-preview': 'none' }),
     },
+    icons: {
+      icon: [{ url: '/favicon.ico' }],
+      shortcut: ['/favicon.ico'],
+    },
     alternates: {
       canonical: canonicalBase,
     },
