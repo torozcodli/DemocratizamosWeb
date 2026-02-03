@@ -8,6 +8,20 @@ const config: Config = {
     './src/lib/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    screens: {
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+      // iPad only (any-pointer: coarse) — después de lg/xl para que en iPad gane ipadP/ipadL
+      ipadP: {
+        raw: '(min-width: 768px) and (max-width: 1366px) and (orientation: portrait) and (any-pointer: coarse)',
+      },
+      ipadL: {
+        raw: '(min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (any-pointer: coarse)',
+      },
+    },
     extend: {
       colors: {
         primary: {

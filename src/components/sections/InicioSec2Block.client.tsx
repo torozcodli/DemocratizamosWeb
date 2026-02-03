@@ -60,14 +60,12 @@ export function InicioSec2Block() {
 
       ctxRef.current = gsap.context(
         () => {
-          // Trigger en el bloque (logo+línea): animación cuando bajas y el bloque entra en pantalla
-          // start: cuando el borde superior del bloque llega al 75% del viewport (hay que bajar más)
-          // end: cuando llega al 20% — así el recorrido es claro y se ve todo
+          // Trigger: se activa antes (top 95% = cuando la sección entra); termina en 30% para ver el efecto antes de pasar
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: triggerEl,
-              start: 'top 75%',
-              end: 'top 20%',
+              start: 'top 95%',
+              end: 'top 30%',
               scrub: true,
               invalidateOnRefresh: true,
             },

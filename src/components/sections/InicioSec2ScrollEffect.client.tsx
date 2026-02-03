@@ -49,7 +49,7 @@ export function InicioSec2ScrollEffect() {
               scrollTrigger: {
                 trigger: root,
                 start: 'top bottom',
-                end: 'top 45%',
+                end: 'top 70%',
                 scrub: true,
               },
             })
