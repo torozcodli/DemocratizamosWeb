@@ -26,7 +26,7 @@ export function FlipCard({
       <SealBadge text={sealText} src={sealSrc} />
 
       {/* Card wrapper con perspective */}
-      <div className="perspective-[1200px] w-full h-[480px] sm:h-[520px] md:h-[560px] lg:h-[580px]">
+      <div className="flip-card-container perspective-[1200px] w-full h-[480px] sm:h-[520px] md:h-[560px] lg:h-[580px]">
         <div
           className="relative w-full h-full transition-transform duration-[600ms] ease-in-out [transform-style:preserve-3d]"
           style={{

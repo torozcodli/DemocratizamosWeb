@@ -33,7 +33,7 @@ export function ProgramasModeloIntervencionSection() {
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-tech font-extrabold tracking-tight leading-tight">
                 <span className="text-[#1D194C]">Nuestro modelo</span>
                 <br />
-                <span className="text-white">de intervención.</span>
+                <span className="text-white">de intervención</span>
               </h2>
             </div>
 

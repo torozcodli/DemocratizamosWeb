@@ -29,7 +29,7 @@ export function NavbarMenuClient() {
 
   return (
     <>
-      <div className="hidden xl:flex xl:items-center xl:gap-4">
+      <div className="hidden 2xl:flex 2xl:items-center 2xl:gap-2 2xl:gap-4">
         {siteConfig.navigation.map((item, index) => {
           const isActive = item.href === pathname;
           const isDisabled = item.href === '#';
@@ -52,7 +52,7 @@ export function NavbarMenuClient() {
                 }
               }}
               className={cn(
-                'text-lg font-medium transition-all relative px-4 py-2 rounded-full',
+                'text-base 2xl:text-[15px] 2xl:px-3 2xl:py-2 rounded-full font-medium transition-all relative px-2 py-1.5',
                 isActive
                   ? 'text-navy-900 bg-lavender hover:ring-2 hover:ring-[#6F74C9] hover:ring-offset-2'
                   : isDisabled
@@ -65,13 +65,13 @@ export function NavbarMenuClient() {
           );
         })}
         <a href={siteConfig.cta.href} target="_blank" rel="noopener noreferrer">
-          <Button variant="primary" className={contactBtnClass + ' ml-2 mr-4'}>
+          <Button variant="primary" className={contactBtnClass + ' ml-1 2xl:px-5 2xl:py-2 2xl:ml-2 mr-2 2xl:mr-4 text-sm 2xl:text-base'}>
             {siteConfig.cta.label}
           </Button>
         </a>
       </div>
       <button
-        className="xl:hidden h-12 w-12 rounded-full bg-indigo-200/60 hover:bg-indigo-200 flex items-center justify-center transition-colors"
+        className="2xl:hidden h-12 w-12 rounded-full bg-indigo-200/60 hover:bg-indigo-200 flex items-center justify-center transition-colors"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle menu"
         aria-expanded={isOpen}
@@ -84,7 +84,7 @@ export function NavbarMenuClient() {
           <>
             {/* Overlay full-screen: renderizado en body para que cubra toda la pantalla sin importar el scroll */}
             <div
-              className="xl:hidden fixed inset-0 bg-[#1E1A49]/95 backdrop-blur-md w-full h-full"
+              className="2xl:hidden fixed inset-0 bg-[#1E1A49]/95 backdrop-blur-md w-full h-full"
               style={{ zIndex: 99999, top: 0, left: 0, right: 0, bottom: 0 }}
             >
               <div className="absolute top-4 right-4">

@@ -333,6 +333,31 @@
     }
   }
 
+  /* iPad Pro horizontal: Nosotros hero — título y banner 3 cm arriba; banner 1 cm a la izquierda */
+  @media (min-width: 1194px) and (max-width: 1380px) and (orientation: landscape) and (any-pointer: coarse) {
+    #nosotros-page .nosotros-hero-desktop h1 {
+      transform: translateY(3cm) !important;
+    }
+    #nosotros-page .nosotros-whatsapp-banner {
+      transform: translateX(1cm) translateY(2.5cm) !important;
+    }
+  }
+
+  /* iPad Pro vertical: sección flip cards (Misión/Visión) más grande */
+  @media (min-width: 1000px) and (max-width: 1400px) and (orientation: portrait) {
+    #nosotros-page .nosotros-mision-vision-section {
+      padding-top: 3.5rem !important;
+      padding-bottom: 3.5rem !important;
+    }
+    #nosotros-page .nosotros-mision-vision-section .nosotros-flip-grid {
+      gap: 2.5rem !important;
+    }
+    #nosotros-page .nosotros-mision-vision-section .flip-card-container {
+      min-height: 640px !important;
+      height: 640px !important;
+    }
+  }
+
   /* Flip Card Animation */
   .rotate-y-180 {
     transform: rotateY(180deg);
