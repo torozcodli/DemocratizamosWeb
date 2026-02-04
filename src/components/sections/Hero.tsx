@@ -4,6 +4,7 @@ import { contactBtnClass } from '@/lib/styles/buttons';
 import { homeContent } from '@/content/home';
 import HeroIllustration from '@/components/landing/HeroIllustration';
 import { HeroCollageWrapper } from '@/components/sections/HeroCollageWrapper.client';
+import { HeroIpadProStyles } from '@/components/sections/HeroIpadProStyles.client';
 
 export function Hero() {
   return (
@@ -164,6 +165,19 @@ export function Hero() {
             top: 0% !important;
           }
         }
+        /* iPad Pro 12.9" (portrait ~1024px): laptop y señor más chicos; 1024–1180 para que aplique con zoom/UI del navegador */
+        @media (min-width: 1024px) and (max-width: 1180px) and (orientation: portrait) {
+          #inicio .hero-collage-wrapper .hero-illustration-laptop {
+            left: 0% !important;
+            top: 2% !important;
+            width: 95% !important;
+          }
+          #inicio .hero-collage-wrapper .hero-illustration-man {
+            width: 42% !important;
+            right: 0 !important;
+            bottom: -18% !important;
+          }
+        }
         /* Ocultar banner WhatsApp en iPad (portrait y landscape) */
         @media (min-width: 768px) and (max-width: 1366px) {
           #inicio .hero-whatsapp-banner {
@@ -171,6 +185,7 @@ export function Hero() {
           }
         }
       `}} />
+      <HeroIpadProStyles />
     </section>
   );
 }

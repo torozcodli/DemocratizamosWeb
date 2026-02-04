@@ -222,6 +222,35 @@
     transform: translateX(0.7cm) !important;
   }
 
+  /* iPad Pro only: laptop and man smaller in hero collage */
+  @media (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait) and (any-pointer: coarse) {
+    #inicio .hero-collage-wrapper .hero-illustration-laptop {
+      width: 95% !important;
+      left: 0% !important;
+      top: 2% !important;
+    }
+    #inicio .hero-collage-wrapper .hero-illustration-man {
+      width: 55% !important;
+    }
+  }
+  /* iPad Pro landscape (11" 1194px or 12.9" 1366px): collage 1 cm arriba, señor más grande */
+  @media (min-width: 1194px) and (max-width: 1380px) and (orientation: landscape) and (any-pointer: coarse) {
+    #inicio .hero-collage-wrapper.ipad-h-landscape {
+      transform: translateX(3cm) translateY(calc(5px + 0.4cm + 2.35cm - 0.5cm)) scale(0.84) !important;
+      transform-origin: center center;
+    }
+    #inicio .hero-collage-wrapper .hero-illustration-laptop {
+      width: 88% !important;
+      left: 5% !important;
+      top: 2% !important;
+      transform: translateX(calc(0.75cm + 10px)) !important;
+    }
+    #inicio .hero-collage-wrapper .hero-illustration-man {
+      width: 48% !important;
+      transform: translateY(calc(0.6cm - 8px)) !important;
+    }
+  }
+
   /* iPad vertical: ocultar líneas decorativas (curva + línea con círculo) sin depender de any-pointer */
   @media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
     .tech-card-decorative-line,
@@ -236,7 +265,14 @@
       transform: translateX(4px) !important;
     }
     #inicio-sec2 .about-logo-container {
-      transform: translateX(0.2cm) !important;
+      transform: translateX(-5.8cm) !important;
+    }
+  }
+
+  /* iPad Pro vertical: logo sección 2 más a la izquierda */
+  @media (min-width: 1000px) and (max-width: 1400px) and (orientation: portrait) {
+    #inicio-sec2 .about-logo-container {
+      transform: translateX(-5cm) !important;
     }
   }
 
