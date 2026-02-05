@@ -17,13 +17,11 @@ interface Programa {
   imageUrl: string;
 }
 
-// Componente helper para la card
 function ProyectoCard({ programa, className = '' }: { programa: Programa; className?: string }) {
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState(programa.imageUrl);
   const [hasTriedFallback, setHasTriedFallback] = useState(false);
 
-  // Normalizar la ruta de la imagen
   useEffect(() => {
     if (programa.imageUrl) {
       let normalizedPath = programa.imageUrl;
@@ -42,22 +40,17 @@ function ProyectoCard({ programa, className = '' }: { programa: Programa; classN
   }, [programa.imageUrl]);
 
   return (
-    <div className={className}>
-      {/* Frame tipo ventana */}
+    <div className={`grid h-full min-w-0 grid-rows-[auto_1fr_auto] ${className}`}>
       <div className="rounded-3xl overflow-hidden border-2 border-[#7B87FF] shadow-[0_16px_40px_rgba(0,0,0,0.18)]">
-        {/* Barra superior tipo navegador */}
         <div className="h-12 bg-[#3B3B7A] flex items-center px-4 gap-2">
-          {/* 3 puntitos a la izquierda */}
           <div className="flex gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-white/70"></div>
             <div className="w-2.5 h-2.5 rounded-full bg-white/70"></div>
             <div className="w-2.5 h-2.5 rounded-full bg-white/70"></div>
           </div>
-          {/* Barra sutil a la derecha */}
           <div className="h-2 w-3/5 rounded-full bg-white/15 ml-auto"></div>
         </div>
 
-        {/* Área de imagen */}
         <div className="relative aspect-video w-full bg-gradient-to-br from-slate-200 to-slate-300">
           {!imageError ? (
             <Image
@@ -68,7 +61,6 @@ function ProyectoCard({ programa, className = '' }: { programa: Programa; classN
               sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 25vw"
               unoptimized={imageSrc.startsWith('/images/') || imageSrc.startsWith('/')}
               onError={() => {
-                // Intentar fallback: si la imagen está en /images/programas/, intentar /images/
                 if (imageSrc.startsWith('/images/programas/') && !imageSrc.startsWith('http') && !hasTriedFallback) {
                   const fileName = imageSrc.split('/').pop();
                   const fallbackPath = `/images/${fileName}`;
@@ -88,28 +80,24 @@ function ProyectoCard({ programa, className = '' }: { programa: Programa; classN
               </div>
             </div>
           )}
-          {/* Degradado naranja abajo */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#E68956]/35 via-transparent to-transparent pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#E68956]/35 via-transparent to-transparent pointer-events-none" aria-hidden />
         </div>
       </div>
 
-      {/* Contenido debajo de la card */}
-      <div className="mt-6 space-y-4">
-        {/* Título */}
-        <h3 className="text-[#1D194C] font-tech font-extrabold text-2xl leading-tight">
+      <div className="mt-6 flex min-h-0 flex-col gap-4">
+        <h3 className="text-[#1D194C] font-tech font-extrabold text-2xl leading-tight shrink-0">
           {programa.title}
         </h3>
-
-        {/* Descripción */}
-        <p className="text-[#1D194C]/70 leading-relaxed text-base">
+        <p className="text-[#1D194C]/70 leading-relaxed text-base min-h-0 overflow-auto">
           {programa.shortDescription}
         </p>
+      </div>
 
-        {/* Botón */}
+      <div className="flex items-end pt-2">
         <Link
           href={`/programas/${programa.slug}`}
           prefetch={false}
-          className="inline-block rounded-full px-6 py-3 bg-[#E68956] text-white font-semibold hover:bg-[#D67A45] transition-colors"
+          className="w-fit inline-block rounded-full px-6 py-3 bg-[#E68956] text-white font-semibold hover:bg-[#D67A45] transition-colors -translate-y-[5.5rem]"
           aria-label={`Más información sobre ${programa.title}`}
         >
           Más información
@@ -234,7 +222,7 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
           ) : programasDuplicados.length > 0 ? (
             <div
               ref={containerRef}
-              className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide"
+              className="flex items-stretch gap-8 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide min-h-[520px]"
               style={{
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
@@ -244,7 +232,7 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
                 <ProyectoCard
                   key={`${programa._id}-${index}`}
                   programa={programa}
-                  className="snap-center shrink-0 w-[280px] sm:w-[320px] lg:w-[calc(25%-24px)] flex flex-col"
+                  className="snap-center shrink-0 w-[280px] sm:w-[320px] lg:w-[calc(25%-24px)] h-full min-h-[520px]"
                 />
               ))}
             </div>
