@@ -31,12 +31,17 @@ const teamMembers = [
     name: 'Xochitl Castillo',
     linkedinUrl: 'https://www.linkedin.com/in/xochitl-castillo-d-12271410a/',
   },
+  {
+    frameSrc: '/solar/icons/Silvia.svg',
+    role: '',
+    name: 'Silvia',
+    linkedinUrl: '#', // TODO: agregar URL de LinkedIn cuando la pases
+  },
 ];
 
 export function TeamSection() {
-  // Split into two rows: first 3, then last 2
   const firstRow = teamMembers.slice(0, 3);
-  const secondRow = teamMembers.slice(3, 5);
+  const secondRow = teamMembers.slice(3, 6);
 
   return (
     <section className="w-full bg-gradient-to-b from-[#090828] via-[#131039] to-[#1D194C] py-16 md:py-20 overflow-x-clip">
@@ -46,10 +51,8 @@ export function TeamSection() {
           Nuestro equipo.
         </h2>
 
-        {/* Desktop/Tablet Layout: 3 cards top, 2 cards bottom centered */}
+        {/* Desktop/Tablet: 3 cards top, 3 cards bottom */}
         <div className="hidden md:block">
-          {/* First Row: 3 cards */}
-          {/* Desktop (lg+): 3 columns, Tablet (md): 2 columns */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12 mb-10 md:mb-12">
             {firstRow.map((member) => (
               <TeamCard
@@ -62,8 +65,7 @@ export function TeamSection() {
             ))}
           </div>
 
-          {/* Second Row: 2 cards centered */}
-          <div className="flex justify-center gap-10 md:gap-12 flex-wrap">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
             {secondRow.map((member) => (
               <TeamCard
                 key={member.name}

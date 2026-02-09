@@ -5,8 +5,6 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { PostHogProvider } from '@/components/providers/PostHogProvider';
 import { siteConfig } from '@/config/site';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { buildBaseMetadata } from '@/lib/seo/metadata';
 import { robotsDirectives } from '@/lib/seo/env';
 import { getCanonicalBaseUrl } from '@/config/site';
@@ -91,9 +89,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Obtener sesión UNA VEZ en el servidor para evitar múltiples llamadas a /api/auth/session
-  const session = await getServerSession(authOptions);
-
+  // Sesión: no se obtiene en el layout para evitar JWT_SESSION_ERROR si la cookie es inválida; SessionProvider la pide en cliente vía /api/auth/session.
   // JSON-LD structured data
   const organizationSchema = organizationJsonLd();
   const websiteSchema = websiteJsonLd();
@@ -111,7 +107,7 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${inter.variable} ${orbitron.variable} ${tektur.variable} ${inter.className}`}>
-        <SessionProvider session={session}>
+        <SessionProvider>
           <ThemeProvider>
             <PostHogProvider>{children}</PostHogProvider>
           </ThemeProvider>
