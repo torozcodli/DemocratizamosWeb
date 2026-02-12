@@ -11,20 +11,20 @@ const values = [
     icon: '/solar/icons/EquidadValor.svg', 
     description: 'Distribuimos recursos y oportunidades para que cada quien alcance su potencial.' 
   },
-  { 
-    title: 'Solidaridad', 
-    icon: '/solar/icons/SolidaridadValor.svg', 
-    description: 'Colaboramos con otros para multiplicar y sostener el impacto.' 
+  {
+    title: 'Solidaridad',
+    icon: '/solar/icons/SolidaridadValor.svg',
+    description: 'Promover la colaboración, el apoyo mutuo y la responsabilidad compartida para lograr el bien común.',
   },
-  { 
-    title: 'Innovación', 
-    icon: '/solar/icons/InnovacionValor.svg', 
-    description: 'Colaboramos con otros para multiplicar y sostener el impacto.' 
+  {
+    title: 'Innovación',
+    icon: '/solar/icons/InnovacionValor.svg',
+    description: 'Brindar soluciones creativas a problemas cotidianos.',
   },
-  { 
-    title: 'Responsabilidad', 
-    icon: '/solar/icons/ResponsabilidadValor.svg', 
-    description: 'Colaboramos con otros para multiplicar y sostener el impacto.' 
+  {
+    title: 'Responsabilidad',
+    icon: '/solar/icons/ResponsabilidadValor.svg',
+    description: 'Actuar consciente con compromiso ético procurando el impacto positivo de la organización.',
   },
 ];
 
