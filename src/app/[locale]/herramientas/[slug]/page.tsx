@@ -10,7 +10,7 @@ import { breadcrumbJsonLd } from '@/lib/seo/jsonld';
 export const dynamic = 'force-dynamic';
 
 interface ToolPageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }
 
 export async function generateMetadata({ params }: ToolPageProps) {
@@ -39,10 +39,8 @@ export default async function ToolDetailPage({ params }: ToolPageProps) {
     notFound();
   }
 
-  // Obtener herramientas relacionadas
   const relatedTools = await ToolController.getRelatedTools(slug, 6);
 
-  // Convertir _id de ObjectId a string y fechas
   const toolAdapted = {
     ...tool,
     _id: tool._id.toString(),
@@ -59,7 +57,6 @@ export default async function ToolDetailPage({ params }: ToolPageProps) {
     updatedAt: t.updatedAt ? new Date(t.updatedAt).toString() : new Date().toString(),
   }));
 
-  // Breadcrumb JSON-LD
   const breadcrumbSchema = breadcrumbJsonLd([
     { name: 'Inicio', url: '/inicio' },
     { name: 'Herramientas', url: '/herramientas' },

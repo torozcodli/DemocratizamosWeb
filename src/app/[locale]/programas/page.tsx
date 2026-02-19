@@ -16,7 +16,6 @@ export const metadata = buildBaseMetadata({
 });
 
 export default async function ProgramasPage() {
-  // Obtener sesión en el servidor para pasar como prop y evitar llamadas cliente
   const session = await getServerSession(authOptions);
 
   return (
@@ -27,7 +26,6 @@ export default async function ProgramasPage() {
       <NosotrosTestimonioVideoSection />
       <ProgramasProyectosSection session={session} />
       <ProgramasModeloIntervencionSection />
-      {/* Aquí irán las demás secciones de Programas */}
       <Footer />
     </main>
   );

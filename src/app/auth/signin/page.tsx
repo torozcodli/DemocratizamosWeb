@@ -21,25 +21,10 @@ function SignInForm() {
     });
   }, [callbackUrl, router]);
 
-  const handleSignIn = async () => {
+  const handleSignIn = () => {
     setIsLoading(true);
-    try {
-      const result = await signIn('google', {
-        callbackUrl,
-        redirect: false,
-      });
-
-      if (result?.ok) {
-        router.push(callbackUrl);
-        router.refresh();
-      } else if (result?.error) {
-        console.error('Error signing in:', result.error);
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.error('Error signing in:', error);
-      setIsLoading(false);
-    }
+    // Dejar que NextAuth redirija a Google y luego al callbackUrl (evita problemas con middleware)
+    signIn('google', { callbackUrl });
   };
 
   return (

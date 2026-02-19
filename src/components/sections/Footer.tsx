@@ -1,11 +1,13 @@
 'use client';
 
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
+import { LanguageToggle } from '@/components/LanguageToggle';
 import { Container } from '@/components/ui/Container';
 import { siteConfig } from '@/config/site';
 import { Facebook, Instagram, Linkedin, Mail, Phone } from 'lucide-react';
 import Image from 'next/image';
 import { track } from '@/lib/analytics';
+import { useTranslations } from 'next-intl';
 // import { useState } from 'react'; // Deshabilitado - newsletter desactivado
 
 // Simple TikTok icon component
@@ -26,6 +28,7 @@ function TikTokIcon({ className }: { className?: string }) {
 }
 
 export function Footer() {
+  const t = useTranslations('footer');
   const currentYear = new Date().getFullYear();
   // Newsletter deshabilitado
   // const [email, setEmail] = useState('');
@@ -68,7 +71,7 @@ export function Footer() {
           {/* Column 2: Social Media & Contact — más ancho para que el correo no se corte */}
           <div className="space-y-6 sm:space-y-8 min-w-0 xl:min-w-[320px]">
             <div>
-              <h4 className="font-semibold text-[#E1E6FD] mb-4 sm:mb-6 text-base sm:text-lg">Redes sociales</h4>
+              <h4 className="font-semibold text-[#E1E6FD] mb-4 sm:mb-6 text-base sm:text-lg">{t('socialTitle')}</h4>
               <div className="flex gap-3 sm:gap-4">
                 <a
                   href={siteConfig.social.linkedin}
@@ -119,7 +122,7 @@ export function Footer() {
 
           {/* Column 3: Explorar */}
           <div className="sm:col-start-1 sm:row-start-2 md:col-start-3 md:row-start-1">
-            <h4 className="font-semibold text-[#E1E6FD] mb-4 sm:mb-6 text-base sm:text-lg">Explorar</h4>
+            <h4 className="font-semibold text-[#E1E6FD] mb-4 sm:mb-6 text-base sm:text-lg">{t('explore')}</h4>
             <ul className="space-y-3 sm:space-y-4">
               <li>
                 <Link
@@ -131,7 +134,7 @@ export function Footer() {
                   }}
                   className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
                 >
-                  Inicio
+                  {t('home')}
                 </Link>
               </li>
               <li>
@@ -144,7 +147,7 @@ export function Footer() {
                   }}
                   className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
                 >
-                  Nosotros
+                  {t('about')}
                 </Link>
               </li>
               <li>
@@ -157,7 +160,7 @@ export function Footer() {
                   }}
                   className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
                 >
-                  Programas
+                  {t('programs')}
                 </Link>
               </li>
               <li>
@@ -170,7 +173,7 @@ export function Footer() {
                   }}
                   className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
                 >
-                  Blog
+                  {t('blog')}
                 </Link>
               </li>
               <li>
@@ -183,7 +186,7 @@ export function Footer() {
                   }}
                   className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
                 >
-                  Herramientas
+                  {t('tools')}
                 </Link>
               </li>
               <li>
@@ -198,7 +201,7 @@ export function Footer() {
                   }}
                   className="text-sm sm:text-base text-[#E1E6FD] hover:underline transition-colors active:text-white/80"
                 >
-                  Contáctanos
+                  {t('contactUs')}
                 </a>
               </li>
             </ul>
@@ -254,9 +257,12 @@ export function Footer() {
             }}
             className="text-[#E1E6FD]/70 hover:text-[#E1E6FD] hover:underline transition-colors inline-block"
           >
-            Aviso de privacidad
+            {t('privacy')}
           </Link>
-          <p>© {currentYear}. Todos los derechos reservados</p>
+          <p>© {currentYear}. {t('rights')}</p>
+          <p className="inline-block">
+            <LanguageToggle />
+          </p>
         </div>
       </Container>
     </footer>

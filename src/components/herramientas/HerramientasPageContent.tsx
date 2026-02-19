@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { Session } from 'next-auth';
 import { Container } from '@/components/ui/Container';
 import { ToolCard } from './ToolCard';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import { Plus } from 'lucide-react';
 
 interface Tool {
@@ -23,6 +24,7 @@ interface HerramientasPageContentProps {
 }
 
 export function HerramientasPageContent({ session }: HerramientasPageContentProps) {
+  const t = useTranslations('herramientas.page');
   const [tools, setTools] = useState<Tool[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -61,14 +63,13 @@ export function HerramientasPageContent({ session }: HerramientasPageContentProp
       <Container>
         {/* Título */}
         <h2 className="text-center text-3xl sm:text-4xl lg:text-5xl font-tech font-extrabold text-white mb-12">
-          Herramientas que te acercan a tus{' '}
-          <span className="text-[#E68956]">metas</span>
+          {t('title')}
+          <span className="text-[#E68956]">{t('titleGoals')}</span>
         </h2>
 
-        {/* Grid de cards */}
         {isLoading ? (
           <div className="text-center py-12 text-white/60">
-            <p>Cargando herramientas...</p>
+            <p>{t('loading')}</p>
           </div>
         ) : tools.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -81,17 +82,16 @@ export function HerramientasPageContent({ session }: HerramientasPageContentProp
           </div>
         ) : (
           <div className="text-center py-12 text-white/60">
-            <p>No hay herramientas disponibles</p>
+            <p>{t('empty')}</p>
           </div>
         )}
 
-        {/* Botón + para admin */}
         {session?.user?.isAdmin && (
           <div className="flex justify-center mt-8">
             <Link
               href="/admin/herramientas"
               className="w-12 h-12 rounded-full bg-[#FF6A00] text-white shadow-lg hover:shadow-xl hover:bg-[#FF7A1A] transition-all flex items-center justify-center"
-              aria-label="Administrar herramientas"
+              aria-label={t('adminAria')}
             >
               <Plus size={24} className="text-white" />
             </Link>

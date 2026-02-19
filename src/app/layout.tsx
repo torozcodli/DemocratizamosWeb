@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { Inter, Orbitron, Tektur } from 'next/font/google';
 import './globals.css';
+
+const LOCALES = ['es', 'en'] as const;
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { PostHogProvider } from '@/components/providers/PostHogProvider';
@@ -89,13 +92,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Sesión: no se obtiene en el layout para evitar JWT_SESSION_ERROR si la cookie es inválida; SessionProvider la pide en cliente vía /api/auth/session.
-  // JSON-LD structured data
+  const headersList = await headers();
+  const localeHeader = headersList.get('x-next-intl-locale');
+  const lang =
+    localeHeader && LOCALES.includes(localeHeader as (typeof LOCALES)[number])
+      ? localeHeader
+      : 'es';
+
   const organizationSchema = organizationJsonLd();
   const websiteSchema = websiteJsonLd();
 
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

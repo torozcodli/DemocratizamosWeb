@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { NextIntlClientProvider } from 'next-intl';
+import { routing } from '@/i18n/routing';
 
 export const metadata: Metadata = {
   robots: {
@@ -9,10 +11,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AuthLayout({
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  const locale = routing.defaultLocale;
+  const messages = (await import(`@/messages/${locale}.json`)).default;
+  return (
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      {children}
+    </NextIntlClientProvider>
+  );
 }

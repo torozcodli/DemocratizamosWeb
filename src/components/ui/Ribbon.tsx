@@ -1,19 +1,18 @@
-export function Ribbon() {
-  const text = "Creemos en el poder de la tecnología para todos. ";
-  const repetitions = 15; // Número de repeticiones para efecto continuo
+import { getTranslations } from 'next-intl/server';
 
-  // Función para renderizar el texto con los colores correctos
-  const renderColoredText = () => {
-    return (
-      <>
-        <span className="text-[#E1E6FD]">Creemos en el </span>
-        <span className="text-[#BDC4FA] tech-word">poder</span>
-        <span className="text-[#E1E6FD]"> de la </span>
-        <span className="text-[#EFBE9F] tech-word">tecnología</span>
-        <span className="text-[#E1E6FD]"> para todos. </span>
-      </>
-    );
-  };
+export async function Ribbon() {
+  const t = await getTranslations('home.ribbon');
+  const repetitions = 15;
+
+  const renderColoredText = () => (
+    <>
+      <span className="text-[#E1E6FD]">{t('prefix1')}</span>
+      <span className="text-[#BDC4FA] tech-word">{t('power')}</span>
+      <span className="text-[#E1E6FD]">{t('prefix2')}</span>
+      <span className="text-[#EFBE9F] tech-word">{t('tech')}</span>
+      <span className="text-[#E1E6FD]">{t('suffix')}</span>
+    </>
+  );
 
   return (
     <section className="relative w-full bg-[#1E1A49] overflow-hidden isolate py-3 sm:py-4 my-0 border-y border-[#E1E6FD]/15">

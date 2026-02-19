@@ -1,10 +1,12 @@
+import { getTranslations } from 'next-intl/server';
 import { Container } from '@/components/ui/Container';
 import { BgPixelBlocks } from '@/components/ui/BgPixelBlocks';
 import { SolarSystemResponsive } from '@/components/solar/SolarSystemResponsive';
 import { SolarSystemMobileList } from '@/components/ui/SolarSystemMobileList';
 import { StatCard } from '@/components/ui/StatCard';
 
-export function InclusionDigitalSection() {
+export async function InclusionDigitalSection() {
+  const t = await getTranslations('home.inclusionDigital');
   return (
     <section
       id="inclusion-digital"
@@ -95,7 +97,6 @@ export function InclusionDigitalSection() {
 
       {/* Contenido */}
       <Container className="relative z-10">
-        {/* Sistema solar: desktop/tablet (md+) — escala uniforme; móvil: lista vertical */}
         <div className="mb-20 md:mb-32">
           <div className="hidden md:block">
             <SolarSystemResponsive />
@@ -105,21 +106,20 @@ export function InclusionDigitalSection() {
           </div>
         </div>
 
-        {/* Cards de estadísticas */}
         <div className="min-h-[520px] flex items-center justify-center px-4 sm:px-0">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24 lg:gap-32 max-w-5xl w-full">
             <StatCard
               value="+2500"
-              label="Personas capacitadas"
+              label={t('stat1Label')}
               imageSrc="/images/2500.jpg"
-              imageAlt="Personas en capacitación"
+              imageAlt={t('stat1Alt')}
               animateOnScroll
             />
             <StatCard
               value="+190"
-              label="Proyectos realizados"
+              label={t('stat2Label')}
               imageSrc="/images/500.jpg"
-              imageAlt="Proyectos de inclusión digital"
+              imageAlt={t('stat2Alt')}
               animateOnScroll
             />
           </div>

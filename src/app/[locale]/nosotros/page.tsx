@@ -16,7 +16,7 @@ export const metadata = buildBaseMetadata({
   path: '/nosotros',
 });
 
-export default function NosotrosPage() {
+export default async function NosotrosPage() {
   return (
     <main id="nosotros-page" className="w-full overflow-x-clip">
       <Navbar />
@@ -32,4 +32,3 @@ export default function NosotrosPage() {
     </main>
   );
 }
-

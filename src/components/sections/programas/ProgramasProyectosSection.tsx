@@ -2,8 +2,8 @@
 
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link, useRouter } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import type { Session } from 'next-auth';
 import { Container } from '@/components/ui/Container';
 import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
@@ -17,7 +17,7 @@ interface Programa {
   imageUrl: string;
 }
 
-function ProyectoCard({ programa, className = '' }: { programa: Programa; className?: string }) {
+function ProyectoCard({ programa, className = '', verMasLabel }: { programa: Programa; className?: string; verMasLabel: string }) {
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState(programa.imageUrl);
   const [hasTriedFallback, setHasTriedFallback] = useState(false);
@@ -98,9 +98,9 @@ function ProyectoCard({ programa, className = '' }: { programa: Programa; classN
           href={`/programas/${programa.slug}`}
           prefetch={false}
           className="w-fit inline-block rounded-full px-6 py-3 bg-[#E68956] text-white font-semibold hover:bg-[#D67A45] transition-colors -translate-y-[5.5rem]"
-          aria-label={`Más información sobre ${programa.title}`}
+          aria-label={`${verMasLabel}: ${programa.title}`}
         >
-          Más información
+          {verMasLabel}
         </Link>
       </div>
     </div>
@@ -112,6 +112,7 @@ interface ProgramasProyectosSectionProps {
 }
 
 export function ProgramasProyectosSection({ session }: ProgramasProyectosSectionProps) {
+  const t = useTranslations('programas.proyectos');
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [programs, setPrograms] = useState<Programa[]>([]);
@@ -147,7 +148,7 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
         console.error('[ProgramasProyectosSection] Error response:', response.status, errorData);
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Error al cargar programas';
+      const errorMessage = error instanceof Error ? error.message : t('errorTitle');
       setError(errorMessage);
       console.error('[ProgramasProyectosSection] Fetch error:', error);
     } finally {
@@ -181,7 +182,7 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
       <Container>
         {/* Título */}
         <h2 className="text-center text-4xl sm:text-5xl lg:text-6xl font-tech font-extrabold tracking-tight text-[#1D194C] mb-12 lg:mb-16">
-          Proyectos.
+          {t('sectionTitle')}
         </h2>
 
         {/* Contenedor relativo para las flechas */}
@@ -206,17 +207,17 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
           {/* Carrusel */}
           {isLoading ? (
             <div className="text-center py-12 text-[#1D194C]/60">
-              <p>Cargando programas...</p>
+              <p>{t('loading')}</p>
             </div>
           ) : error ? (
             <div className="text-center py-12 text-red-600">
-              <p className="font-semibold mb-2">Error al cargar programas</p>
+              <p className="font-semibold mb-2">{t('errorTitle')}</p>
               <p className="text-sm">{error}</p>
               <button
                 onClick={fetchPrograms}
                 className="mt-4 px-4 py-2 bg-[#E68956] text-white rounded-full hover:bg-[#D67A45] transition-colors"
               >
-                Reintentar
+                {t('retry')}
               </button>
             </div>
           ) : programasDuplicados.length > 0 ? (
@@ -232,13 +233,14 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
                 <ProyectoCard
                   key={`${programa._id}-${index}`}
                   programa={programa}
+                  verMasLabel={t('verMas')}
                   className="snap-center shrink-0 w-[280px] sm:w-[320px] lg:w-[calc(25%-24px)] h-full min-h-[520px]"
                 />
               ))}
             </div>
           ) : (
             <div className="text-center py-12 text-[#1D194C]/60">
-              <p>No hay programas disponibles</p>
+              <p>{t('empty')}</p>
             </div>
           )}
         </div>

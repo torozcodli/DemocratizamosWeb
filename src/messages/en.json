@@ -1,0 +1,219 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About us",
+    "programs": "Programs",
+    "blog": "Blog/Publications",
+    "tools": "Tools",
+    "academy": "Academy",
+    "contact": "Contact"
+  },
+  "footer": {
+    "socialTitle": "Social media",
+    "explore": "Explore",
+    "home": "Home",
+    "about": "About us",
+    "programs": "Programs",
+    "blog": "Blog",
+    "tools": "Tools",
+    "contactUs": "Contact us",
+    "privacy": "Privacy notice",
+    "rights": "All rights reserved",
+    "switchToEnglish": "English",
+    "switchToSpanish": "Español"
+  },
+  "home": {
+    "hero": {
+      "title1": "We transform",
+      "title2": "lives through",
+      "title3": "",
+      "titleTech": "technology.",
+      "description1": "Bringing digital skills to those who need them most,",
+      "description2": "fostering digital inclusion and reducing",
+      "description3": "social inequality.",
+      "cta": "Contact"
+    },
+    "about": {
+      "cardTitle": "Who We Are",
+      "cardText": "We are a non-profit civil association committed to closing the digital divide in Mexico. We work so that every person, regardless of context, can access the technology tools they need to transform their reality.",
+      "cardAdditional": "We don't just teach technology—we build learning communities where people discover their potential and shape their future.",
+      "headingPrefix1": "We believe in the ",
+      "headingPower": "power",
+      "headingPrefix2": " of ",
+      "headingTech": "technology",
+      "headingSuffix": " for everyone."
+    },
+    "ribbon": {
+      "prefix1": "We believe in the ",
+      "power": "power",
+      "prefix2": " of ",
+      "tech": "technology",
+      "suffix": " for everyone. "
+    },
+    "allies": {
+      "titleOur": "Our ",
+      "titleAllies": "allies.",
+      "subtitle": "We value each of our allies. Thank you for trusting and building with us."
+    },
+    "inclusionDigital": {
+      "stat1Label": "People trained",
+      "stat2Label": "Projects completed",
+      "stat1Alt": "People in training",
+      "stat2Alt": "Digital inclusion projects"
+    },
+    "latest": {
+      "title": "Latest updates.",
+      "items": [
+        {
+          "title": "Cybersecurity Training",
+          "description": "Intensive workshop to strengthen safe digital skills in vulnerable sectors. Basic data protection practices and responsible browsing were covered."
+        },
+        {
+          "title": "Social Technology Fair",
+          "description": "A day to share technology tools applied to community issues. Young people from rural areas participated with innovative projects in digital accessibility."
+        },
+        {
+          "title": "Digital Innovation Workshop",
+          "description": "An initiative to boost technological skills, creativity and digital inclusion among youth and entrepreneurs. This workshop is part of the professionalization program for vulnerable communities."
+        }
+      ]
+    }
+  },
+  "nosotros": {
+    "hero": {
+      "title": "About us.",
+      "teContamosAlt": "Let us tell you more about us!"
+    },
+    "quienesSomos": {
+      "title": "Who we are?",
+      "p1": "Democratizamos la Innovación, A.C. is committed to challenging the status quo by providing disruptive opportunities for personal and community development through education, training, and support for the popular economy through entrepreneurship.",
+      "p2": "We focus especially on empowering vulnerable populations, strengthening their agency to drive positive change in their lives and in society as a whole.",
+      "p3": "Our goals are to create equal opportunities and inspire innovative solutions that challenge established norms and promote a fairer and more equitable society."
+    },
+    "missionVision": {
+      "missionSeal": "Mission",
+      "missionTitle": "We drive autonomy through technology.",
+      "missionFront": "We empower people in vulnerable contexts with digital skills so they can access better opportunities and build a fairer society.",
+      "missionBack": "We empower people toward better economic opportunities by strengthening their autonomy through digital skills that enhance their personal, professional, and social development. We democratize innovation and technology as tools for inclusion, focusing on those facing the greatest barriers, to build a more equitable, creative, and resilient society.",
+      "visionSeal": "Vision",
+      "visionTitle": "A world where innovation is a right.",
+      "visionFront": "We want to be a global force that inspires, transforms, and opens paths so that all people can build a sustainable and inclusive future.",
+      "visionBack": "Democratizamos la Innovación envisions itself as a transformative and revolutionary force, a leader in promoting human development and social innovation. We seek to transcend borders and barriers, being recognized for our radical and positive impact on the lives of people and communities globally. We aspire to be pioneers in creating a more sustainable, inclusive, and vibrant world, where every individual has the opportunity and power to turn their dreams into reality and actively contribute to building a better future for all."
+    },
+    "valores": {
+      "values": [
+        { "title": "Inclusion", "description": "Equal opportunities for all people, without exception." },
+        { "title": "Equity", "description": "We distribute resources and opportunities so that everyone can reach their potential." },
+        { "title": "Solidarity", "description": "Promoting collaboration, mutual support, and shared responsibility for the common good." },
+        { "title": "Innovation", "description": "Providing creative solutions to everyday problems." },
+        { "title": "Responsibility", "description": "Acting with ethical commitment and ensuring the organization's positive impact." }
+      ]
+    },
+    "principios": {
+      "title1": "Principles",
+      "title2": "of ",
+      "title3": "action.",
+      "items": [
+        { "title": "Agility.", "description": "We avoid unnecessary bureaucracy. We act quickly, decisively, and focused on solutions that create social value." },
+        { "title": "Resilience.", "description": "In the face of challenges, we find creative alternatives. We adapt, learn, and move forward without losing our way." },
+        { "title": "Conviction.", "description": "Every action has purpose. We deeply believe in the impact that innovation can have on people's lives." }
+      ]
+    },
+    "team": {
+      "title": "Our team.",
+      "members": [
+        { "role": "Legal Representative.", "name": "Paulina García" },
+        { "role": "Director", "name": "Daniel García" },
+        { "role": "Operations Coordinator", "name": "Daniel Santiesteban" },
+        { "role": "Process Automation Engineer", "name": "Tomás Orozco" },
+        { "role": "Administrative Coordinator", "name": "Xochitl Castillo" },
+        { "role": "", "name": "Silvia" }
+      ]
+    },
+    "results": {
+      "alt": "Results and metrics",
+      "metrics": [
+        { "value": "420", "label": "Consulting\nsolutions" },
+        { "value": "+5000", "label": "Cases\ncompleted" },
+        { "value": "4999", "label": "Satisfied\nclients" },
+        { "value": "160", "label": "Expert\nconsultants" }
+      ]
+    },
+    "ubicacion": {
+      "title": "Location.",
+      "intro": "We are located in Chihuahua, Mexico, where we work to reduce inequality through digital inclusion and the use of technology.",
+      "city": "Chihuahua.",
+      "scheduleTitle": "Schedule.",
+      "schedule": "Monday to Friday 08:00 to 17:00.",
+      "locations": [
+        { "name": "Utopic Workspace", "address": "Francisco Xavier Mina #1000 Int. 9, Col. Zona Centro, C.P. 31000, Chihuahua, Chih. México." },
+        { "name": "PIT 3, 2nd floor", "address": "Av. H. Colegio Militar s/n, Bodegas del Estado, 31300 Chihuahua, Chih." },
+        { "name": "Mifam Canaco", "address": "Av. Pedro Zuloaga 11200, Labor de Terrazas, 31207 Chihuahua, Chih." }
+      ]
+    },
+    "testimonios": {
+      "title": "Testimonials",
+      "videoTitle": "Testimonial video",
+      "badge": "Someone like you, sharing their experience!"
+    },
+    "propuestaValor": {
+      "alt": "Value Proposition",
+      "title1": "Value",
+      "title2": "Proposition:",
+      "title3": "Programs",
+      "title4": "and services",
+      "intro": "Our proposal is articulated in six components that strengthen people's capabilities to improve their economic autonomy, their participation in the digital economy, and their well-being, with a focus on social inclusion and local development.",
+      "cards": [
+        { "title": "Professionalization", "description": "We strengthen the capabilities of self-employed people, entrepreneurs, and local teams through training processes that allow them to improve the management of their economic activity, adapt to digital environments, and make better decisions for their livelihood and growth." },
+        { "title": "Technological Skills", "description": "We promote digital literacy and strengthen technological skills in people with different needs, providing practical knowledge to navigate digital environments with autonomy, improve their economic participation, and adapt to technological changes." },
+        { "title": "Support", "description": "We support people and productive projects in implementing technological solutions and innovation processes, providing guidance, mentoring, and follow-up to reduce barriers and facilitate the adoption of technology in an accessible and relevant way." },
+        { "title": "Awareness", "description": "We promote a culture of responsible and conscious use of technology, fostering understanding of its social, economic, and creative value, as well as basic knowledge about rights, innovation, and idea protection." },
+        { "title": "Guidance", "description": "We channel people toward support networks, complementary services, and technological resources that strengthen their development, facilitating access to tools, equipment, and opportunities that would otherwise be inaccessible." },
+        { "title": "Protection", "description": "We guide people and projects in understanding basic mechanisms for protecting their ideas and innovations, helping knowledge and creativity generate sustainable value and fair recognition." }
+      ]
+    }
+  },
+  "programas": {
+    "hero": {
+      "searchPlaceholder": "Search programs",
+      "searchAria": "Search programs",
+      "imageAlt": "Programs - Democratizamos la Innovación"
+    },
+    "modelo": {
+      "imageAlt": "Training event",
+      "title1": "Our model",
+      "title2": "of intervention",
+      "p1": "At Democratizamos la Innovación, A.C. we understand digital inclusion as an integral process that goes beyond access to technology: it involves ",
+      "p1Bold": "educating, connecting, supporting, and empowering people so they can use it with purpose.",
+      "p2": "That is why our model focuses on five complementary axes that strengthen personal, economic, and social development.",
+      "p3": "Each axis connects with the others, forming a network that drives social transformation through technology."
+    },
+    "proyectos": {
+      "sectionTitle": "Projects.",
+      "loading": "Loading programs...",
+      "empty": "No programs available",
+      "verMas": "Learn more",
+      "errorTitle": "Error loading programs",
+      "retry": "Retry"
+    }
+  },
+  "blog": {
+    "title": "Latest from our blog...",
+    "noPosts": "No posts yet",
+    "sortRecent": "Most recent",
+    "sortRecommended": "Recommended",
+    "loading": "Loading posts...",
+    "noPostsAvailable": "No posts available",
+    "adminAria": "Manage blogs"
+  },
+  "herramientas": {
+    "marquee": "TOOLS",
+    "page": {
+      "title": "Tools that bring you closer to your ",
+      "titleGoals": "goals",
+      "loading": "Loading tools...",
+      "empty": "No tools available",
+      "adminAria": "Manage tools"
+    }
+  }
+}

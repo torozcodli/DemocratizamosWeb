@@ -1,0 +1,219 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "about": "Nosotros",
+    "programs": "Programas",
+    "blog": "Blog/Publicaciones",
+    "tools": "Herramientas",
+    "academy": "Academia",
+    "contact": "Contacto"
+  },
+  "footer": {
+    "socialTitle": "Redes sociales",
+    "explore": "Explorar",
+    "home": "Inicio",
+    "about": "Nosotros",
+    "programs": "Programas",
+    "blog": "Blog",
+    "tools": "Herramientas",
+    "contactUs": "Contáctanos",
+    "privacy": "Aviso de privacidad",
+    "rights": "Todos los derechos reservados",
+    "switchToEnglish": "English",
+    "switchToSpanish": "Español"
+  },
+  "home": {
+    "hero": {
+      "title1": "Transformamos",
+      "title2": "vidas a través de",
+      "title3": "la",
+      "titleTech": "Tecnología.",
+      "description1": "Llevando habilidades digitales a quienes más las necesitan,",
+      "description2": "contribuyendo así a la inclusión digital y disminuyendo la",
+      "description3": "desigualdad social.",
+      "cta": "Contacto"
+    },
+    "about": {
+      "cardTitle": "¿Quiénes Somos?",
+      "cardText": "Somos una asociación civil sin fines de lucro, comprometida con cerrar la brecha digital en México. Trabajamos para que cada persona, sin importar su contexto, pueda acceder a las herramientas tecnológicas que necesita para transformar su realidad.",
+      "cardAdditional": "No solo enseñamos tecnología, creamos comunidades de aprendizaje donde las personas descubren su potencial y construyen su futuro.",
+      "headingPrefix1": "Creemos en el ",
+      "headingPower": "poder",
+      "headingPrefix2": " de la ",
+      "headingTech": "tecnología",
+      "headingSuffix": " para todos."
+    },
+    "ribbon": {
+      "prefix1": "Creemos en el ",
+      "power": "poder",
+      "prefix2": " de la ",
+      "tech": "tecnología",
+      "suffix": " para todos. "
+    },
+    "allies": {
+      "titleOur": "Nuestros ",
+      "titleAllies": "aliados.",
+      "subtitle": "Valoramos a cada uno de nuestros aliados. Gracias por confiar y construir juntos."
+    },
+    "inclusionDigital": {
+      "stat1Label": "Personas capacitadas",
+      "stat2Label": "Proyectos realizados",
+      "stat1Alt": "Personas en capacitación",
+      "stat2Alt": "Proyectos de inclusión digital"
+    },
+    "latest": {
+      "title": "Lo más nuevo.",
+      "items": [
+        {
+          "title": "Capacitación en Ciberseguridad",
+          "description": "Taller intensivo para fortalecer las habilidades digitales seguras en sectores vulnerables. Se abordaron prácticas básicas de protección de datos y navegación responsable."
+        },
+        {
+          "title": "Feria de Tecnología Social",
+          "description": "Una jornada para compartir herramientas tecnológicas aplicadas a problemas comunitarios. Participaron jóvenes de zonas rurales con proyectos innovadores en accesibilidad digital."
+        },
+        {
+          "title": "Taller de Innovación Digital",
+          "description": "Una iniciativa para impulsar habilidades tecnológicas, creatividad e inclusión digital entre jóvenes y emprendedores. Este taller forma parte del programa de profesionalización para comunidades vulnerables."
+        }
+      ]
+    }
+  },
+  "nosotros": {
+    "hero": {
+      "title": "Nosotros.",
+      "teContamosAlt": "¡Te contamos más de nosotros!"
+    },
+    "quienesSomos": {
+      "title": "¿Quiénes somos?",
+      "p1": "Democratizamos la Innovación, A.C. se compromete a desafiar los límites del status quo al brindar oportunidades disruptivas de desarrollo personal y comunitario a través de la educación, la capacitación y al fomento a la economía popular a través del emprendimiento.",
+      "p2": "Nos enfocamos especialmente en empoderar a las poblaciones en situación de vulnerabilidad, fortaleciendo su capacidad de agencia para impulsar un cambio positivo en sus vidas y en la sociedad en su conjunto.",
+      "p3": "Nuestros objetivos son crear igualdad de oportunidades e inspirar la creación de soluciones innovadoras que desafíen las normas establecidas y promuevan una sociedad más justa y equitativa."
+    },
+    "missionVision": {
+      "missionSeal": "Misión",
+      "missionTitle": "Impulsamos autonomía con tecnología.",
+      "missionFront": "Fortalecemos a personas en contextos vulnerables con habilidades digitales para que accedan a mejores oportunidades y construyan una sociedad más justa.",
+      "missionBack": "Impulsamos a las personas hacia mejores oportunidades económicas, fortaleciendo su autonomía mediante habilidades digitales que potencian su desarrollo personal, profesional y social. Democratizamos la innovación y la tecnología como herramientas de inclusión, enfocándonos en quienes enfrentan mayores barreras, para construir una sociedad más equitativa, creativa y resiliente.",
+      "visionSeal": "Visión",
+      "visionTitle": "Un mundo donde innovar es un derecho.",
+      "visionFront": "Queremos ser una fuerza global que inspira, transforma y abre caminos para que todas las personas puedan construir un futuro sostenible e inclusivo.",
+      "visionBack": "Democratizamos la Innovación se visualiza como una fuerza transformadora y revolucionaria, líder en la promoción del desarrollo humano y la innovación social. Buscamos trascender fronteras y barreras, siendo reconocidos por nuestro impacto radical y positivo en la vida de las personas y comunidades a nivel global. Aspiramos a ser pioneros en la creación de un mundo más sostenible, inclusivo y vibrante, donde cada individuo tenga la oportunidad y el poder de convertir sus sueños en realidad y contribuir activamente a la construcción de un futuro mejor para todos."
+    },
+    "valores": {
+      "values": [
+        { "title": "Inclusión", "description": "Igualdad de oportunidades para todas las personas, sin excepciones." },
+        { "title": "Equidad", "description": "Distribuimos recursos y oportunidades para que cada quien alcance su potencial." },
+        { "title": "Solidaridad", "description": "Promover la colaboración, el apoyo mutuo y la responsabilidad compartida para lograr el bien común." },
+        { "title": "Innovación", "description": "Brindar soluciones creativas a problemas cotidianos." },
+        { "title": "Responsabilidad", "description": "Actuar consciente con compromiso ético procurando el impacto positivo de la organización." }
+      ]
+    },
+    "principios": {
+      "title1": "Principios",
+      "title2": "de ",
+      "title3": "acción.",
+      "items": [
+        { "title": "Agilidad.", "description": "Evitamos la burocracia innecesaria. Actuamos rápido, decididos y enfocados en soluciones que generen valor social." },
+        { "title": "Resiliencia.", "description": "Ante los retos, encontramos alternativas creativas. Nos adaptamos, aprendemos, y seguimos adelante sin perder el rumbo." },
+        { "title": "Convicción.", "description": "Cada acción tiene propósito. Creemos profundamente en el impacto que la innovación puede tener en la vida de las personas." }
+      ]
+    },
+    "team": {
+      "title": "Nuestro equipo.",
+      "members": [
+        { "role": "Representante Legal.", "name": "Paulina García" },
+        { "role": "Director", "name": "Daniel García" },
+        { "role": "Coordinador de Operaciones", "name": "Daniel Santiesteban" },
+        { "role": "Ing. Automatización de Procesos", "name": "Tomás Orozco" },
+        { "role": "Coordinadora Administrativa", "name": "Xochitl Castillo" },
+        { "role": "", "name": "Silvia" }
+      ]
+    },
+    "results": {
+      "alt": "Resultados y métricas",
+      "metrics": [
+        { "value": "420", "label": "Soluciones\nde consultoría" },
+        { "value": "+5000", "label": "Casos\ncompletados" },
+        { "value": "4999", "label": "Clientes\nsatisfechos" },
+        { "value": "160", "label": "Consultores\nexpertos" }
+      ]
+    },
+    "ubicacion": {
+      "title": "Ubicación.",
+      "intro": "Estamos ubicados en Chihuahua, México, donde trabajamos para reducir la desigualdad mediante la inclusión digital y el uso de la tecnología.",
+      "city": "Chihuahua.",
+      "scheduleTitle": "Horario.",
+      "schedule": "Lunes a Viernes 08:00 a 17:00 hrs.",
+      "locations": [
+        { "name": "Utopic Workspace", "address": "Francisco Xavier Mina #1000 Int. 9, Col. Zona Centro, C.P. 31000, Chihuahua, Chih. México." },
+        { "name": "PIT 3, 2do piso", "address": "Av. H. Colegio Militar s/n, Bodegas del Estado, 31300 Chihuahua, Chih." },
+        { "name": "Mifam Canaco", "address": "Av. Pedro Zuloaga 11200, Labor de Terrazas, 31207 Chihuahua, Chih." }
+      ]
+    },
+    "testimonios": {
+      "title": "Testimonios",
+      "videoTitle": "Video testimonio",
+      "badge": "¡Alguien como tú, contando su experiencia!"
+    },
+    "propuestaValor": {
+      "alt": "Propuesta de Valor",
+      "title1": "Propuesta de",
+      "title2": "Valor:",
+      "title3": "Programas",
+      "title4": "y servicios",
+      "intro": "Nuestra propuesta se articula en seis componentes que fortalecen las capacidades de las personas para mejorar su autonomía económica, su participación en la economía digital y su bienestar, con un enfoque de inclusión social y desarrollo local.",
+      "cards": [
+        { "title": "Profesionalización", "description": "Fortalecemos las capacidades de personas autoempleadas, emprendedoras y equipos locales mediante procesos formativos que les permiten mejorar la gestión de su actividad económica, adaptarse a entornos digitales y tomar mejores decisiones para su sustento y crecimiento." },
+        { "title": "Habilidades Tecnológicas", "description": "Impulsamos la alfabetización digital y fortalecemos habilidades tecnológicas en personas con distintas necesidades, brindando conocimientos prácticos para desenvolverse con autonomía en entornos digitales, mejorar su participación económica y adaptarse a los cambios tecnológicos." },
+        { "title": "Acompañamiento", "description": "Acompañamos a personas y proyectos productivos en la implementación de soluciones tecnológicas y procesos de innovación, brindando orientación, mentoría y seguimiento para reducir barreras y facilitar la adopción de tecnología de forma accesible y pertinente." },
+        { "title": "Sensibilización", "description": "Promovemos una cultura de uso responsable y consciente de la tecnología, fomentando la comprensión de su valor social, económico y creativo, así como el conocimiento básico sobre derechos, innovación y protección de ideas." },
+        { "title": "Orientación", "description": "Canalizamos a las personas hacia redes de apoyo, servicios complementarios y recursos tecnológicos que fortalecen su desarrollo, facilitando el acceso a herramientas, equipos y oportunidades que de otra forma serían inaccesibles." },
+        { "title": "Protección", "description": "Orientamos a personas y proyectos en la comprensión de mecanismos básicos de protección de sus ideas e innovaciones, contribuyendo a que el conocimiento y la creatividad generen valor sostenible y reconocimiento justo." }
+      ]
+    }
+  },
+  "programas": {
+    "hero": {
+      "searchPlaceholder": "Buscar programas",
+      "searchAria": "Buscar programas",
+      "imageAlt": "Programas - Democratizamos la Innovación"
+    },
+    "modelo": {
+      "imageAlt": "Evento de capacitación",
+      "title1": "Nuestro modelo",
+      "title2": "de intervención",
+      "p1": "En Democratizamos la Innovación, A.C. entendemos la inclusión digital como un proceso integral que va más allá del acceso a la tecnología: implica ",
+      "p1Bold": "educar, conectar, acompañar y empoderar a las personas para que puedan usarla con propósito.",
+      "p2": "Por eso, nuestro modelo se centra en cinco ejes complementarios que fortalecen el desarrollo personal, económico y social.",
+      "p3": "Cada eje se conecta con los demás, formando una red que impulsa la transformación social a través de la tecnología."
+    },
+    "proyectos": {
+      "sectionTitle": "Proyectos.",
+      "loading": "Cargando programas...",
+      "empty": "No hay programas disponibles",
+      "verMas": "Ver más",
+      "errorTitle": "Error al cargar programas",
+      "retry": "Reintentar"
+    }
+  },
+  "blog": {
+    "title": "Lo último de nuestro blog...",
+    "noPosts": "Aún no hay publicaciones",
+    "sortRecent": "Más reciente",
+    "sortRecommended": "Recomendado",
+    "loading": "Cargando posts...",
+    "noPostsAvailable": "No hay posts disponibles",
+    "adminAria": "Administrar blogs"
+  },
+  "herramientas": {
+    "marquee": "HERRAMIENTAS",
+    "page": {
+      "title": "Herramientas que te acercan a tus ",
+      "titleGoals": "metas",
+      "loading": "Cargando herramientas...",
+      "empty": "No hay herramientas disponibles",
+      "adminAria": "Administrar herramientas"
+    }
+  }
+}

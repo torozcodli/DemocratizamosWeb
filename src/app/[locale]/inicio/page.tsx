@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import { buildBaseMetadata } from '@/lib/seo/metadata';
 import { Navbar } from '@/components/sections/Navbar';
 import { Hero } from '@/components/sections/Hero';
@@ -15,7 +16,11 @@ export const metadata = buildBaseMetadata({
   path: '/inicio',
 });
 
-export default function InicioPage() {
+export default async function InicioPage() {
+  const t = await getTranslations('home.latest');
+  const title = t('title');
+  const items = t.raw('items') as Array<{ title: string; description: string }>;
+
   return (
     <main className="min-h-screen w-full p-0 m-0">
       <Navbar />
@@ -25,7 +30,7 @@ export default function InicioPage() {
       <InclusionDigitalSection />
       <Ribbon />
       <AlliesSection />
-      <LatestSection />
+      <LatestSection title={title} items={items} />
       <Footer />
     </main>
   );

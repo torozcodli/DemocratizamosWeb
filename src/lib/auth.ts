@@ -1,11 +1,12 @@
 import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { MongoDBAdapter } from '@auth/mongodb-adapter';
-import clientPromise from './mongodb';
 import { isAdminEmail } from './admin';
 
+// Sin adapter: el login usa solo JWT y no requiere MongoDB en el callback.
+// Así evitas "adapter_error_getUserByAccount" / ETIMEOUT si Atlas no responde (red, firewall, IP).
+// El admin se determina por ADMIN_EMAILS. Para persistir usuarios en MongoDB, añade:
+// adapter: MongoDBAdapter(clientPromise),
 export const authOptions: NextAuthOptions = {
-  adapter: MongoDBAdapter(clientPromise),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID!,
@@ -20,7 +21,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, trigger }) {
       // On initial sign-in, set user data
       if (user) {
-        token.id = user.id;
+        token.id = user.id ?? token.sub ?? user.email ?? '';
         token.email = user.email || '';
         token.isAdmin = isAdminEmail(user.email);
       }
@@ -39,6 +40,12 @@ export const authOptions: NextAuthOptions = {
         session.user.isAdmin = token.isAdmin as boolean;
       }
       return session;
+    },
+    redirect({ url, baseUrl }) {
+      // Asegurar que tras el login se redirija al callbackUrl (ej. /admin/programas)
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
     },
   },
   pages: {

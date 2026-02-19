@@ -7,28 +7,18 @@ import { cn } from '@/lib/utils/cn';
 import { getGsap } from '@/lib/gsap/gsapClient';
 import { usePrefersReducedMotion } from '@/lib/motion/usePrefersReducedMotion';
 
-const latestItems = [
-  {
-    title: 'Capacitación en Ciberseguridad',
-    description:
-      'Taller intensivo para fortalecer las habilidades digitales seguras en sectores vulnerables. Se abordaron prácticas básicas de protección de datos y navegación responsable.',
-    image: '/images/CapacitacionCiber.jpg',
-  },
-  {
-    title: 'Feria de Tecnología Social',
-    description:
-      'Una jornada para compartir herramientas tecnológicas aplicadas a problemas comunitarios. Participaron jóvenes de zonas rurales con proyectos innovadores en accesibilidad digital.',
-    image: '/images/Feriade.jpg',
-  },
-  {
-    title: 'Taller de Innovación Digital',
-    description:
-      'Una iniciativa para impulsar habilidades tecnológicas, creatividad e inclusión digital entre jóvenes y emprendedores. Este taller forma parte del programa de profesionalización para comunidades vulnerables.',
-    image: '/images/TallerdeInnovacion.jpeg',
-  },
+const latestImages = [
+  '/images/CapacitacionCiber.jpg',
+  '/images/Feriade.jpg',
+  '/images/TallerdeInnovacion.jpeg',
 ];
 
-export function LatestSection() {
+type LatestSectionProps = {
+  title: string;
+  items: Array<{ title: string; description: string }>;
+};
+
+export function LatestSection({ title, items }: LatestSectionProps) {
   const ref = useRef<HTMLElement | null>(null);
   const reduced = usePrefersReducedMotion();
 
@@ -208,19 +198,17 @@ export function LatestSection() {
 
       {/* Contenido */}
       <Container className="relative z-10">
-        {/* Título */}
         <h2 className="text-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] mb-16 md:mb-20">
           <span
             className="text-[#1E1A49] font-black tracking-tight font-tech-alt"
             style={{ fontWeight: 900, WebkitTextStroke: '1px #1E1A49', letterSpacing: '-0.02em' }}
           >
-            Lo más nuevo.
+            {title}
           </span>
         </h2>
 
-        {/* Cards - 2 arriba + 1 abajo en tablet */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-14 lg:gap-20 max-w-[88rem] mx-auto px-4 sm:px-0">
-          {latestItems.map((item, index) => (
+          {items.map((item, index) => (
             <div
               key={index}
               data-lmn-card
@@ -232,7 +220,7 @@ export function LatestSection() {
               {/* Parte superior: Imagen con overlay */}
               <div className="relative h-[175px] lg:h-[195px] overflow-hidden">
                 <Image
-                  src={item.image}
+                  src={latestImages[index] ?? ''}
                   alt={item.title}
                   fill
                   className="object-cover"

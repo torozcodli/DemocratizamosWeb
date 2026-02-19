@@ -2,18 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { siteConfig } from '@/config/site';
 import { contactBtnClass } from '@/lib/styles/buttons';
 import { cn } from '@/lib/utils/cn';
-import { usePathname } from 'next/navigation';
+import { usePathname } from '@/i18n/navigation';
 import { track } from '@/lib/analytics';
+import { useTranslations } from 'next-intl';
 
 export function NavbarMenuClient() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const t = useTranslations('nav');
 
   // Bloquear scroll del body cuando el menú está abierto
   useEffect(() => {
@@ -35,17 +37,16 @@ export function NavbarMenuClient() {
           const isDisabled = item.href === '#';
           return (
             <Link
-              key={`${item.label}-${index}`}
+              key={`${item.navKey}-${index}`}
               href={item.href}
               prefetch={false}
               onClick={(e) => {
                 if (isDisabled) {
                   e.preventDefault();
                 } else {
-                  // Track CTA clicks for Programas and Herramientas
-                  if (item.label === 'Programas' || item.label === 'Herramientas') {
+                  if (item.navKey === 'programs' || item.navKey === 'tools') {
                     track('cta_click', {
-                      cta: item.label,
+                      cta: item.navKey,
                       location: 'navbar',
                     });
                   }
@@ -60,13 +61,13 @@ export function NavbarMenuClient() {
                   : 'text-navy-900 hover:text-navy-900 hover:bg-lavender/50 hover:ring-2 hover:ring-[#6F74C9] hover:ring-offset-2'
               )}
             >
-              {item.label}
+              {t(item.navKey)}
             </Link>
           );
         })}
         <a href={siteConfig.cta.href} target="_blank" rel="noopener noreferrer">
           <Button variant="primary" className={contactBtnClass + ' ml-1 2xl:px-5 2xl:py-2 2xl:ml-2 mr-2 2xl:mr-4 text-sm 2xl:text-base'}>
-            {siteConfig.cta.label}
+            {t(siteConfig.cta.navKey)}
           </Button>
         </a>
       </div>
@@ -104,7 +105,7 @@ export function NavbarMenuClient() {
                     const isDisabled = item.href === '#';
                     return (
                       <Link
-                        key={`${item.label}-${index}`}
+                        key={`${item.navKey}-${index}`}
                         href={item.href}
                         prefetch={false}
                         onClick={(e) => {
@@ -112,9 +113,9 @@ export function NavbarMenuClient() {
                             e.preventDefault();
                           } else {
                             setIsOpen(false);
-                            if (item.label === 'Programas' || item.label === 'Herramientas') {
+                            if (item.navKey === 'programs' || item.navKey === 'tools') {
                               track('cta_click', {
-                                cta: item.label,
+                                cta: item.navKey,
                                 location: 'navbar_mobile',
                               });
                             }
@@ -129,7 +130,7 @@ export function NavbarMenuClient() {
                             : 'text-[#E1E6FD] hover:text-white'
                         )}
                       >
-                        {item.label}
+                        {t(item.navKey)}
                       </Link>
                     );
                   })}
@@ -141,7 +142,7 @@ export function NavbarMenuClient() {
                     onClick={() => setIsOpen(false)}
                   >
                     <Button variant="primary" className={contactBtnClass + ' text-lg md:text-xl px-8 py-3 rounded-full'}>
-                      {siteConfig.cta.label}
+                      {t(siteConfig.cta.navKey)}
                     </Button>
                   </a>
                 </nav>

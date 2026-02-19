@@ -1,12 +1,13 @@
+import { getTranslations } from 'next-intl/server';
 import { Button } from '@/components/ui/Button';
 import { WhatsAppBanner } from '@/components/ui/WhatsAppBanner';
 import { contactBtnClass } from '@/lib/styles/buttons';
-import { homeContent } from '@/content/home';
 import HeroIllustration from '@/components/landing/HeroIllustration';
 import { HeroCollageWrapper } from '@/components/sections/HeroCollageWrapper.client';
 import { HeroIpadProStyles } from '@/components/sections/HeroIpadProStyles.client';
 
-export function Hero() {
+export async function Hero() {
+  const t = await getTranslations('home.hero');
   return (
     <section 
       id="inicio" 
@@ -37,21 +38,21 @@ export function Hero() {
                 className="font-inter font-extrabold text-[#1E1A49] leading-[1.05] tracking-tight min-w-0 text-[clamp(2.15rem,8.2vw,4.6rem)] ipadP:text-[clamp(44px,5vw,64px)] ipadP:leading-[0.95] ipadL:text-[clamp(44px,5vw,64px)] ipadL:leading-[0.95]"
               >
                 <span className="block">
-                  Transformamos
+                  {t('title1')}
                   <br />
-                  <span className="whitespace-nowrap">vidas a través de</span>
+                  <span className="whitespace-nowrap">{t('title2')}</span>
                   <br />
-                  la <span className="font-tech-alt font-bold text-[#807AC9]">Tecnología.</span>
+                  {t('title3')} <span className="font-tech-alt font-bold text-[#807AC9]">{t('titleTech')}</span>
                 </span>
               </h1>
             </div>
 
             <p className="mt-0.5 sm:mt-1 max-w-[65ch] ipadP:max-w-[560px] ipadP:text-[clamp(16px,2vw,18px)] lg:max-w-none text-left text-[18px] md:text-[18px] lg:text-[18px] xl:text-[22px] font-medium leading-snug text-[#5C5C77]">
-              Llevando habilidades digitales a quienes más las necesitan,
+              {t('description1')}
               <br />
-              contribuyendo así a la inclusión digital y disminuyendo la
+              {t('description2')}
               <br />
-              desigualdad social.
+              {t('description3')}
             </p>
 
             <a 
@@ -61,7 +62,7 @@ export function Hero() {
               className="self-start ipadP:self-center ipadL:self-center lg:self-start"
             >
               <Button variant="primary" className={contactBtnClass + ' hero-cta-button text-[clamp(16px,4vw,20px)] md:text-lg xl:text-xl px-6 md:px-7 py-2 md:py-2.5'}>
-                {homeContent.hero.cta}
+                {t('cta')}
               </Button>
             </a>
           </div>

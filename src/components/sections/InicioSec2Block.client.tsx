@@ -10,12 +10,26 @@ gsap.registerPlugin(ScrollTrigger);
 
 type GsapContextRevert = () => void;
 
+type InicioSec2BlockProps = {
+  headingPrefix1: string;
+  headingPower: string;
+  headingPrefix2: string;
+  headingTech: string;
+  headingSuffix: string;
+};
+
 /**
  * Columna derecha de la sección 2 en /inicio: heading, logo y línea.
  * Efecto de scroll: logo se revela al bajar, línea se dibuja hacia la izquierda;
  * ambos al máximo cuando ya estás en la sección.
  */
-export function InicioSec2Block() {
+export function InicioSec2Block({
+  headingPrefix1,
+  headingPower,
+  headingPrefix2,
+  headingTech,
+  headingSuffix,
+}: InicioSec2BlockProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
@@ -121,11 +135,11 @@ export function InicioSec2Block() {
       className="order-2 md:order-2 space-y-8 relative overflow-visible"
     >
       <h2 className="text-center md:text-center xl:text-right text-[44px] md:text-[48px] lg:text-[56px] xl:text-[72px] font-bold leading-[1.1] tracking-[-0.02em]">
-        <span className="text-[#E7ECFF]">Creemos en el </span>
-        <span className="tech-word text-[#B9C0FF]">poder</span>
-        <span className="text-[#E7ECFF]"> de la </span>
-        <span className="tech-word text-[#F0B07C]">tecnología</span>
-        <span className="text-[#E7ECFF]"> para todos.</span>
+        <span className="text-[#E7ECFF]">{headingPrefix1}</span>
+        <span className="tech-word text-[#B9C0FF]">{headingPower}</span>
+        <span className="text-[#E7ECFF]">{headingPrefix2}</span>
+        <span className="tech-word text-[#F0B07C]">{headingTech}</span>
+        <span className="text-[#E7ECFF]">{headingSuffix}</span>
       </h2>
 
       <div className="relative flex justify-center md:justify-center xl:justify-end items-center mt-[1cm] md:mt-0 md:-mt-12 overflow-visible">

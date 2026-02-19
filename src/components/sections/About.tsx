@@ -1,23 +1,45 @@
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 import { Container } from '@/components/ui/Container';
 import { TechCard } from '@/components/ui/TechCard';
 import { InicioSec2Block } from '@/components/sections/InicioSec2Block.client';
-import { homeContent } from '@/content/home';
 
 type AboutProps = { sectionId?: string };
 
-function AboutRightColumn({ sectionId }: { sectionId: string }) {
+function AboutRightColumn({
+  sectionId,
+  headingPrefix1,
+  headingPower,
+  headingPrefix2,
+  headingTech,
+  headingSuffix,
+}: {
+  sectionId: string;
+  headingPrefix1: string;
+  headingPower: string;
+  headingPrefix2: string;
+  headingTech: string;
+  headingSuffix: string;
+}) {
   if (sectionId === 'inicio-sec2') {
-    return <InicioSec2Block />;
+    return (
+      <InicioSec2Block
+        headingPrefix1={headingPrefix1}
+        headingPower={headingPower}
+        headingPrefix2={headingPrefix2}
+        headingTech={headingTech}
+        headingSuffix={headingSuffix}
+      />
+    );
   }
   return (
     <div className="order-2 md:order-2 space-y-8 relative overflow-visible">
       <h2 className="text-center md:text-center xl:text-right text-[44px] md:text-[48px] lg:text-[56px] xl:text-[72px] font-bold leading-[1.1] tracking-[-0.02em]">
-        <span className="text-[#E7ECFF]">Creemos en el </span>
-        <span className="tech-word text-[#B9C0FF]">poder</span>
-        <span className="text-[#E7ECFF]"> de la </span>
-        <span className="tech-word text-[#F0B07C]">tecnología</span>
-        <span className="text-[#E7ECFF]"> para todos.</span>
+        <span className="text-[#E7ECFF]">{headingPrefix1}</span>
+        <span className="tech-word text-[#B9C0FF]">{headingPower}</span>
+        <span className="text-[#E7ECFF]">{headingPrefix2}</span>
+        <span className="tech-word text-[#F0B07C]">{headingTech}</span>
+        <span className="text-[#E7ECFF]">{headingSuffix}</span>
       </h2>
       <div className="relative flex justify-center md:justify-center xl:justify-end items-center -mt-12 overflow-visible">
         <div className="relative h-36 w-36 md:h-40 md:w-40 lg:h-44 lg:w-44 z-10 about-logo-container">
@@ -60,7 +82,8 @@ function AboutRightColumn({ sectionId }: { sectionId: string }) {
   );
 }
 
-export function About({ sectionId = 'nosotros' }: AboutProps) {
+export async function About({ sectionId = 'nosotros' }: AboutProps) {
+  const t = await getTranslations('home.about');
   return (
     <section
       id={sectionId}
@@ -76,12 +99,19 @@ export function About({ sectionId = 'nosotros' }: AboutProps) {
       <Container>
         <div className="grid gap-10 md:grid-cols-2 md:gap-12 lg:gap-16 items-center">
           <div className="order-1 md:order-1">
-            <TechCard title={homeContent.about.card.title}>
-              <p className="mb-4">{homeContent.about.card.text}</p>
-              <p>{homeContent.about.card.additional}</p>
+            <TechCard title={t('cardTitle')}>
+              <p className="mb-4">{t('cardText')}</p>
+              <p>{t('cardAdditional')}</p>
             </TechCard>
           </div>
-          <AboutRightColumn sectionId={sectionId} />
+          <AboutRightColumn
+            sectionId={sectionId}
+            headingPrefix1={t('headingPrefix1')}
+            headingPower={t('headingPower')}
+            headingPrefix2={t('headingPrefix2')}
+            headingTech={t('headingTech')}
+            headingSuffix={t('headingSuffix')}
+          />
         </div>
       </Container>
     </section>

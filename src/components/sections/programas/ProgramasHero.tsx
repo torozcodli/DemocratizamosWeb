@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { WhatsAppBanner } from '@/components/ui/WhatsAppBanner';
 
 export function ProgramasHero() {
+  const t = useTranslations('programas.hero');
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
@@ -22,7 +24,7 @@ export function ProgramasHero() {
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/ProgramasPortada.jpg"
-          alt="Programas - Democratizamos la Innovación"
+          alt={t('imageAlt')}
           fill
           className="object-cover object-center"
           sizes="100vw"
@@ -66,7 +68,7 @@ export function ProgramasHero() {
           <div className="relative w-full">
             <Image
               src="/solar/icons/programas-searchbar.svg"
-              alt="Buscar programas"
+              alt={t('searchAria')}
               width={637}
               height={134}
               className="w-full h-auto"
@@ -81,7 +83,7 @@ export function ProgramasHero() {
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder=""
               className="absolute left-[10%] bottom-[15%] w-[78%] h-[35%] bg-transparent border-none outline-none text-[#1E1A49] text-sm md:text-base lg:text-lg font-medium placeholder:text-transparent focus:outline-none"
-              aria-label="Buscar programas"
+              aria-label={t('searchAria')}
             />
           </div>
         </form>

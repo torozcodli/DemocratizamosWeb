@@ -1,16 +1,17 @@
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 import { Container } from '@/components/ui/Container';
 
 // YouTube video ID from: https://youtu.be/IJDPSk9VqxQ
 const YOUTUBE_VIDEO_ID = 'IJDPSk9VqxQ';
 
-export function NosotrosTestimonioVideoSection() {
+export async function NosotrosTestimonioVideoSection() {
+  const t = await getTranslations('nosotros.testimonios');
   return (
     <section className="relative w-full overflow-x-clip bg-[#1D194C] py-14 sm:py-16 lg:py-20">
       <Container className="relative z-10">
-        {/* Título de sección — tema testimonial, paleta web */}
         <h2 className="font-tech font-extrabold tracking-tight text-center text-[#E1E6FD] text-[clamp(32px,5vw,48px)] sm:text-[clamp(36px,5.5vw,56px)] md:text-[clamp(40px,5vw,60px)] mb-10 md:mb-12">
-          <span className="text-[#FF8948]">Testimonios</span>
+          <span className="text-[#FF8948]">{t('title')}</span>
         </h2>
 
         {/* Decoración pixel blocks (derecha, fondo) */}
@@ -43,13 +44,12 @@ export function NosotrosTestimonioVideoSection() {
           <div className="relative aspect-video w-full bg-black">
             {/* Badge / pill naranja flotante */}
             <div className="absolute left-4 sm:left-6 top-6 z-20 bg-[#E68956] text-white font-semibold rounded-full px-5 py-3 shadow-[0_12px_30px_rgba(0,0,0,0.25)] max-w-[90%] text-sm sm:text-base">
-              ¡Alguien como tú, contando su experiencia!
+              {t('badge')}
             </div>
 
-            {/* Iframe de YouTube */}
             <iframe
               src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}`}
-              title="Video testimonio"
+              title={t('videoTitle')}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               loading="lazy"

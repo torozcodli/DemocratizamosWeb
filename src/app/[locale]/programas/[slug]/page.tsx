@@ -10,7 +10,7 @@ import { breadcrumbJsonLd } from '@/lib/seo/jsonld';
 export const dynamic = 'force-dynamic';
 
 interface ProgramaPageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }
 
 export async function generateMetadata({ params }: ProgramaPageProps) {
@@ -39,11 +39,9 @@ export default async function ProgramaPage({ params }: ProgramaPageProps) {
     notFound();
   }
 
-  // Obtener programas anterior y siguiente basado en order
   const previousPrograma = await ProgramController.getPreviousProgram(programa.order);
   const nextPrograma = await ProgramController.getNextProgram(programa.order);
 
-  // Adaptar datos de MongoDB al formato esperado por el template
   const programaAdapted = {
     slug: programa.slug,
     title: programa.title,
@@ -81,7 +79,6 @@ export default async function ProgramaPage({ params }: ProgramaPageProps) {
       }
     : null;
 
-  // Breadcrumb JSON-LD
   const breadcrumbSchema = breadcrumbJsonLd([
     { name: 'Inicio', url: '/inicio' },
     { name: 'Programas', url: '/programas' },

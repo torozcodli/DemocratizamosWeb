@@ -1,8 +1,10 @@
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 import { WhatsAppBanner } from '@/components/ui/WhatsAppBanner';
 import { BgPixelBlocks } from '@/components/ui/BgPixelBlocks';
 
-export function NosotrosHero() {
+export async function NosotrosHero() {
+  const t = await getTranslations('nosotros.hero');
   return (
     <section className="relative w-full overflow-x-clip">
       {/* ========== MOBILE (base / sm): sin título "Nosotros", collage centrado ========== */}
@@ -60,7 +62,7 @@ export function NosotrosHero() {
             >
               <Image
                 src="/solar/icons/Tecontamos.svg"
-                alt="¡Te contamos más de nosotros!"
+                alt={t('teContamosAlt')}
                 width={200}
                 height={100}
                 className="h-auto w-full object-contain drop-shadow-lg"
@@ -90,7 +92,7 @@ export function NosotrosHero() {
         <div className="relative z-10 flex h-full w-full items-center justify-center px-4 sm:px-6 md:px-8">
           {/* Título "Nosotros." abajo izquierda — solo tablet/desktop */}
           <h1 className="absolute bottom-4 left-4 text-[clamp(40px,9vw,68px)] font-tech tracking-[-0.02em] text-[#E1E6FD] z-20 sm:bottom-6 sm:left-6 sm:text-[clamp(44px,10vw,72px)] md:bottom-8 md:left-8 md:text-[clamp(48px,6vw,70px)] lg:bottom-10 lg:left-10 lg:text-[clamp(50px,6.5vw,72px)] xl:bottom-6 xl:left-8 xl:text-[clamp(42px,5.2vw,68px)]">
-            Nosotros.
+            {t('title')}
           </h1>
 
           {/* Composición central */}
@@ -124,7 +126,7 @@ export function NosotrosHero() {
             <div className="nosotros-tecontamos absolute bottom-4 left-1/2 z-30 w-[100px] sm:bottom-6 sm:w-[120px] md:bottom-8 md:w-[140px] lg:bottom-10 lg:w-[160px] xl:left-1/2 xl:top-[58%] xl:bottom-auto xl:w-[200px]">
               <Image
                 src="/solar/icons/Tecontamos.svg"
-                alt="¡Te contamos más de nosotros!"
+                alt={t('teContamosAlt')}
                 width={200}
                 height={100}
                 className="w-full h-auto object-contain drop-shadow-lg"

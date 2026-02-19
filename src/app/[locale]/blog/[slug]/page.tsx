@@ -10,7 +10,7 @@ import { articleJsonLd, breadcrumbJsonLd } from '@/lib/seo/jsonld';
 export const dynamic = 'force-dynamic';
 
 interface BlogPageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }
 
 export async function generateMetadata({ params }: BlogPageProps) {
@@ -45,10 +45,8 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
     notFound();
   }
 
-  // Obtener posts relacionados
   const relatedPosts = await PostController.getRelatedPosts(slug, 3);
 
-  // Convertir _id de ObjectId a string
   const postAdapted = {
     ...post,
     _id: post._id.toString(),
@@ -61,7 +59,6 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
     createdAt: p.createdAt.toString(),
   }));
 
-  // JSON-LD structured data
   const publishedTime = post.createdAt ? new Date(post.createdAt).toISOString() : new Date().toISOString();
   const modifiedTime = post.updatedAt ? new Date(post.updatedAt).toISOString() : publishedTime;
 
