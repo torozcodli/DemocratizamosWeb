@@ -3,6 +3,7 @@ import { Navbar } from '@/components/sections/Navbar';
 import { Footer } from '@/components/sections/Footer';
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
 import { PostController } from '@/modules/posts/controllers/post.controller';
+import { resolvePost } from '@/lib/i18n/resolve';
 import { BlogDetailContent } from '@/components/blog/BlogDetailContent';
 import { buildBaseMetadata } from '@/lib/seo/metadata';
 import { articleJsonLd, breadcrumbJsonLd } from '@/lib/seo/jsonld';
@@ -14,21 +15,20 @@ interface BlogPageProps {
 }
 
 export async function generateMetadata({ params }: BlogPageProps) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const post = await PostController.getPostBySlug(slug);
-
   if (!post) {
-    return {
-      title: 'Post no encontrado',
-    };
+    return { title: 'Post no encontrado' };
   }
-
+  const resolved = resolvePost(post as any, locale);
+  if (!resolved) {
+    return { title: 'Post no encontrado' };
+  }
   const publishedTime = post.createdAt ? new Date(post.createdAt).toISOString() : undefined;
   const modifiedTime = post.updatedAt ? new Date(post.updatedAt).toISOString() : publishedTime;
-
   return buildBaseMetadata({
-    title: post.title,
-    description: post.excerpt,
+    title: resolved.title,
+    description: resolved.excerpt,
     path: `/blog/${slug}`,
     ogImage: post.imageUrl,
     ogType: 'article',
@@ -38,33 +38,37 @@ export async function generateMetadata({ params }: BlogPageProps) {
 }
 
 export default async function BlogDetailPage({ params }: BlogPageProps) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const post = await PostController.getPostBySlug(slug);
-
   if (!post) {
+    notFound();
+  }
+  const resolved = resolvePost(post as any, locale);
+  if (!resolved) {
     notFound();
   }
 
   const relatedPosts = await PostController.getRelatedPosts(slug, 3);
+  const relatedResolved = relatedPosts.map((p) => resolvePost(p as any, locale)).filter(Boolean);
 
   const postAdapted = {
-    ...post,
-    _id: post._id.toString(),
-    createdAt: post.createdAt.toString(),
+    ...resolved,
+    _id: (resolved as any)._id.toString(),
+    createdAt: (resolved as any).createdAt?.toString?.() ?? '',
   };
 
-  const relatedPostsAdapted = relatedPosts.map((p) => ({
+  const relatedPostsAdapted = relatedResolved.map((p: any) => ({
     ...p,
     _id: p._id.toString(),
-    createdAt: p.createdAt.toString(),
+    createdAt: p.createdAt?.toString?.() ?? '',
   }));
 
   const publishedTime = post.createdAt ? new Date(post.createdAt).toISOString() : new Date().toISOString();
   const modifiedTime = post.updatedAt ? new Date(post.updatedAt).toISOString() : publishedTime;
 
   const articleSchema = articleJsonLd({
-    headline: post.title,
-    description: post.excerpt,
+    headline: resolved.title,
+    description: resolved.excerpt,
     image: post.imageUrl,
     datePublished: publishedTime,
     dateModified: modifiedTime,
@@ -75,7 +79,7 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
   const breadcrumbSchema = breadcrumbJsonLd([
     { name: 'Inicio', url: '/inicio' },
     { name: 'Blog', url: '/blog' },
-    { name: post.title, url: `/blog/${slug}` },
+    { name: resolved.title, url: `/blog/${slug}` },
   ]);
 
   return (

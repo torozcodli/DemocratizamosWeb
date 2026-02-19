@@ -4,6 +4,7 @@ import { Footer } from '@/components/sections/Footer';
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
 import { ProgramaDetalleTemplate } from '@/components/programas/ProgramaDetalleTemplate';
 import { ProgramController } from '@/modules/programs/controllers/program.controller';
+import { resolveProgram } from '@/lib/i18n/resolve';
 import { buildBaseMetadata } from '@/lib/seo/metadata';
 import { breadcrumbJsonLd } from '@/lib/seo/jsonld';
 
@@ -14,66 +15,71 @@ interface ProgramaPageProps {
 }
 
 export async function generateMetadata({ params }: ProgramaPageProps) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const programa = await ProgramController.getProgramBySlug(slug);
-
   if (!programa) {
-    return {
-      title: 'Programa no encontrado',
-    };
+    return { title: 'Programa no encontrado' };
   }
-
+  const resolved = resolveProgram(programa as any, locale);
+  if (!resolved) {
+    return { title: 'Programa no encontrado' };
+  }
   return buildBaseMetadata({
-    title: programa.title,
-    description: programa.shortDescription,
+    title: resolved.title,
+    description: resolved.shortDescription,
     path: `/programas/${slug}`,
     ogImage: programa.imageUrl,
   });
 }
 
 export default async function ProgramaPage({ params }: ProgramaPageProps) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const programa = await ProgramController.getProgramBySlug(slug);
-
   if (!programa) {
+    notFound();
+  }
+  const resolved = resolveProgram(programa as any, locale);
+  if (!resolved) {
     notFound();
   }
 
   const previousPrograma = await ProgramController.getPreviousProgram(programa.order);
   const nextPrograma = await ProgramController.getNextProgram(programa.order);
+  const prevResolved = previousPrograma ? resolveProgram(previousPrograma as any, locale) : null;
+  const nextResolved = nextPrograma ? resolveProgram(nextPrograma as any, locale) : null;
 
   const programaAdapted = {
-    slug: programa.slug,
-    title: programa.title,
-    shortDescription: programa.shortDescription,
-    imageSrc: programa.imageUrl,
-    content: programa.content,
-    info: programa.info,
+    slug: resolved.slug,
+    title: resolved.title,
+    shortDescription: resolved.shortDescription,
+    imageSrc: resolved.imageUrl,
+    content: resolved.content,
+    info: resolved.info,
     ctaText: 'Reserva mi lugar',
     ctaHref: 'https://wa.me/+5216145871758',
   };
 
-  const previousAdapted = previousPrograma
+  const previousAdapted = prevResolved
     ? {
-        slug: previousPrograma.slug,
-        title: previousPrograma.title,
-        shortDescription: previousPrograma.shortDescription,
-        imageSrc: previousPrograma.imageUrl,
-        content: previousPrograma.content,
-        info: previousPrograma.info,
+        slug: prevResolved.slug,
+        title: prevResolved.title,
+        shortDescription: prevResolved.shortDescription,
+        imageSrc: prevResolved.imageUrl,
+        content: prevResolved.content,
+        info: prevResolved.info,
         ctaText: 'Reserva mi lugar',
         ctaHref: 'https://wa.me/+5216145871758',
       }
     : null;
 
-  const nextAdapted = nextPrograma
+  const nextAdapted = nextResolved
     ? {
-        slug: nextPrograma.slug,
-        title: nextPrograma.title,
-        shortDescription: nextPrograma.shortDescription,
-        imageSrc: nextPrograma.imageUrl,
-        content: nextPrograma.content,
-        info: nextPrograma.info,
+        slug: nextResolved.slug,
+        title: nextResolved.title,
+        shortDescription: nextResolved.shortDescription,
+        imageSrc: nextResolved.imageUrl,
+        content: nextResolved.content,
+        info: nextResolved.info,
         ctaText: 'Reserva mi lugar',
         ctaHref: 'https://wa.me/+5216145871758',
       }
@@ -82,7 +88,7 @@ export default async function ProgramaPage({ params }: ProgramaPageProps) {
   const breadcrumbSchema = breadcrumbJsonLd([
     { name: 'Inicio', url: '/inicio' },
     { name: 'Programas', url: '/programas' },
-    { name: programa.title, url: `/programas/${slug}` },
+    { name: resolved.title, url: `/programas/${slug}` },
   ]);
 
   return (
