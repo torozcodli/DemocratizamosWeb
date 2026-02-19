@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link } from '@/i18n/navigation';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Session } from 'next-auth';
 import { Container } from '@/components/ui/Container';
 import { FeaturedBlogCard } from './FeaturedBlogCard';
@@ -30,6 +30,7 @@ interface BlogPageContentProps {
 
 export function BlogPageContent({ session }: BlogPageContentProps) {
   const t = useTranslations('blog');
+  const locale = useLocale();
   const [posts, setPosts] = useState<Post[]>([]);
   const [latestPost, setLatestPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,12 +40,12 @@ export function BlogPageContent({ session }: BlogPageContentProps) {
   useEffect(() => {
     fetchPosts();
     fetchLatestPost();
-  }, [sort]);
+  }, [sort, locale]);
 
   const fetchPosts = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/blog?sort=${sort}`, {
+      const response = await fetch(`/api/blog?sort=${sort}&locale=${locale}`, {
         cache: 'no-store',
       });
       
@@ -68,7 +69,7 @@ export function BlogPageContent({ session }: BlogPageContentProps) {
   const fetchLatestPost = async () => {
     try {
       // Obtener todos los posts recientes y tomar el primero
-      const response = await fetch('/api/blog?sort=recent', {
+      const response = await fetch(`/api/blog?sort=recent&locale=${locale}`, {
         cache: 'no-store',
       });
       

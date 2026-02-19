@@ -1,10 +1,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Clock, Heart } from 'lucide-react';
+import { getLocale } from 'next-intl/server';
 import { PostController } from '@/modules/posts/controllers/post.controller';
+import { resolvePost } from '@/lib/i18n/resolve';
 
 export async function FeaturedLatestBlog() {
+  const locale = await getLocale();
   const latestPost = await PostController.getLatestPost();
+  const resolved = latestPost ? resolvePost(latestPost as any, locale) : null;
 
   const formatDate = (dateString: Date | string) => {
     const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
@@ -15,7 +19,7 @@ export async function FeaturedLatestBlog() {
     }).format(date);
   };
 
-  if (!latestPost) {
+  if (!resolved) {
     return (
       <section className="relative w-full bg-[#E7E9FF] py-16 overflow-hidden">
         {/* Círculo decorativo */}
@@ -35,11 +39,10 @@ export async function FeaturedLatestBlog() {
     );
   }
 
-  // Convertir _id y createdAt a string si es necesario
   const postAdapted = {
-    ...latestPost,
-    _id: latestPost._id.toString(),
-    createdAt: latestPost.createdAt.toString(),
+    ...resolved,
+    _id: (resolved as any)._id.toString(),
+    createdAt: (resolved as any).createdAt?.toString?.() ?? '',
   };
 
   return (

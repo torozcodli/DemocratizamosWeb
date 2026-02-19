@@ -5,7 +5,7 @@ import { Session } from 'next-auth';
 import { Container } from '@/components/ui/Container';
 import { ToolCard } from './ToolCard';
 import { Link } from '@/i18n/navigation';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Plus } from 'lucide-react';
 
 interface Tool {
@@ -25,17 +25,18 @@ interface HerramientasPageContentProps {
 
 export function HerramientasPageContent({ session }: HerramientasPageContentProps) {
   const t = useTranslations('herramientas.page');
+  const locale = useLocale();
   const [tools, setTools] = useState<Tool[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchTools();
-  }, []);
+  }, [locale]);
 
   const fetchTools = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('/api/tools', {
+      const response = await fetch(`/api/tools?locale=${locale}`, {
         cache: 'no-store',
       });
       

@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Link, useRouter } from '@/i18n/navigation';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import type { Session } from 'next-auth';
 import { Container } from '@/components/ui/Container';
 import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
@@ -113,6 +113,7 @@ interface ProgramasProyectosSectionProps {
 
 export function ProgramasProyectosSection({ session }: ProgramasProyectosSectionProps) {
   const t = useTranslations('programas.proyectos');
+  const locale = useLocale();
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [programs, setPrograms] = useState<Programa[]>([]);
@@ -121,14 +122,13 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
 
   useEffect(() => {
     fetchPrograms();
-  }, []);
+  }, [locale]);
 
   const fetchPrograms = async () => {
     try {
       setError(null);
       setIsLoading(true);
-      
-      const response = await fetch('/api/programas', {
+      const response = await fetch(`/api/programas?locale=${locale}`, {
         cache: 'no-store',
       });
       
