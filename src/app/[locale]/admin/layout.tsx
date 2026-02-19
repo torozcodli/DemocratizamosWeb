@@ -4,7 +4,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { authOptions } from '@/lib/auth';
 import { isAdminEmail } from '@/lib/admin';
 import { Navbar } from '@/components/sections/Navbar';
-import { routing } from '@/i18n/routing';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -18,20 +17,22 @@ export const metadata: Metadata = {
 
 export default async function AdminLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
   const session = await getServerSession(authOptions);
+  const { locale } = await params;
 
   if (!session || !session.user) {
-    redirect('/auth/signin?callbackUrl=/admin/programas');
+    redirect(`/auth/signin?callbackUrl=/${locale}/admin/programas`);
   }
 
   if (!isAdminEmail(session.user.email)) {
     redirect('/');
   }
 
-  const locale = routing.defaultLocale;
   const messages = (await import(`@/messages/${locale}.json`)).default;
 
   return (
