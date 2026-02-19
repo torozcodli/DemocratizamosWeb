@@ -101,32 +101,28 @@ export class PostController {
 
     await connectDB();
 
-    // Generar slug único
-    const baseSlug = slugify(validated.title);
+    const titleForSlug = typeof validated.title === 'string' ? validated.title : validated.title.es;
+    const baseSlug = slugify(titleForSlug);
     const uniqueSlug = await generateUniqueSlug(baseSlug, async (slug) => {
       const exists = await Post.findOne({ slug });
       return !!exists;
     });
 
-    // Generar excerpt del primer párrafo
-    const contentArray = Array.isArray(validated.content) 
-      ? validated.content 
-      : [validated.content];
-    const excerpt = generateExcerpt(contentArray);
+    const contentVal = validated.content;
+    const contentArray = contentVal.es;
+    const excerptVal = validated.excerpt ?? { es: generateExcerpt(contentArray), en: undefined };
 
-    // Autor por defecto
-    const authorName = validated.authorName || 
-      session.user.name || 
-      session.user.email?.split('@')[0] || 
+    const authorName = validated.authorName ||
+      session.user.name ||
+      session.user.email?.split('@')[0] ||
       'Democratizamos la Innovación';
 
-    // Crear post
     const post = new Post({
       ...validated,
       slug: uniqueSlug,
       authorName,
-      content: contentArray,
-      excerpt,
+      content: contentVal,
+      excerpt: excerptVal,
     });
 
     await post.save();
@@ -159,13 +155,13 @@ export class PostController {
       throw new Error('NOT_FOUND');
     }
 
-    // Validar input (campos opcionales)
     const validated = createPostSchema.partial().parse(input);
+    const slugFromBody = (input as { slug?: string }).slug;
 
-    // Si se actualiza el título, regenerar slug si es necesario
-    if (validated.title && validated.title !== post.title) {
-      const baseSlug = slugify(validated.title);
-      if (baseSlug !== post.slug) {
+    if (slugFromBody != null && String(slugFromBody).trim() !== '') {
+      const newSlug = String(slugFromBody).trim();
+      if (newSlug !== post.slug) {
+        const baseSlug = slugify(newSlug);
         const uniqueSlug = await generateUniqueSlug(baseSlug, async (slug) => {
           const exists = await Post.findOne({ slug, _id: { $ne: postId } });
           return !!exists;
@@ -174,17 +170,13 @@ export class PostController {
       }
     }
 
-    // Si se actualiza el contenido, regenerar excerpt
     if (validated.content) {
-      const contentArray = Array.isArray(validated.content) 
-        ? validated.content 
-        : [validated.content];
-      post.content = contentArray;
-      post.excerpt = generateExcerpt(contentArray);
+      post.content = validated.content as any;
+      const contentArr = validated.content.es;
+      post.excerpt = validated.excerpt ?? { es: generateExcerpt(contentArr), en: undefined } as any;
     }
 
-    // Actualizar campos
-    const { slug: _, content: __, ...updateData } = validated as any;
+    const { slug: _, content: __, excerpt: ___, ...updateData } = validated as any;
     Object.assign(post, updateData);
     await post.save();
 

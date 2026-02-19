@@ -1,28 +1,30 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
+import type { Localized } from '@/lib/i18n/content';
 
 export interface IPost extends Document {
-  title: string;
+  title: string | Localized<string>;
   slug: string;
   imageUrl: string;
   readTime: string;
   authorName: string;
-  content: string[];
-  excerpt: string;
+  content: string[] | Localized<string[]>;
+  excerpt: string | Localized<string>;
   likes: number;
   status: 'published' | 'draft';
   createdAt: Date;
   updatedAt: Date;
 }
 
+// Campos i18n usan Mixed por compatibilidad con docs legacy. Ver docs/I18N_SCHEMA_MIGRATION.md.
 const PostSchema = new Schema<IPost>(
   {
-    title: { type: String, required: true },
+    title: { type: Schema.Types.Mixed, required: true },
     slug: { type: String, required: true, unique: true },
     imageUrl: { type: String, required: true },
     readTime: { type: String, required: true },
     authorName: { type: String, required: true },
-    content: { type: [String], required: true },
-    excerpt: { type: String, required: true },
+    content: { type: Schema.Types.Mixed, required: true },
+    excerpt: { type: Schema.Types.Mixed, required: true },
     likes: { type: Number, default: 0 },
     status: {
       type: String,

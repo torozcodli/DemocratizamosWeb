@@ -110,8 +110,8 @@ export class ToolController {
 
     await connectDB();
 
-    // Generar slug único
-    const baseSlug = slugify(validated.title);
+    const titleForSlug = typeof validated.title === 'string' ? validated.title : validated.title.es;
+    const baseSlug = slugify(titleForSlug);
     const uniqueSlug = await generateUniqueSlug(baseSlug, async (slug) => {
       const exists = await Tool.findOne({ slug });
       return !!exists;
@@ -154,13 +154,13 @@ export class ToolController {
       throw new Error('NOT_FOUND');
     }
 
-    // Validar input (campos opcionales)
     const validated = updateToolSchema.parse(input);
+    const slugFromBody = (input as { slug?: string }).slug;
 
-    // Si se actualiza el título, regenerar slug si es necesario
-    if (validated.title && validated.title !== tool.title) {
-      const baseSlug = slugify(validated.title);
-      if (baseSlug !== tool.slug) {
+    if (slugFromBody != null && String(slugFromBody).trim() !== '') {
+      const newSlug = String(slugFromBody).trim();
+      if (newSlug !== tool.slug) {
+        const baseSlug = slugify(newSlug);
         const uniqueSlug = await generateUniqueSlug(baseSlug, async (slug) => {
           const exists = await Tool.findOne({ slug, _id: { $ne: toolId } });
           return !!exists;

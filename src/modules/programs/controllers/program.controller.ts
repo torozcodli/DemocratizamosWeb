@@ -102,8 +102,8 @@ export class ProgramController {
 
     await connectDB();
 
-    // Generar slug único
-    const baseSlug = slugify(validated.title);
+    const titleForSlug = typeof validated.title === 'string' ? validated.title : validated.title.es;
+    const baseSlug = slugify(titleForSlug);
     const uniqueSlug = await generateUniqueSlug(baseSlug, async (slug) => {
       const exists = await Program.findOne({ slug });
       return !!exists;
@@ -124,7 +124,9 @@ export class ProgramController {
   }
 
   /**
-   * Actualiza un programa existente (solo admin)
+   * Actualiza un programa existente (solo admin).
+   * Slug estable: no se regenera por cambio de título; solo se actualiza si el body incluye "slug" explícitamente.
+   * Manual check: editar título y guardar no debe cambiar la URL del programa.
    */
   static async updateProgram(
     programId: string,
@@ -149,14 +151,13 @@ export class ProgramController {
       throw new Error('NOT_FOUND');
     }
 
-    // Validar input (campos opcionales)
     const validated = createProgramSchema.partial().parse(input);
+    const slugFromBody = (input as { slug?: string }).slug;
 
-    // Si se actualiza el título, regenerar slug si es necesario
-    if (validated.title && validated.title !== program.title) {
-      const baseSlug = slugify(validated.title);
-      // Solo regenerar slug si es diferente al actual
-      if (baseSlug !== program.slug) {
+    if (slugFromBody != null && String(slugFromBody).trim() !== '') {
+      const newSlug = String(slugFromBody).trim();
+      if (newSlug !== program.slug) {
+        const baseSlug = slugify(newSlug);
         const uniqueSlug = await generateUniqueSlug(baseSlug, async (slug) => {
           const exists = await Program.findOne({ slug, _id: { $ne: programId } });
           return !!exists;
@@ -165,8 +166,7 @@ export class ProgramController {
       }
     }
 
-    // Actualizar campos (excluyendo slug que se maneja arriba)
-    const { slug: _, ...updateData } = validated as any;
+    const { slug: _s, ...updateData } = validated as any;
     Object.assign(program, updateData);
     await program.save();
 

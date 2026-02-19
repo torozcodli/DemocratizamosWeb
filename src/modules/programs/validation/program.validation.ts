@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { localizedStringSchema, localizedArraySchema } from '@/lib/validation/localized';
 
 const ProgramInfoSchema = z.object({
   date: z.string().min(1, 'La fecha es requerida'),
@@ -10,22 +11,27 @@ const ProgramInfoSchema = z.object({
   includes: z.string().min(1, 'El campo "incluye" es requerido'),
 });
 
+/** Content (array): trim por elemento; vacíos filtrados. Compat legacy string/array. */
+const contentLocalizedOrLegacy = z
+  .union([
+    localizedArraySchema,
+    z.array(z.string().trim().refine((s) => s.length > 0)).min(1),
+    z.string().trim().min(1).transform((s) => ({ es: s.split('\n\n').map((p) => p.trim()).filter((p) => p.length > 0) })),
+  ])
+  .transform((v): { es: string[]; en?: string[] } => {
+    if (typeof v === 'object' && v !== null && 'es' in v) return v as { es: string[]; en?: string[] };
+    const arr = Array.isArray(v) ? v : [String(v)];
+    return { es: arr.map((s) => String(s).trim()).filter((s) => s.length > 0) };
+  });
+
 export const createProgramSchema = z.object({
-  title: z.string().min(3, 'El título debe tener al menos 3 caracteres'),
-  shortDescription: z.string().min(1, 'La descripción corta es requerida'),
-  content: z
-    .union([
-      z.array(z.string()).min(1, 'Debe haber al menos un párrafo'),
-      z.string().min(1, 'El contenido es requerido'),
-    ])
-    .transform((val) => {
-      // Normalizar a array de strings
-      if (typeof val === 'string') {
-        // Separar por dobles saltos de línea
-        return val.split('\n\n').filter((p) => p.trim().length > 0);
-      }
-      return val;
-    }),
+  title: z.union([localizedStringSchema, z.string().trim().min(3)]).transform((v) =>
+    typeof v === 'string' ? { es: v, en: undefined } : v
+  ),
+  shortDescription: z.union([localizedStringSchema, z.string().trim().min(1)]).transform((v) =>
+    typeof v === 'string' ? { es: v, en: undefined } : v
+  ),
+  content: contentLocalizedOrLegacy,
   imageUrl: z
     .string()
     .min(1, 'La URL de la imagen es requerida')

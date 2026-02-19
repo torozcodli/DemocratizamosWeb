@@ -1,12 +1,19 @@
 import { z } from 'zod';
+import { localizedStringSchema } from '@/lib/validation/localized';
 
 export const createToolSchema = z.object({
-  title: z.string().min(3, 'El título debe tener al menos 3 caracteres'),
+  title: z.union([localizedStringSchema, z.string().trim().min(3)]).transform((v) =>
+    typeof v === 'string' ? { es: v, en: undefined } : v
+  ),
   description: z
-    .string()
-    .min(10, 'La descripción debe tener al menos 10 caracteres')
-    .max(200, 'La descripción no puede exceder 200 caracteres'),
-  content: z.string().min(20, 'El contenido debe tener al menos 20 caracteres'),
+    .union([
+      localizedStringSchema,
+      z.string().trim().min(10).max(200),
+    ])
+    .transform((v) => (typeof v === 'string' ? { es: v, en: undefined } : v)),
+  content: z
+    .union([localizedStringSchema, z.string().trim().min(20)])
+    .transform((v) => (typeof v === 'string' ? { es: v, en: undefined } : v)),
   imageUrl: z
     .string()
     .min(1, 'La URL de la imagen es requerida')

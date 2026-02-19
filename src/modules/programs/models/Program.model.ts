@@ -1,10 +1,11 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
+import type { Localized } from '@/lib/i18n/content';
 
 export interface IProgram extends Document {
-  title: string;
+  title: string | Localized<string>;
   slug: string;
-  shortDescription: string;
-  content: string[];
+  shortDescription: string | Localized<string>;
+  content: string[] | Localized<string[]>;
   imageUrl: string;
   info: {
     date: string;
@@ -34,12 +35,13 @@ const ProgramInfoSchema = new Schema(
   { _id: false }
 );
 
+// Campos i18n usan Mixed por compatibilidad con docs legacy. Ver docs/I18N_SCHEMA_MIGRATION.md.
 const ProgramSchema = new Schema<IProgram>(
   {
-    title: { type: String, required: true },
+    title: { type: Schema.Types.Mixed, required: true },
     slug: { type: String, required: true, unique: true },
-    shortDescription: { type: String, required: true },
-    content: { type: [String], required: true },
+    shortDescription: { type: Schema.Types.Mixed, required: true },
+    content: { type: Schema.Types.Mixed, required: true },
     imageUrl: { type: String, required: true },
     info: { type: ProgramInfoSchema, required: true },
     order: { type: Number, default: 0 },

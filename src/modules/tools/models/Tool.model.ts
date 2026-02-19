@@ -1,10 +1,11 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
+import type { Localized } from '@/lib/i18n/content';
 
 export interface ITool extends Document {
-  title: string;
+  title: string | Localized<string>;
   slug: string;
-  description: string;
-  content: string;
+  description: string | Localized<string>;
+  content: string | Localized<string>;
   imageUrl: string;
   date: Date;
   isPublished: boolean;
@@ -12,12 +13,13 @@ export interface ITool extends Document {
   updatedAt: Date;
 }
 
+// Campos i18n usan Mixed por compatibilidad con docs legacy. Ver docs/I18N_SCHEMA_MIGRATION.md.
 const ToolSchema = new Schema<ITool>(
   {
-    title: { type: String, required: true },
+    title: { type: Schema.Types.Mixed, required: true },
     slug: { type: String, required: true, unique: true },
-    description: { type: String, required: true },
-    content: { type: String, required: true },
+    description: { type: Schema.Types.Mixed, required: true },
+    content: { type: Schema.Types.Mixed, required: true },
     imageUrl: { type: String, required: true },
     date: { type: Date, required: true, default: Date.now },
     isPublished: { type: Boolean, default: true },
