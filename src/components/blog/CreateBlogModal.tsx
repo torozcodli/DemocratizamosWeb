@@ -3,9 +3,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useTranslations } from 'next-intl';
 import { X, Upload } from 'lucide-react';
-import { createPostSchema, type CreatePostInput } from '@/modules/posts/validation/post.validation';
+import { type CreatePostInput } from '@/modules/posts/validation/post.validation';
 import { Input } from '@/components/ui/Input';
+import { LocaleTabs } from '@/components/admin/LocaleTabs';
+import { hasRealContent, toLocalizedEn, toLocalizedEs } from '@/lib/i18n/content';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -13,12 +17,13 @@ import { useSession } from 'next-auth/react';
 
 interface Post {
   _id: string;
-  title: string;
+  title: string | { es: string; en?: string };
   slug: string;
   imageUrl: string;
   readTime: string;
   authorName: string;
-  content: string[];
+  excerpt?: string | { es: string; en?: string };
+  content: string[] | { es: string[]; en?: string[] };
   status: 'published' | 'draft';
 }
 
@@ -35,6 +40,7 @@ export function CreateBlogModal({
   onSuccess,
   postToEdit,
 }: CreateBlogModalProps) {
+  const t = useTranslations('admin');
   const router = useRouter();
   const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,16 +49,27 @@ export function CreateBlogModal({
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
   const [manualImageUrl, setManualImageUrl] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const lastLoadedRef = useRef<{ isOpen: boolean; postId: string | null }>({ isOpen: false, postId: null });
   const isEditMode = !!postToEdit;
+  const [activeLocaleTab, setActiveLocaleTab] = useState<'es' | 'en'>('es');
 
-  // Schema para edición: imageUrl opcional
-  const editPostSchema = createPostSchema.omit({ imageUrl: true }).passthrough();
+  /** Schema que coincide con el formulario: title/excerpt/content como { es, en } strings (content es texto con \n\n, no array). */
+  const blogFormSchema = z.object({
+    title: z.object({ es: z.string().trim().min(1, 'Título en español requerido'), en: z.string() }),
+    excerpt: z.object({ es: z.string(), en: z.string() }),
+    readTime: z.string().trim().min(1, 'Tiempo de lectura requerido'),
+    authorName: z.string().optional(),
+    content: z.object({ es: z.string().trim().min(1, 'Contenido en español requerido'), en: z.string() }),
+    imageUrl: z.string().min(1, 'Imagen requerida').refine((v) => v.startsWith('http') || v.startsWith('/'), 'URL o ruta válida').optional(),
+    status: z.enum(['published', 'draft']),
+  });
 
   type FormInput = {
-    title: string;
+    title: { es: string; en: string };
+    excerpt: { es: string; en: string };
     readTime: string;
     authorName?: string;
-    content: string; // Siempre string en el formulario
+    content: { es: string; en: string };
     imageUrl?: string;
     status: 'published' | 'draft';
   };
@@ -68,45 +85,77 @@ export function CreateBlogModal({
     trigger,
     unregister,
   } = useForm<FormInput>({
-    resolver: isEditMode 
-      ? zodResolver(editPostSchema) as any
-      : zodResolver(createPostSchema) as any,
+    resolver: zodResolver(blogFormSchema),
     mode: 'onSubmit',
     defaultValues: postToEdit
-      ? {
-          title: postToEdit.title,
-          readTime: postToEdit.readTime,
-          authorName: postToEdit.authorName,
-          content: postToEdit.content.join('\n\n'),
-          status: postToEdit.status,
-        } as FormInput
+      ? (() => {
+          const t = postToEdit.title;
+          const e = postToEdit.excerpt;
+          const c = postToEdit.content;
+          const title = typeof t === 'string' ? { es: t, en: '' } : { es: t?.es ?? '', en: t?.en ?? '' };
+          const excerpt = typeof e === 'string' ? { es: e, en: '' } : { es: e?.es ?? '', en: e?.en ?? '' };
+          const contentEs = Array.isArray(c) ? c : (c as any)?.es ?? [];
+          const contentEn = Array.isArray(c) ? [] : (c as any)?.en ?? [];
+          return {
+            title,
+            excerpt,
+            readTime: postToEdit.readTime,
+            authorName: postToEdit.authorName,
+            content: { es: contentEs.join('\n\n'), en: contentEn.join('\n\n') },
+            status: postToEdit.status,
+          } as FormInput;
+        })()
       : {
-        status: 'published',
-        authorName: session?.user?.name || session?.user?.email?.split('@')[0] || '',
-        content: '',
-      },
+          title: { es: '', en: '' },
+          excerpt: { es: '', en: '' },
+          readTime: '',
+          status: 'published',
+          authorName: session?.user?.name || session?.user?.email?.split('@')[0] || '',
+          content: { es: '', en: '' },
+        } as FormInput,
   });
 
-  // Cargar datos del post a editar cuando se abre el modal
+  // Cargar datos solo al abrir el modal o al cambiar de post; no al re-render (evita borrar lo que el usuario escribe en la pestaña EN).
   useEffect(() => {
-    if (isOpen && postToEdit) {
+    const postId = postToEdit?._id ?? null;
+    const justOpened = isOpen && !lastLoadedRef.current.isOpen;
+    const postChanged = isOpen && postId !== lastLoadedRef.current.postId;
+    if (!isOpen) {
+      lastLoadedRef.current = { isOpen: false, postId: null };
+      return;
+    }
+    if (!justOpened && !postChanged) return;
+    lastLoadedRef.current = { isOpen: true, postId };
+
+    if (postToEdit) {
       unregister('imageUrl');
+      const t = postToEdit.title;
+      const e = postToEdit.excerpt;
+      const c = postToEdit.content;
+      const title = typeof t === 'string' ? { es: t, en: '' } : { es: t?.es ?? '', en: t?.en ?? '' };
+      const excerpt = typeof e === 'string' ? { es: e, en: '' } : { es: e?.es ?? '', en: e?.en ?? '' };
+      const contentEs = Array.isArray(c) ? c : (c as any)?.es ?? [];
+      const contentEn = Array.isArray(c) ? [] : (c as any)?.en ?? [];
       reset({
-        title: postToEdit.title,
+        title,
+        excerpt,
         readTime: postToEdit.readTime,
         authorName: postToEdit.authorName,
-        content: postToEdit.content.join('\n\n'),
+        content: { es: contentEs.join('\n\n'), en: contentEn.join('\n\n') },
         status: postToEdit.status,
       });
       setImagePreview(postToEdit.imageUrl);
       setUploadedImageUrl('');
       setManualImageUrl(postToEdit.imageUrl);
       clearErrors('imageUrl');
-    } else if (isOpen && !postToEdit) {
+    } else {
       reset({
+        title: { es: '', en: '' },
+        excerpt: { es: '', en: '' },
+        readTime: '',
+        content: { es: '', en: '' },
         status: 'published',
         authorName: session?.user?.name || session?.user?.email?.split('@')[0] || '',
-        content: '',
       });
       setImagePreview('');
       setUploadedImageUrl('');
@@ -183,28 +232,29 @@ export function CreateBlogModal({
           ? manualImageUrl
           : postToEdit.imageUrl;
         
-        // Convertir content de string a array
-        const contentArray = typeof data.content === 'string' 
-          ? data.content.split('\n\n').filter((p) => p.trim().length > 0)
-          : data.content;
-        
-        const { imageUrl: _, ...dataWithoutImageUrl } = data;
+        const toContentArray = (v: string) => v.split('\n\n').filter((p) => p.trim().length > 0);
+        const contentEs = toContentArray((data as FormInput).content?.es ?? '');
+        const contentEn = hasRealContent((data as FormInput).content?.en) ? toContentArray((data as FormInput).content!.en!) : undefined;
+        const { imageUrl: _, content: __, ...rest } = data as FormInput;
         finalData = {
-          ...dataWithoutImageUrl,
-          content: contentArray,
+          ...rest,
+          title: { es: toLocalizedEs((data as FormInput).title.es), en: toLocalizedEn((data as FormInput).title.en) },
+          excerpt: { es: toLocalizedEs((data as FormInput).excerpt?.es ?? ''), en: toLocalizedEn((data as FormInput).excerpt?.en) },
+          content: { es: contentEs, en: contentEn },
           imageUrl: imageUrlToUse,
-        } as Partial<CreatePostInput>;
+        } as unknown as Partial<CreatePostInput>;
       } else {
-        // Convertir content de string a array
-        const contentArray = typeof data.content === 'string' 
-          ? data.content.split('\n\n').filter((p) => p.trim().length > 0)
-          : data.content;
-        
+        const toContentArray = (v: string) => v.split('\n\n').filter((p) => p.trim().length > 0);
+        const contentEs = toContentArray((data as FormInput).content?.es ?? '');
+        const contentEn = hasRealContent((data as FormInput).content?.en) ? toContentArray((data as FormInput).content!.en!) : undefined;
+        const { content: __, ...rest } = data as FormInput;
         finalData = {
-          ...data,
-          content: contentArray,
+          ...rest,
+          title: { es: toLocalizedEs((data as FormInput).title.es), en: toLocalizedEn((data as FormInput).title.en) },
+          excerpt: { es: toLocalizedEs((data as FormInput).excerpt?.es ?? ''), en: toLocalizedEn((data as FormInput).excerpt?.en) },
+          content: { es: contentEs, en: contentEn },
           imageUrl: uploadedImageUrl || (data as any).imageUrl,
-        } as CreatePostInput;
+        } as unknown as CreatePostInput;
       }
 
       const url = isEditMode
@@ -261,12 +311,12 @@ export function CreateBlogModal({
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-[#1D194C]/10 px-6 py-4 flex items-center justify-between">
           <h2 className="text-2xl font-tech font-extrabold text-[#1D194C]">
-            {isEditMode ? 'Editar blog' : 'Crear nuevo blog'}
+            {isEditMode ? t('editBlogTitle') : t('createBlogTitle')}
           </h2>
           <button
             onClick={onClose}
             className="w-10 h-10 rounded-full bg-[#1D194C]/10 hover:bg-[#1D194C]/20 flex items-center justify-center transition-colors"
-            aria-label="Cerrar modal"
+            aria-label={t('close')}
           >
             <X size={20} className="text-[#1D194C]" />
           </button>
@@ -274,26 +324,41 @@ export function CreateBlogModal({
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
-          {/* Título */}
+          <LocaleTabs
+            activeTab={activeLocaleTab}
+            onTabChange={setActiveLocaleTab}
+            hasEnContent={hasRealContent((watch as (n: string) => unknown)('title.en')) || hasRealContent((watch as (n: string) => unknown)('excerpt.en')) || hasRealContent((watch as (n: string) => unknown)('content.en'))}
+          />
+
           <div>
             <label className="block text-sm font-semibold text-[#1D194C] mb-2">
-              Título *
+              {activeLocaleTab === 'es' ? t('titleEs') : t('titleEn')}
             </label>
             <Input
-              {...register('title')}
-              placeholder="Título del blog"
-              className={errors.title ? 'border-red-500' : ''}
+              {...(register as (name: string) => ReturnType<typeof register>)(activeLocaleTab === 'es' ? 'title.es' : 'title.en')}
+              placeholder={activeLocaleTab === 'es' ? t('blogTitlePlaceholder') : t('blogTitlePlaceholderEn')}
+              className={(errors as any).title?.es || (errors as any).title?.en ? 'border-red-500' : ''}
             />
-            {errors.title && (
-              <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
-            )}
+            {(errors as any).title?.es && <p className="text-red-500 text-sm mt-1">{(errors as any).title.es.message}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-[#1D194C] mb-2">
+              {activeLocaleTab === 'es' ? t('excerptEs') : t('excerptEn')}
+            </label>
+            <textarea
+              {...(register as (name: string) => ReturnType<typeof register>)(activeLocaleTab === 'es' ? 'excerpt.es' : 'excerpt.en')}
+              rows={2}
+              placeholder={activeLocaleTab === 'es' ? t('placeholderExcerptEs') : t('placeholderExcerptEn')}
+              className="w-full px-4 py-3 border border-[#1D194C]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6F74C9] resize-y"
+            />
           </div>
 
           {/* Duración y Autor en fila */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-[#1D194C] mb-2">
-                Duración de lectura *
+                {t('readTimeLabel')}
               </label>
               <Input
                 {...register('readTime')}
@@ -307,11 +372,11 @@ export function CreateBlogModal({
 
             <div>
               <label className="block text-sm font-semibold text-[#1D194C] mb-2">
-                Autor
+                {t('authorLabel')}
               </label>
               <Input
                 {...register('authorName')}
-                placeholder="Nombre del autor"
+                placeholder={t('placeholderAuthor')}
               />
             </div>
           </div>
@@ -319,7 +384,7 @@ export function CreateBlogModal({
           {/* Imagen */}
           <div>
             <label className="block text-sm font-semibold text-[#1D194C] mb-2">
-              Imagen *
+              {t('imageRequiredStar')}
             </label>
             
             {/* Preview */}
@@ -352,7 +417,7 @@ export function CreateBlogModal({
               >
                 <Upload size={24} />
                 <span className="text-sm">
-                  {isUploading ? 'Subiendo...' : 'Subir imagen'}
+                  {isUploading ? t('uploading') : t('uploadImage')}
                 </span>
               </button>
             </div>
@@ -369,14 +434,14 @@ export function CreateBlogModal({
                       setImagePreview(e.target.value);
                     }
                   }}
-                  placeholder="O ingresa una URL de imagen"
+                  placeholder={t('imageUrlOrUpload')}
                   disabled={!!uploadedImageUrl}
                 />
               ) : (
                 <Input
                   type="text"
                   {...register('imageUrl')}
-                  placeholder="O ingresa una URL de imagen"
+                  placeholder={t('imageUrlOrUpload')}
                   disabled={!!uploadedImageUrl}
                   className={errors.imageUrl ? 'border-red-500' : ''}
                 />
@@ -387,33 +452,30 @@ export function CreateBlogModal({
             </div>
           </div>
 
-          {/* Contenido */}
           <div>
             <label className="block text-sm font-semibold text-[#1D194C] mb-2">
-              Contenido * (Separa párrafos con doble salto de línea)
+              {activeLocaleTab === 'es' ? t('contentBlogLabel') : t('contentBlogLabelEn')}
             </label>
             <textarea
-              {...register('content')}
+              {...(register as (name: string) => ReturnType<typeof register>)(activeLocaleTab === 'es' ? 'content.es' : 'content.en')}
               rows={12}
-              placeholder="Escribe el contenido del blog aquí. Separa los párrafos con doble salto de línea."
+              placeholder={activeLocaleTab === 'es' ? 'Escribe el contenido del blog aquí.' : 'Write blog content here.'}
               className="w-full px-4 py-3 border border-[#1D194C]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6F74C9] focus:border-transparent resize-y"
             />
-            {errors.content && (
-              <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>
-            )}
+            {(errors as any).content?.es && <p className="text-red-500 text-sm mt-1">{(errors as any).content.es.message}</p>}
           </div>
 
           {/* Status */}
           <div>
             <label className="block text-sm font-semibold text-[#1D194C] mb-2">
-              Estado
+              {t('status')}
             </label>
             <select
               {...register('status')}
               className="w-full px-4 py-3 border border-[#1D194C]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6F74C9] focus:border-transparent"
             >
-              <option value="published">Publicado</option>
-              <option value="draft">Borrador</option>
+              <option value="published">{t('published')}</option>
+              <option value="draft">{t('draft')}</option>
             </select>
           </div>
 
@@ -425,7 +487,7 @@ export function CreateBlogModal({
               onClick={onClose}
               disabled={isSubmitting}
             >
-              Cancelar
+              {t('cancel')}
             </Button>
             <Button
               type="submit"
@@ -433,8 +495,8 @@ export function CreateBlogModal({
               disabled={isSubmitting || isUploading}
             >
               {isSubmitting 
-                ? (isEditMode ? 'Actualizando...' : 'Creando...') 
-                : (isEditMode ? 'Actualizar publicación' : 'Crear publicación')}
+                ? (isEditMode ? t('updating') : t('creating')) 
+                : (isEditMode ? t('updatePost') : t('createPost'))}
             </Button>
           </div>
         </form>

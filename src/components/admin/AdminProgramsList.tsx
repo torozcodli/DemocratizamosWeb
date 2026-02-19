@@ -2,16 +2,24 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { AddProgramButton } from '@/components/programas/AddProgramButton';
 import { CreateProgramModal } from '@/components/programas/CreateProgramModal';
 import { Edit, Trash2 } from 'lucide-react';
 
+/** Admin API devuelve docs con title/shortDescription/content como { es, en? } o string legacy. */
+function toDisplayString(v: string | { es: string; en?: string } | undefined): string {
+  if (v == null) return '';
+  if (typeof v === 'string') return v;
+  return (v as { es?: string }).es ?? '';
+}
+
 interface Program {
   _id: string;
-  title: string;
+  title: string | { es: string; en?: string };
   slug: string;
-  shortDescription: string;
-  content: string[];
+  shortDescription: string | { es: string; en?: string };
+  content: string[] | { es: string[]; en?: string[] };
   imageUrl: string;
   info: {
     date: string;
@@ -27,6 +35,7 @@ interface Program {
 }
 
 export function AdminProgramsList() {
+  const t = useTranslations('admin');
   const [programs, setPrograms] = useState<Program[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,9 +66,7 @@ export function AdminProgramsList() {
 
   const handleDelete = async (program: Program) => {
     if (
-      !confirm(
-        `¿Estás seguro de que quieres eliminar "${program.title}"? Esta acción no se puede deshacer.`
-      )
+      !confirm(t('confirmDelete', { name: toDisplayString(program.title) }))
     ) {
       return;
     }
@@ -71,14 +78,14 @@ export function AdminProgramsList() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Error al eliminar programa');
+        throw new Error(error.error || t('errorDeleteProgram'));
       }
 
       // Refrescar lista
       fetchPrograms();
     } catch (error: any) {
       console.error('Error deleting program:', error);
-      alert(error.message || 'Error al eliminar programa');
+      alert(error.message || t('errorDeleteProgram'));
     }
   };
 
@@ -88,14 +95,14 @@ export function AdminProgramsList() {
   };
 
   if (isLoading) {
-    return <div className="text-center py-8">Cargando...</div>;
+    return <div className="text-center py-8">{t('loading')}</div>;
   }
 
   return (
     <>
       <div className="mb-6 flex items-center justify-between">
         <p className="text-[#1D194C]/70">
-          {programs.length} programa{programs.length !== 1 ? 's' : ''} en total
+          {programs.length} {programs.length !== 1 ? t('programs') : t('program')} {t('inTotal')}
         </p>
         <AddProgramButton
           onClick={() => {
@@ -115,7 +122,7 @@ export function AdminProgramsList() {
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
                 <h3 className="text-xl font-tech font-extrabold text-[#1D194C]">
-                  {program.title}
+                  {toDisplayString(program.title)}
                 </h3>
                 <span
                   className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -124,30 +131,30 @@ export function AdminProgramsList() {
                       : 'bg-gray-100 text-gray-800'
                   }`}
                 >
-                  {program.status === 'published' ? 'Publicado' : 'Borrador'}
+                  {program.status === 'published' ? t('published') : t('draft')}
                 </span>
-                <span className="text-sm text-[#1D194C]/60">Orden: {program.order}</span>
+                <span className="text-sm text-[#1D194C]/60">{t('order')}: {program.order}</span>
               </div>
-              <p className="text-[#1D194C]/70">{program.shortDescription}</p>
+              <p className="text-[#1D194C]/70">{toDisplayString(program.shortDescription)}</p>
               <Link
                 href={`/programas/${program.slug}`}
                 className="text-sm text-[#6F74C9] hover:underline mt-2 inline-block"
               >
-                Ver detalle →
+                {t('viewDetail')}
               </Link>
             </div>
             <div className="flex gap-2 ml-4">
               <button
                 onClick={() => handleEdit(program)}
                 className="w-10 h-10 rounded-full bg-[#1D194C]/10 hover:bg-[#1D194C]/20 flex items-center justify-center transition-colors"
-                aria-label={`Editar programa: ${program.title}`}
+                aria-label={`${t('editProgram')}: ${toDisplayString(program.title)}`}
               >
                 <Edit size={18} className="text-[#1D194C]" />
               </button>
               <button
                 onClick={() => handleDelete(program)}
                 className="w-10 h-10 rounded-full bg-red-100 hover:bg-red-200 flex items-center justify-center transition-colors"
-                aria-label={`Eliminar programa: ${program.title}`}
+                aria-label={`${t('deleteProgram')}: ${toDisplayString(program.title)}`}
               >
                 <Trash2 size={18} className="text-red-600" />
               </button>
@@ -157,7 +164,7 @@ export function AdminProgramsList() {
 
         {programs.length === 0 && (
           <div className="text-center py-12 text-[#1D194C]/60">
-            <p>No hay programas aún. Crea el primero usando el botón +</p>
+            <p>{t('emptyPrograms')}</p>
           </div>
         )}
       </div>

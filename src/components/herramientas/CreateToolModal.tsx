@@ -3,19 +3,22 @@
 import { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { X, Upload } from 'lucide-react';
 import { createToolSchema, type CreateToolInput } from '@/modules/tools/validation/tool.validation';
 import { Input } from '@/components/ui/Input';
+import { LocaleTabs } from '@/components/admin/LocaleTabs';
+import { hasRealContent, toLocalizedEn, toLocalizedEs } from '@/lib/i18n/content';
 import { Button } from '@/components/ui/Button';
 import Image from 'next/image';
 
 interface Tool {
   _id: string;
-  title: string;
+  title: string | { es: string; en?: string };
   slug: string;
   imageUrl: string;
-  description: string;
-  content: string;
+  description: string | { es: string; en?: string };
+  content: string | { es: string; en?: string };
   date: string;
   isPublished: boolean;
 }
@@ -33,21 +36,23 @@ export function CreateToolModal({
   onSuccess,
   toolToEdit,
 }: CreateToolModalProps) {
+  const t = useTranslations('admin');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
   const [manualImageUrl, setManualImageUrl] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const lastLoadedRef = useRef<{ isOpen: boolean; toolId: string | null }>({ isOpen: false, toolId: null });
   const isEditMode = !!toolToEdit;
+  const [activeLocaleTab, setActiveLocaleTab] = useState<'es' | 'en'>('es');
 
-  // Schema para edición: imageUrl opcional
   const editToolSchema = createToolSchema.omit({ imageUrl: true }).passthrough();
 
   type FormInput = {
-    title: string;
-    description: string;
-    content: string;
+    title: { es: string; en: string };
+    description: { es: string; en: string };
+    content: { es: string; en: string };
     imageUrl?: string;
     date?: string;
     isPublished: boolean;
@@ -69,41 +74,65 @@ export function CreateToolModal({
       : zodResolver(createToolSchema) as any,
     mode: 'onSubmit',
     defaultValues: toolToEdit
-      ? {
-          title: toolToEdit.title,
-          description: toolToEdit.description,
-          content: toolToEdit.content,
-          date: toolToEdit.date ? new Date(toolToEdit.date).toISOString().split('T')[0] : '',
-          isPublished: toolToEdit.isPublished,
-        } as FormInput
+      ? (() => {
+          const t = toolToEdit.title;
+          const d = toolToEdit.description;
+          const c = toolToEdit.content;
+          const title = typeof t === 'string' ? { es: t, en: '' } : { es: t?.es ?? '', en: t?.en ?? '' };
+          const description = typeof d === 'string' ? { es: d, en: '' } : { es: d?.es ?? '', en: d?.en ?? '' };
+          const content = typeof c === 'string' ? { es: c, en: '' } : { es: c?.es ?? '', en: c?.en ?? '' };
+          return {
+            title,
+            description,
+            content,
+            date: toolToEdit.date ? new Date(toolToEdit.date).toISOString().split('T')[0] : '',
+            isPublished: toolToEdit.isPublished,
+          } as FormInput;
+        })()
       : {
-        title: '',
-        description: '',
-        content: '',
-        date: new Date().toISOString().split('T')[0],
-        isPublished: true,
-      },
+          title: { es: '', en: '' },
+          description: { es: '', en: '' },
+          content: { es: '', en: '' },
+          date: new Date().toISOString().split('T')[0],
+          isPublished: true,
+        } as FormInput,
   });
 
-  // Cargar datos de la herramienta a editar cuando se abre el modal
+  // Cargar datos solo al abrir el modal o al cambiar de herramienta; no al re-render (evita borrar lo que el usuario escribe en la pestaña EN).
   useEffect(() => {
-    if (isOpen && toolToEdit) {
+    const toolId = toolToEdit?._id ?? null;
+    const justOpened = isOpen && !lastLoadedRef.current.isOpen;
+    const toolChanged = isOpen && toolId !== lastLoadedRef.current.toolId;
+    if (!isOpen) {
+      lastLoadedRef.current = { isOpen: false, toolId: null };
+      return;
+    }
+    if (!justOpened && !toolChanged) return;
+    lastLoadedRef.current = { isOpen: true, toolId };
+
+    if (toolToEdit) {
       unregister('imageUrl');
+      const t = toolToEdit.title;
+      const d = toolToEdit.description;
+      const c = toolToEdit.content;
+      const title = typeof t === 'string' ? { es: t, en: '' } : { es: t?.es ?? '', en: t?.en ?? '' };
+      const description = typeof d === 'string' ? { es: d, en: '' } : { es: d?.es ?? '', en: d?.en ?? '' };
+      const content = typeof c === 'string' ? { es: c, en: '' } : { es: c?.es ?? '', en: c?.en ?? '' };
       reset({
-        title: toolToEdit.title,
-        description: toolToEdit.description,
-        content: toolToEdit.content,
+        title,
+        description,
+        content,
         date: toolToEdit.date ? new Date(toolToEdit.date).toISOString().split('T')[0] : '',
         isPublished: toolToEdit.isPublished,
       });
       setImagePreview(toolToEdit.imageUrl);
       setUploadedImageUrl('');
       setManualImageUrl('');
-    } else if (isOpen && !toolToEdit) {
+    } else {
       reset({
-        title: '',
-        description: '',
-        content: '',
+        title: { es: '', en: '' },
+        description: { es: '', en: '' },
+        content: { es: '', en: '' },
         date: new Date().toISOString().split('T')[0],
         isPublished: true,
       });
@@ -150,19 +179,25 @@ export function CreateToolModal({
     try {
       let finalData: CreateToolInput | Partial<CreateToolInput>;
 
+      const payloadTitle = { es: toLocalizedEs((data as FormInput).title.es), en: toLocalizedEn((data as FormInput).title.en) };
+      const payloadDescription = { es: toLocalizedEs((data as FormInput).description.es), en: toLocalizedEn((data as FormInput).description.en) };
+      const payloadContent = { es: toLocalizedEs((data as FormInput).content.es), en: toLocalizedEn((data as FormInput).content.en) };
+
       if (isEditMode && toolToEdit) {
         const imageUrlToUse = uploadedImageUrl
           ? uploadedImageUrl
           : (manualImageUrl && manualImageUrl.trim() !== '')
-          ? manualImageUrl
-          : toolToEdit.imageUrl;
-
-        const { imageUrl: _, ...dataWithoutImageUrl } = data;
+            ? manualImageUrl
+            : toolToEdit.imageUrl;
+        const { imageUrl: _, title: __, description: ___, content: ____, ...rest } = data as FormInput;
         finalData = {
-          ...dataWithoutImageUrl,
+          ...rest,
+          title: payloadTitle,
+          description: payloadDescription,
+          content: payloadContent,
           imageUrl: imageUrlToUse,
           date: data.date ? new Date(data.date) : undefined,
-        } as Partial<CreateToolInput>;
+        } as unknown as Partial<CreateToolInput>;
       } else {
         // Para crear, necesitamos imageUrl obligatorio
         const imageUrlToUse = uploadedImageUrl || manualImageUrl;
@@ -188,13 +223,13 @@ export function CreateToolModal({
         // Construir objeto final sin campos undefined
         // date se envía como string ISO, Zod lo convertirá con z.coerce.date()
         finalData = {
-          title: String(data.title || '').trim(),
-          description: String(data.description || '').trim(),
-          content: String(data.content || '').trim(),
+          title: payloadTitle,
+          description: payloadDescription,
+          content: payloadContent,
           imageUrl: String(imageUrlToUse || '').trim(),
-          date: dateString as any, // Zod convertirá el string a Date
+          date: dateString as any,
           isPublished: data.isPublished ?? true,
-        } as CreateToolInput;
+        } as unknown as CreateToolInput;
         
         // Validar que todos los campos requeridos estén presentes
         if (!finalData.title || !finalData.description || !finalData.content || !finalData.imageUrl) {
@@ -262,12 +297,12 @@ export function CreateToolModal({
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-[#1D194C]">
-            {isEditMode ? 'Editar Herramienta' : 'Crear Nueva Herramienta'}
+            {isEditMode ? t('editToolTitle') : t('createToolTitle')}
           </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
-            aria-label="Cerrar"
+            aria-label={t('close')}
           >
             <X size={24} />
           </button>
@@ -275,61 +310,54 @@ export function CreateToolModal({
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
-          {/* Título */}
+          <LocaleTabs
+            activeTab={activeLocaleTab}
+            onTabChange={setActiveLocaleTab}
+            hasEnContent={hasRealContent((watch as (n: string) => unknown)('title.en')) || hasRealContent((watch as (n: string) => unknown)('description.en')) || hasRealContent((watch as (n: string) => unknown)('content.en'))}
+          />
+
           <div>
             <label className="block text-sm font-medium text-[#1D194C] mb-2">
-              Título *
+              {activeLocaleTab === 'es' ? t('titleEs') : t('titleEn')}
             </label>
             <Input
-              {...register('title')}
-              placeholder="Ej: Plataforma de Aprendizaje Online"
-              className={errors.title ? 'border-red-500' : ''}
+              {...(register as (name: string) => ReturnType<typeof register>)(activeLocaleTab === 'es' ? 'title.es' : 'title.en')}
+              placeholder={activeLocaleTab === 'es' ? 'Ej: Plataforma de Aprendizaje Online' : 'e.g. Online Learning Platform'}
+              className={(errors as any).title?.es || (errors as any).title?.en ? 'border-red-500' : ''}
             />
-            {errors.title && (
-              <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
-            )}
+            {(errors as any).title?.es && <p className="text-red-500 text-sm mt-1">{(errors as any).title.es.message}</p>}
           </div>
 
-          {/* Descripción */}
           <div>
             <label className="block text-sm font-medium text-[#1D194C] mb-2">
-              Descripción *
+              {activeLocaleTab === 'es' ? t('descriptionEs') : t('descriptionEn')}
             </label>
             <textarea
-              {...register('description')}
-              placeholder="Breve descripción para la card (10-200 caracteres)"
+              {...(register as (name: string) => ReturnType<typeof register>)(activeLocaleTab === 'es' ? 'description.es' : 'description.en')}
               rows={3}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6F74C9] ${
-                errors.description ? 'border-red-500' : 'border-gray-300'
-              }`}
+              placeholder={activeLocaleTab === 'es' ? 'Breve descripción para la card (10-200 caracteres)' : 'Brief description for the card (10-200 chars)'}
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6F74C9] ${(errors as any).description?.es || (errors as any).description?.en ? 'border-red-500' : 'border-gray-300'}`}
             />
-            {errors.description && (
-              <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
-            )}
+            {(errors as any).description?.es && <p className="text-red-500 text-sm mt-1">{(errors as any).description.es.message}</p>}
           </div>
 
-          {/* Contenido */}
           <div>
             <label className="block text-sm font-medium text-[#1D194C] mb-2">
-              Contenido *
+              {activeLocaleTab === 'es' ? t('contentEs') : t('contentEn')}
             </label>
             <textarea
-              {...register('content')}
-              placeholder="Contenido completo de la herramienta (mínimo 20 caracteres)"
+              {...(register as (name: string) => ReturnType<typeof register>)(activeLocaleTab === 'es' ? 'content.es' : 'content.en')}
               rows={8}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6F74C9] ${
-                errors.content ? 'border-red-500' : 'border-gray-300'
-              }`}
+              placeholder={activeLocaleTab === 'es' ? t('placeholderToolContent') : t('placeholderToolContentEn')}
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6F74C9] ${(errors as any).content?.es || (errors as any).content?.en ? 'border-red-500' : 'border-gray-300'}`}
             />
-            {errors.content && (
-              <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>
-            )}
+            {(errors as any).content?.es && <p className="text-red-500 text-sm mt-1">{(errors as any).content.es.message}</p>}
           </div>
 
           {/* Fecha */}
           <div>
             <label className="block text-sm font-medium text-[#1D194C] mb-2">
-              Fecha
+              {t('date')}
             </label>
             <Input
               type="date"
@@ -345,14 +373,14 @@ export function CreateToolModal({
           {/* Imagen */}
           <div>
             <label className="block text-sm font-medium text-[#1D194C] mb-2">
-              Imagen {!isEditMode && '*'}
+              {t('image')} {!isEditMode && '*'}
             </label>
             
             {isEditMode && (
               <div className="mb-3">
                 <Input
                   type="text"
-                  placeholder="URL de la imagen"
+                  placeholder={t('imageUrlAlt')}
                   value={manualImageUrl}
                   onChange={(e) => {
                     setManualImageUrl(e.target.value);
@@ -388,7 +416,7 @@ export function CreateToolModal({
                 className="flex items-center gap-2"
               >
                 <Upload size={16} />
-                {isUploading ? 'Subiendo...' : 'Subir Imagen'}
+                {isUploading ? t('uploading') : t('uploadImage')}
               </Button>
             </div>
 
@@ -418,7 +446,7 @@ export function CreateToolModal({
               className="w-4 h-4 text-[#6F74C9] border-gray-300 rounded focus:ring-[#6F74C9]"
             />
             <label className="text-sm font-medium text-[#1D194C]">
-              Publicar inmediatamente
+              {t('publishImmediately')}
             </label>
           </div>
 
@@ -429,7 +457,7 @@ export function CreateToolModal({
               onClick={onClose}
               className="flex-1 bg-gray-200 hover:bg-gray-300 text-[#1D194C]"
             >
-              Cancelar
+              {t('cancel')}
             </Button>
             <Button
               type="submit"
@@ -437,8 +465,8 @@ export function CreateToolModal({
               className="flex-1 bg-[#6F74C9] hover:bg-[#5A5FB8] text-white"
             >
               {isSubmitting
-                ? (isEditMode ? 'Guardando...' : 'Creando...')
-                : (isEditMode ? 'Guardar Cambios' : 'Crear Herramienta')}
+                ? (isEditMode ? t('saving') : t('creating'))
+                : (isEditMode ? t('saveChanges') : t('createTool'))}
             </Button>
           </div>
         </form>

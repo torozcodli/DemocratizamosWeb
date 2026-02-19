@@ -4,19 +4,22 @@ import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTranslations } from 'next-intl';
 import { X, Upload, Image as ImageIcon } from 'lucide-react';
 import { createProgramSchema, type CreateProgramInput } from '@/modules/programs/validation/program.validation';
 import { Input } from '@/components/ui/Input';
+import { LocaleTabs } from '@/components/admin/LocaleTabs';
+import { hasRealContent, toLocalizedEn, toLocalizedEs } from '@/lib/i18n/content';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 interface Program {
   _id: string;
-  title: string;
+  title: string | { es: string; en?: string };
   slug: string;
-  shortDescription: string;
-  content: string[];
+  shortDescription: string | { es: string; en?: string };
+  content: string[] | { es: string[]; en?: string[] };
   imageUrl: string;
   info: {
     date: string;
@@ -44,6 +47,7 @@ export function CreateProgramModal({
   onSuccess,
   programToEdit,
 }: CreateProgramModalProps) {
+  const t = useTranslations('admin');
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -51,6 +55,7 @@ export function CreateProgramModal({
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
   const [manualImageUrl, setManualImageUrl] = useState<string>(''); // Para modo edición
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const lastLoadedRef = useRef<{ isOpen: boolean; programId: string | null }>({ isOpen: false, programId: null });
   const isEditMode = !!programToEdit;
 
   // Schema para edición: imageUrl NO se valida con Zod
@@ -65,7 +70,9 @@ export function CreateProgramModal({
     content: string | string[]; // Permitir string o array para el formulario
   };
 
-  type FormInput = (CreateProgramInput & { content: string | string[] }) | EditProgramInput;
+  type FormInput = (CreateProgramInput & { content?: string | string[] }) | EditProgramInput;
+
+  const [activeLocaleTab, setActiveLocaleTab] = useState<'es' | 'en'>('es');
 
   const {
     register,
@@ -87,51 +94,70 @@ export function CreateProgramModal({
     mode: 'onSubmit', // Solo validar al enviar
     shouldUnregister: false, // Mantener valores al desregistrar
     defaultValues: programToEdit
-      ? {
-          title: programToEdit.title,
-          shortDescription: programToEdit.shortDescription,
-          content: programToEdit.content.join('\n\n'),
-          // NO incluir imageUrl en defaultValues en modo edición - se maneja manualmente
-          info: programToEdit.info,
-          order: programToEdit.order,
-          status: programToEdit.status,
-        } as FormInput
+      ? (() => {
+          const t = programToEdit.title;
+          const s = programToEdit.shortDescription;
+          const c = programToEdit.content;
+          const title = typeof t === 'string' ? { es: t, en: '' } : { es: t?.es ?? '', en: t?.en ?? '' };
+          const shortDescription = typeof s === 'string' ? { es: s, en: '' } : { es: s?.es ?? '', en: s?.en ?? '' };
+          const contentEs = Array.isArray(c) ? c : (c as any)?.es ?? [];
+          const contentEn = Array.isArray(c) ? [] : (c as any)?.en ?? [];
+          return {
+            title,
+            shortDescription,
+            content: { es: contentEs.join('\n\n'), en: contentEn.join('\n\n') },
+            info: programToEdit.info,
+            order: programToEdit.order,
+            status: programToEdit.status,
+          } as FormInput;
+        })()
       : {
+          title: { es: '', en: '' },
+          shortDescription: { es: '', en: '' },
+          content: { es: '', en: '' },
           status: 'published',
-          content: '',
-        } as FormInput,
+        } as unknown as FormInput,
   });
 
-  // Cargar datos del programa a editar cuando se abre el modal
+  // Cargar datos solo al abrir el modal o al cambiar de programa; no al re-render (evita borrar lo que el usuario escribe en la pestaña EN).
   useEffect(() => {
-    if (isOpen && programToEdit) {
-      // En modo edición, desregistrar imageUrl completamente para evitar validación
+    const programId = programToEdit?._id ?? null;
+    const justOpened = isOpen && !lastLoadedRef.current.isOpen;
+    const programChanged = isOpen && programId !== lastLoadedRef.current.programId;
+    if (!isOpen) {
+      lastLoadedRef.current = { isOpen: false, programId: null };
+      return;
+    }
+    if (!justOpened && !programChanged) return;
+    lastLoadedRef.current = { isOpen: true, programId };
+
+    if (programToEdit) {
       unregister('imageUrl');
-      
+      const t = programToEdit.title;
+      const s = programToEdit.shortDescription;
+      const c = programToEdit.content;
+      const title = typeof t === 'string' ? { es: t, en: '' } : { es: t?.es ?? '', en: t?.en ?? '' };
+      const shortDescription = typeof s === 'string' ? { es: s, en: '' } : { es: s?.es ?? '', en: s?.en ?? '' };
+      const contentEs = Array.isArray(c) ? c : (c as any)?.es ?? [];
+      const contentEn = Array.isArray(c) ? [] : (c as any)?.en ?? [];
       reset({
-        title: programToEdit.title,
-        shortDescription: programToEdit.shortDescription,
-        content: programToEdit.content.join('\n\n'),
-        // NO incluir imageUrl en reset en modo edición - se maneja manualmente
+        title,
+        shortDescription,
+        content: { es: contentEs.join('\n\n'), en: contentEn.join('\n\n') },
         info: programToEdit.info,
         order: programToEdit.order,
         status: programToEdit.status,
       });
       setImagePreview(programToEdit.imageUrl);
       setUploadedImageUrl('');
-      setManualImageUrl(programToEdit.imageUrl); // Inicializar el input manual en modo edición
-      // Limpiar cualquier error de imageUrl al abrir en modo edición (múltiples veces para asegurar)
+      setManualImageUrl(programToEdit.imageUrl);
       clearErrors('imageUrl');
-      // Esperar un tick y limpiar de nuevo
       setTimeout(() => {
         clearErrors('imageUrl');
-        unregister('imageUrl'); // Desregistrar de nuevo por si acaso
+        unregister('imageUrl');
       }, 0);
-    } else if (isOpen && !programToEdit) {
-      reset({
-        status: 'published',
-        content: '',
-      });
+    } else {
+      reset({ status: 'published', content: '' });
       setImagePreview('');
       setUploadedImageUrl('');
       setManualImageUrl('');
@@ -173,7 +199,7 @@ export function CreateProgramModal({
 
     // Validar tipo de archivo
     if (!file.type.startsWith('image/')) {
-      alert('Por favor selecciona un archivo de imagen');
+      alert(t('selectImageFile'));
       return;
     }
 
@@ -195,7 +221,7 @@ export function CreateProgramModal({
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Error al subir la imagen');
+        throw new Error(error.error || t('uploadImageError'));
       }
 
       const data = await response.json();
@@ -211,7 +237,7 @@ export function CreateProgramModal({
       }
     } catch (error: any) {
       console.error('Error uploading image:', error);
-      alert(error.message || 'Error al subir la imagen');
+      alert(error.message || t('uploadImageError'));
     } finally {
       setIsUploading(false);
     }
@@ -229,22 +255,34 @@ export function CreateProgramModal({
       // Si no hay imagen subida nueva y no hay URL en el campo, usar la original
       let finalData: CreateProgramInput;
       
+      const toContentArray = (v: unknown): string[] =>
+        (typeof v === 'string' ? v : Array.isArray(v) ? (v as string[]).join('\n\n') : '')
+          .split('\n\n')
+          .filter((p) => p.trim().length > 0);
+      const contentEs = toContentArray((data as any).content?.es ?? (data as any).content);
+      const contentEnRaw = (data as any).content?.en;
+      const contentEn = hasRealContent(contentEnRaw) ? toContentArray(typeof contentEnRaw === 'string' ? contentEnRaw : Array.isArray(contentEnRaw) ? contentEnRaw.join('\n\n') : '') : undefined;
+      const payloadContent = { es: contentEs, en: contentEn };
+      const payloadTitle = { es: toLocalizedEs((data as any).title?.es), en: toLocalizedEn((data as any).title?.en) };
+      const payloadShortDescription = { es: toLocalizedEs((data as any).shortDescription?.es), en: toLocalizedEn((data as any).shortDescription?.en) };
+
       if (isEditMode && programToEdit) {
-        // En modo edición, usar uploadedImageUrl si existe, luego manualImageUrl si tiene valor, o la original
-        const imageUrlToUse = uploadedImageUrl 
+        const imageUrlToUse = uploadedImageUrl
           ? uploadedImageUrl
           : (manualImageUrl && manualImageUrl.trim() !== '')
-          ? manualImageUrl
-          : programToEdit.imageUrl;
-        
-        // Crear el objeto final sin imageUrl primero, luego agregarlo
-        const { imageUrl: _, ...dataWithoutImageUrl } = data;
+            ? manualImageUrl
+            : programToEdit.imageUrl;
+        const { imageUrl: _, content: __, title: __t, shortDescription: __s, ...rest } = data as any;
         finalData = {
-          ...dataWithoutImageUrl,
+          ...rest,
+          title: payloadTitle,
+          shortDescription: payloadShortDescription,
+          content: payloadContent,
           imageUrl: imageUrlToUse,
         } as CreateProgramInput;
       } else {
-        finalData = data as CreateProgramInput;
+        const { content: __, title: __t, shortDescription: __s, ...rest } = data as any;
+        finalData = { ...rest, title: payloadTitle, shortDescription: payloadShortDescription, content: payloadContent } as CreateProgramInput;
       }
 
       const url = isEditMode
@@ -272,7 +310,7 @@ export function CreateProgramModal({
             console.warn('Error de imageUrl en backend, usando imagen original:', imageUrlError);
           }
         }
-        throw new Error(error.error || `Error al ${isEditMode ? 'actualizar' : 'crear'} programa`);
+        throw new Error(error.error || (isEditMode ? t('errorUpdateProgram') : t('errorCreateProgram')));
       }
 
       const program = await response.json();
@@ -297,7 +335,7 @@ export function CreateProgramModal({
       router.refresh();
     } catch (error: any) {
       console.error(`Error ${isEditMode ? 'updating' : 'creating'} program:`, error);
-      alert(error.message || `Error al ${isEditMode ? 'actualizar' : 'crear'} programa`);
+      alert(error.message || (isEditMode ? t('errorUpdateProgram') : t('errorCreateProgram')));
     } finally {
       setIsSubmitting(false);
     }
@@ -311,12 +349,12 @@ export function CreateProgramModal({
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-[#1D194C]/10 px-6 py-4 flex items-center justify-between">
           <h2 className="text-2xl font-tech font-extrabold text-[#1D194C]">
-            {isEditMode ? 'Editar programa' : 'Crear nuevo programa'}
+            {isEditMode ? t('editProgramTitle') : t('createProgramTitle')}
           </h2>
           <button
             onClick={onClose}
             className="w-10 h-10 rounded-full bg-[#1D194C]/10 hover:bg-[#1D194C]/20 flex items-center justify-center transition-colors"
-            aria-label="Cerrar modal"
+            aria-label={t('close')}
           >
             <X size={20} className="text-[#1D194C]" />
           </button>
@@ -335,8 +373,8 @@ export function CreateProgramModal({
               clearErrors('imageUrl');
               
               // Validar solo los campos necesarios (sin imageUrl)
-              const fieldsToValidate = ['title', 'shortDescription', 'content', 'info.date', 'info.time', 'info.location', 'info.instructor', 'info.duration', 'info.level', 'info.includes', 'order', 'status'];
-              const isValid = await trigger(fieldsToValidate as any);
+              const fieldsToValidate = ['title.es', 'shortDescription.es', 'content.es', 'info.date', 'info.time', 'info.location', 'info.instructor', 'info.duration', 'info.level', 'info.includes', 'order', 'status'];
+              const isValid = await (trigger as (names: string[]) => Promise<boolean>)(fieldsToValidate);
               
               // Limpiar error de imageUrl después de validar también
               clearErrors('imageUrl');
@@ -366,50 +404,53 @@ export function CreateProgramModal({
           }} 
           className="p-6 space-y-6"
         >
-          {/* Título */}
-          <Input
-            label="Título *"
-            {...register('title')}
-            error={errors.title?.message}
-            placeholder="Ej: Inclusión digital"
+          <LocaleTabs
+            activeTab={activeLocaleTab}
+            onTabChange={setActiveLocaleTab}
+            hasEnContent={hasRealContent((watch as (n: string) => unknown)('title.en')) || hasRealContent((watch as (n: string) => unknown)('shortDescription.en')) || hasRealContent((watch as (n: string) => unknown)('content.en'))}
           />
 
-          {/* Descripción corta */}
+          <Input
+            label={activeLocaleTab === 'es' ? t('titleEs') : t('titleEn')}
+            {...(register as (name: string) => ReturnType<typeof register>)(activeLocaleTab === 'es' ? 'title.es' : 'title.en')}
+            error={activeLocaleTab === 'es' ? (errors as any).title?.es?.message : (errors as any).title?.en?.message}
+            placeholder={activeLocaleTab === 'es' ? 'Ej: Inclusión digital' : 'e.g. Digital inclusion'}
+          />
+
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Descripción corta (para la card) *
+              {activeLocaleTab === 'es' ? t('shortDescCard') : t('shortDescCardEn')}
             </label>
             <textarea
-              {...register('shortDescription')}
+              {...(register as (name: string) => ReturnType<typeof register>)(activeLocaleTab === 'es' ? 'shortDescription.es' : 'shortDescription.en')}
               rows={2}
               className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
-              placeholder="Descripción breve que aparecerá en la card del carrusel"
+              placeholder={activeLocaleTab === 'es' ? t('placeholderShortDesc') : t('placeholderShortDescEn')}
             />
-            {errors.shortDescription && (
-              <p className="mt-1 text-sm text-red-600">{errors.shortDescription.message}</p>
+            {(errors.shortDescription as any)?.es && (
+              <p className="mt-1 text-sm text-red-600">{(errors.shortDescription as any).es.message}</p>
             )}
           </div>
 
-          {/* Contenido largo */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Contenido (párrafos separados por doble salto de línea) *
+              {activeLocaleTab === 'es' ? t('contentLabel') : t('contentLabelEn')}
             </label>
             <textarea
-              {...register('content')}
+              {...(register as (name: string) => ReturnType<typeof register>)(activeLocaleTab === 'es' ? 'content.es' : 'content.en')}
               rows={8}
               className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
-              placeholder="Escribe el contenido del programa. Separa los párrafos con doble salto de línea."
+              placeholder={activeLocaleTab === 'es' ? t('placeholderContent') : t('placeholderContentEn')}
             />
-            {errors.content && (
-              <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
+            {(errors.content as any)?.es && (
+              <p className="mt-1 text-sm text-red-600">{(errors.content as any).es.message}</p>
             )}
           </div>
 
           {/* Imagen - Subir archivo o URL */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
-              Imagen del programa *
+              {t('programImage')}
             </label>
 
             {/* Opci?n 1: Subir archivo */}
@@ -422,13 +463,13 @@ export function CreateProgramModal({
                   {isUploading ? (
                     <>
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#E68956] mb-2"></div>
-                      <p className="text-sm text-slate-600">Subiendo imagen...</p>
+                      <p className="text-sm text-slate-600">{t('uploadingImage')}</p>
                     </>
                   ) : (
                     <>
                       <Upload className="w-8 h-8 text-slate-400 mb-2" />
                       <p className="text-sm text-slate-600">
-                        <span className="font-semibold">Haz clic para subir</span> o arrastra y suelta
+                        <span className="font-semibold">{t('clickToUpload')}</span> {t('orDrag')}
                       </p>
                       <p className="text-xs text-slate-500 mt-1">
                         PNG, JPG, GIF hasta 5MB
@@ -463,47 +504,37 @@ export function CreateProgramModal({
                 // En modo edición, usar input controlado manualmente (sin react-hook-form)
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    URL de la imagen (opcional - dejar vacío para mantener la actual)
+                    {t('imageUrlOptional')}
                   </label>
                   <input
                     type="text"
                     value={manualImageUrl}
                     onChange={(e) => {
                       setManualImageUrl(e.target.value);
-                      // Limpiar cualquier error de imageUrl cuando el usuario escribe
                       clearErrors('imageUrl');
                     }}
-                    onFocus={() => {
-                      // Limpiar error cuando el usuario enfoca el campo
-                      clearErrors('imageUrl');
-                    }}
-                    placeholder="Dejar vacío para mantener la imagen actual"
+                    onFocus={() => clearErrors('imageUrl')}
+                    placeholder={t('placeholderKeepImage')}
                     disabled={!!uploadedImageUrl}
                     className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors disabled:bg-slate-100 disabled:cursor-not-allowed"
                   />
                   <p className="mt-1 text-xs text-slate-500">
-                    Si no cambias la imagen, se mantendrá la actual automáticamente
+                    {t('keepImageHint')}
                   </p>
                   {/* NO mostrar error de imageUrl en modo edición - se maneja manualmente */}
                 </div>
               ) : (
                 // En modo creación, usar react-hook-form normalmente
                 <Input
-                  label="URL de la imagen (alternativa)"
+                  label={t('imageUrlAlt')}
                   type="text"
                   {...register('imageUrl', {
-                    required: uploadedImageUrl ? false : 'La URL de la imagen es requerida (o sube una imagen)',
+                    required: uploadedImageUrl ? false : t('imageRequired'),
                     validate: (value) => {
-                      // Si hay una imagen subida, no validar la URL
-                      if (uploadedImageUrl) {
-                        return true;
-                      }
-                      // Si no hay imagen subida, la URL es requerida
-                      if (!value || value.trim() === '') {
-                        return 'La URL de la imagen es requerida (o sube una imagen)';
-                      }
+                      if (uploadedImageUrl) return true;
+                      if (!value || value.trim() === '') return t('imageRequired');
                       const isValid = value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/');
-                      return isValid || 'Debe ser una URL válida o una ruta de imagen';
+                      return isValid || t('invalidImageUrl');
                     },
                   })}
                   error={errors.imageUrl?.message}
@@ -538,7 +569,7 @@ export function CreateProgramModal({
                       }
                     }}
                     className="absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors shadow-md"
-                    aria-label="Eliminar imagen"
+                    aria-label={t('removeImage')}
                   >
                     <X size={14} />
                   </button>
@@ -550,37 +581,37 @@ export function CreateProgramModal({
           {/* Información del programa */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
-              label="Fecha *"
+              label={t('date')}
               {...register('info.date')}
               error={errors.info?.date?.message}
               placeholder="Ej: 7 de enero 2026"
             />
             <Input
-              label="Hora *"
+              label={t('time')}
               {...register('info.time')}
               error={errors.info?.time?.message}
               placeholder="Ej: 5:00 pm"
             />
             <Input
-              label="Ubicación *"
+              label={t('location')}
               {...register('info.location')}
               error={errors.info?.location?.message}
               placeholder="Ej: Tecnológico de Monterrey"
             />
             <Input
-              label="Instructor *"
+              label={t('instructor')}
               {...register('info.instructor')}
               error={errors.info?.instructor?.message}
               placeholder="Ej: Juan Pérez"
             />
             <Input
-              label="Duración *"
+              label={t('duration')}
               {...register('info.duration')}
               error={errors.info?.duration?.message}
               placeholder="Ej: 2 horas"
             />
             <Input
-              label="Nivel *"
+              label={t('level')}
               {...register('info.level')}
               error={errors.info?.level?.message}
               placeholder="Ej: Principiante"
@@ -589,7 +620,7 @@ export function CreateProgramModal({
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Incluye *
+              {t('includes')}
             </label>
             <textarea
               {...register('info.includes')}
@@ -605,22 +636,22 @@ export function CreateProgramModal({
           {/* Order y Status */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
-              label="Orden (opcional)"
+              label={t('orderOptional')}
               type="number"
               {...register('order', { valueAsNumber: true })}
               error={errors.order?.message}
-              placeholder="Dejar vacío para asignar automáticamente"
+              placeholder={t('placeholderOrder')}
             />
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                Estado *
+                {t('status')}
               </label>
               <select
                 {...register('status')}
                 className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
               >
-                <option value="published">Publicado</option>
-                <option value="draft">Borrador</option>
+                <option value="published">{t('published')}</option>
+                <option value="draft">{t('draft')}</option>
               </select>
             </div>
           </div>
@@ -634,7 +665,7 @@ export function CreateProgramModal({
               className="flex-1"
               disabled={isSubmitting}
             >
-              Cancelar
+              {t('cancel')}
             </Button>
             <Button
               type="submit"
@@ -644,11 +675,11 @@ export function CreateProgramModal({
             >
               {isSubmitting
                 ? isEditMode
-                  ? 'Actualizando...'
-                  : 'Creando...'
+                  ? t('updating')
+                  : t('creating')
                 : isEditMode
-                  ? 'Actualizar programa'
-                  : 'Crear programa'}
+                  ? t('updateProgram')
+                  : t('createProgram')}
             </Button>
           </div>
         </form>
