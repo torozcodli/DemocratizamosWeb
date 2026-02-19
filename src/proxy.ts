@@ -22,7 +22,7 @@ const authMiddleware = withAuth(
       (token?.isAdmin === true) &&
       isAdminEmail(token.email as string | undefined);
 
-    if (pathname.startsWith('/admin')) {
+    if (pathname.includes('/admin')) {
       if (!token) {
         const signInUrl = new URL('/auth/signin', req.url);
         signInUrl.searchParams.set('callbackUrl', pathname);
@@ -49,7 +49,7 @@ const authMiddleware = withAuth(
       authorized: ({ token, req }) => {
         const pathname = req.nextUrl.pathname;
         if (
-          pathname.startsWith('/admin') ||
+          pathname.includes('/admin') ||
           pathname.startsWith('/api/admin')
         ) {
           return !!token;
@@ -62,14 +62,18 @@ const authMiddleware = withAuth(
 
 export default function proxy(req: NextRequest, event: NextFetchEvent) {
   const pathname = req.nextUrl.pathname;
+
+  // Redirigir /admin y /admin/* a /es/admin/* para que coincida con [locale]/admin
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+    return NextResponse.redirect(new URL('/es' + pathname, req.url));
+  }
+
   // Auth pages: no añadir prefijo de locale para que /auth/signin exista
   if (pathname.startsWith('/auth')) {
     return NextResponse.next();
   }
-  if (
-    pathname.startsWith('/admin') ||
-    pathname.startsWith('/api/admin')
-  ) {
+  // Proteger admin con o sin locale: /es/admin/*, /en/admin/*, /admin/*
+  if (pathname.includes('/admin') || pathname.startsWith('/api/admin')) {
     return authMiddleware(req as NextRequestWithAuth, event);
   }
   return intlMiddleware(req);

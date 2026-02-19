@@ -16,7 +16,7 @@ export function slugify(text: string): string {
 }
 
 /**
- * Genera un slug único agregando un sufijo numérico si es necesario
+ * Genera un slug único. Si el baseSlug existe, prueba baseSlug-2, baseSlug-3, etc.
  */
 export async function generateUniqueSlug(
   baseSlug: string,

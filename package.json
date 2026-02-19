@@ -11,7 +11,8 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "seed": "tsx --env-file=.env.local src/scripts/seed-programs.ts",
-    "fix-image": "tsx --env-file=.env.local src/scripts/fix-inclusion-digital-image.ts"
+    "fix-image": "tsx --env-file=.env.local src/scripts/fix-inclusion-digital-image.ts",
+    "migrate:content:i18n": "tsx --env-file=.env.local src/scripts/migrate-content-i18n.ts"
   },
   "repository": {
     "type": "git",
