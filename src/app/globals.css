@@ -343,6 +343,17 @@
     }
   }
 
+  /* Nosotros Hero - 2560 / 4K (desde 1536px): misma posición que laptop */
+  @media (min-width: 1536px) {
+    #nosotros-page .nosotros-hero-desktop h1 {
+      transform: translateY(0) !important;
+    }
+    #nosotros-page .nosotros-whatsapp-banner,
+    .nosotros-whatsapp-banner {
+      transform: translateX(1cm) translateY(-0.5cm) !important;
+    }
+  }
+
   /* iPad Pro horizontal: Nosotros hero — título y banner 3 cm arriba; banner 1 cm a la izquierda */
   @media (min-width: 1194px) and (max-width: 1380px) and (orientation: landscape) and (any-pointer: coarse) {
     #nosotros-page .nosotros-hero-desktop h1 {
