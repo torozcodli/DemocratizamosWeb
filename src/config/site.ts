@@ -45,7 +45,7 @@ export const siteConfig = {
   ],
   cta: {
     navKey: 'contact' as const,
-    href: 'https://wa.me/+5216145871758',
+    href: 'https://wa.me/526144105989',
   },
   social: {
     facebook: 'https://www.facebook.com/share/1ANP7cJHGf/?mibextid=wwXIfr',

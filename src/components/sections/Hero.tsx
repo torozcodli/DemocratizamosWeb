@@ -56,7 +56,7 @@ export async function Hero() {
             </p>
 
             <a 
-              href="https://wa.me/+5216145871758" 
+              href="https://wa.me/526144105989" 
               target="_blank" 
               rel="noopener noreferrer"
               className="self-start ipadP:self-center ipadL:self-center lg:self-start"

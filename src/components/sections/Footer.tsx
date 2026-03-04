@@ -191,7 +191,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://wa.me/+5216145871758"
+                  href="https://wa.me/526144105989"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => {

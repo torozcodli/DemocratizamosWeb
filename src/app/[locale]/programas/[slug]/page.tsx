@@ -56,7 +56,7 @@ export default async function ProgramaPage({ params }: ProgramaPageProps) {
     content: resolved.content,
     info: resolved.info,
     ctaText: 'Reserva mi lugar',
-    ctaHref: 'https://wa.me/+5216145871758',
+    ctaHref: 'https://wa.me/526144105989',
   };
 
   const previousAdapted = prevResolved
@@ -68,7 +68,7 @@ export default async function ProgramaPage({ params }: ProgramaPageProps) {
         content: prevResolved.content,
         info: prevResolved.info,
         ctaText: 'Reserva mi lugar',
-        ctaHref: 'https://wa.me/+5216145871758',
+        ctaHref: 'https://wa.me/526144105989',
       }
     : null;
 
@@ -81,7 +81,7 @@ export default async function ProgramaPage({ params }: ProgramaPageProps) {
         content: nextResolved.content,
         info: nextResolved.info,
         ctaText: 'Reserva mi lugar',
-        ctaHref: 'https://wa.me/+5216145871758',
+        ctaHref: 'https://wa.me/526144105989',
       }
     : null;
 

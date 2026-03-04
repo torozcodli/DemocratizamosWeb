@@ -47,7 +47,7 @@ export const PROGRAMAS: Programa[] = [
       includes: 'Material digital y acceso posterior',
     },
     ctaText: 'Reserva mi lugar',
-    ctaHref: 'https://wa.me/+5216145871758',
+    ctaHref: 'https://wa.me/526144105989',
   },
   {
     slug: 'desigualdad-reducida',
@@ -69,7 +69,7 @@ export const PROGRAMAS: Programa[] = [
       includes: 'Certificado y materiales físicos',
     },
     ctaText: 'Reserva mi lugar',
-    ctaHref: 'https://wa.me/+5216145871758',
+    ctaHref: 'https://wa.me/526144105989',
   },
   {
     slug: 'transformacion-social',
@@ -91,7 +91,7 @@ export const PROGRAMAS: Programa[] = [
       includes: 'Proyecto práctico y mentoría',
     },
     ctaText: 'Reserva mi lugar',
-    ctaHref: 'https://wa.me/+5216145871758',
+    ctaHref: 'https://wa.me/526144105989',
   },
   {
     slug: 'tecnologia-accesible',
@@ -113,7 +113,7 @@ export const PROGRAMAS: Programa[] = [
       includes: 'Dispositivos de préstamo y guías',
     },
     ctaText: 'Reserva mi lugar',
-    ctaHref: 'https://wa.me/+5216145871758',
+    ctaHref: 'https://wa.me/526144105989',
   },
 ];
 

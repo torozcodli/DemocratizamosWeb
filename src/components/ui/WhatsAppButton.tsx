@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils/cn';
 
 export function WhatsAppButton() {
-  const phoneNumber = '+5216145871758';
+  const phoneNumber = '+526144105989';
   const message = encodeURIComponent('¡Hola! Me gustaría obtener más información.');
 
   return (

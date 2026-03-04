@@ -7,7 +7,7 @@ interface ProgramaBodyProps {
 
 export function ProgramaBody({ programa }: ProgramaBodyProps) {
   const ctaText = programa.ctaText || 'Reserva mi lugar';
-  const ctaHref = programa.ctaHref || 'https://wa.me/+5216145871758';
+  const ctaHref = programa.ctaHref || 'https://wa.me/526144105989';
 
   return (
     <div className="space-y-6 sm:space-y-8">
