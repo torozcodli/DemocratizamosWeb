@@ -1,6 +1,21 @@
 import { z } from 'zod';
 import { localizedStringSchema, localizedArraySchema } from '@/lib/validation/localized';
 
+const optionalExternalWebsiteUrlSchema = z
+  .string()
+  .trim()
+  .optional()
+  .transform((value) => (value && value.length > 0 ? value : undefined))
+  .refine((value) => {
+    if (!value) return true;
+    try {
+      const parsed = new URL(value);
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch {
+      return false;
+    }
+  }, 'Ingresa una URL valida que comience con http:// o https://');
+
 const ProgramInfoSchema = z.object({
   date: z.string().min(1, 'La fecha es requerida'),
   time: z.string().min(1, 'La hora es requerida'),
@@ -12,8 +27,26 @@ const ProgramInfoSchema = z.object({
 });
 
 /** Content (array): trim por elemento; vacíos filtrados. Compat legacy string/array. */
+const localizedContentTextSchema = z
+  .object({
+    es: z.string().trim().min(1, 'Debe haber al menos un párrafo'),
+    en: z.string().trim().optional(),
+  })
+  .transform((value): { es: string[]; en?: string[] } => {
+    const splitParagraphs = (text: string) =>
+      text
+        .split('\n\n')
+        .map((p) => p.trim())
+        .filter((p) => p.length > 0);
+
+    const es = splitParagraphs(value.es);
+    const en = value.en && value.en.length > 0 ? splitParagraphs(value.en) : undefined;
+    return { es, en };
+  });
+
 const contentLocalizedOrLegacy = z
   .union([
+    localizedContentTextSchema,
     localizedArraySchema,
     z.array(z.string().trim().refine((s) => s.length > 0)).min(1),
     z.string().trim().min(1).transform((s) => ({ es: s.split('\n\n').map((p) => p.trim()).filter((p) => p.length > 0) })),
@@ -43,6 +76,7 @@ export const createProgramSchema = z.object({
       { message: 'Debe ser una URL válida o una ruta de imagen' }
     ),
   info: ProgramInfoSchema,
+  externalWebsiteUrl: optionalExternalWebsiteUrlSchema,
   order: z.number().int().positive().optional(),
   status: z.enum(['published', 'draft']).default('published'),
 });

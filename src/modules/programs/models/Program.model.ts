@@ -7,6 +7,7 @@ export interface IProgram extends Document {
   shortDescription: string | Localized<string>;
   content: string[] | Localized<string[]>;
   imageUrl: string;
+  externalWebsiteUrl?: string;
   info: {
     date: string;
     time: string;
@@ -43,6 +44,7 @@ const ProgramSchema = new Schema<IProgram>(
     shortDescription: { type: Schema.Types.Mixed, required: true },
     content: { type: Schema.Types.Mixed, required: true },
     imageUrl: { type: String, required: true },
+    externalWebsiteUrl: { type: String, required: false },
     info: { type: ProgramInfoSchema, required: true },
     order: { type: Number, default: 0 },
     status: {

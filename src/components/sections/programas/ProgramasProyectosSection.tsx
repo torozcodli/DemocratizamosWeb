@@ -8,6 +8,7 @@ import type { Session } from 'next-auth';
 import { Container } from '@/components/ui/Container';
 import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
 import { AddProgramButton } from '@/components/programas/AddProgramButton';
+import { resolveProgramMoreInfoDestination } from '@/modules/programs/helpers/program-more-info';
 
 interface Programa {
   _id: string;
@@ -15,9 +16,22 @@ interface Programa {
   slug: string;
   shortDescription: string;
   imageUrl: string;
+  externalWebsiteUrl?: string;
+  order?: number;
 }
 
-function ProyectoCard({ programa, className = '', verMasLabel }: { programa: Programa; className?: string; verMasLabel: string }) {
+function ProyectoCard({
+  programa,
+  className = '',
+  verMasLabel,
+  descriptionMinHeight,
+}: {
+  programa: Programa;
+  className?: string;
+  verMasLabel: string;
+  descriptionMinHeight: number;
+}) {
+  const moreInfoDestination = resolveProgramMoreInfoDestination(programa);
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState(programa.imageUrl);
   const [hasTriedFallback, setHasTriedFallback] = useState(false);
@@ -88,16 +102,22 @@ function ProyectoCard({ programa, className = '', verMasLabel }: { programa: Pro
         <h3 className="text-[#1D194C] font-tech font-extrabold text-2xl leading-tight shrink-0">
           {programa.title}
         </h3>
-        <p className="text-[#1D194C]/70 leading-relaxed text-base min-h-0 overflow-auto">
+        <p
+          data-program-description
+          className="text-[#1D194C]/70 leading-relaxed text-base"
+          style={{ minHeight: descriptionMinHeight > 0 ? `${descriptionMinHeight}px` : undefined }}
+        >
           {programa.shortDescription}
         </p>
       </div>
 
       <div className="flex items-end pt-2">
         <Link
-          href={`/programas/${programa.slug}`}
-          prefetch={false}
-          className="w-fit inline-block rounded-full px-6 py-3 bg-[#E68956] text-white font-semibold hover:bg-[#D67A45] transition-colors -translate-y-[5.5rem]"
+          href={moreInfoDestination.href}
+          prefetch={moreInfoDestination.isExternal ? undefined : false}
+          target={moreInfoDestination.isExternal ? '_blank' : undefined}
+          rel={moreInfoDestination.isExternal ? 'noopener noreferrer' : undefined}
+          className="w-fit inline-block rounded-full px-6 py-3 bg-[#E68956] text-white font-semibold hover:bg-[#D67A45] transition-colors"
           aria-label={`${verMasLabel}: ${programa.title}`}
         >
           {verMasLabel}
@@ -119,6 +139,7 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
   const [programs, setPrograms] = useState<Programa[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [descriptionMinHeight, setDescriptionMinHeight] = useState(0);
 
   useEffect(() => {
     fetchPrograms();
@@ -134,7 +155,14 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
       
       if (response.ok) {
         const data = await response.json();
-        setPrograms(Array.isArray(data) ? data : []);
+        if (Array.isArray(data)) {
+          // Regla visual del carrusel:
+          // nuevos a la izquierda, viejos a la derecha.
+          const sorted = [...data].sort((a, b) => (b.order ?? 0) - (a.order ?? 0));
+          setPrograms(sorted);
+        } else {
+          setPrograms([]);
+        }
       } else {
         let errorData;
         try {
@@ -156,8 +184,68 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
     }
   };
 
-  // Duplicar programas para crear efecto de carrusel infinito
-  const programasDuplicados = [...programs, ...programs, ...programs];
+  // Evitar duplicados visuales cuando hay pocos programas.
+  const programasRender = programs.length > 3 ? [...programs, ...programs, ...programs] : programs;
+
+  useEffect(() => {
+    const recalculateDescriptionHeight = () => {
+      if (!containerRef.current) return;
+      const descriptions = Array.from(
+        containerRef.current.querySelectorAll<HTMLElement>('[data-program-description]')
+      );
+      if (descriptions.length === 0) {
+        setDescriptionMinHeight(0);
+        return;
+      }
+      const maxHeight = Math.max(...descriptions.map((node) => node.scrollHeight));
+      setDescriptionMinHeight(maxHeight);
+    };
+
+    const frame = requestAnimationFrame(recalculateDescriptionHeight);
+    window.addEventListener('resize', recalculateDescriptionHeight);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', recalculateDescriptionHeight);
+    };
+  }, [programasRender.length, locale, isLoading, error]);
+
+  useEffect(() => {
+    if (!containerRef.current || isLoading || programasRender.length === 0) return;
+
+    const container = containerRef.current;
+    const hasDuplicatedTrack = programs.length > 3;
+
+    const frame = requestAnimationFrame(() => {
+      const cards = Array.from(container.querySelectorAll<HTMLElement>('.program-card'));
+      if (cards.length === 0) return;
+
+      if (hasDuplicatedTrack) {
+        // Track triplicado: centrar una card ancla del bloque central.
+        const middleBlockAnchorIndex = Math.min(
+          programs.length + Math.floor(programs.length / 2),
+          cards.length - 1
+        );
+        const anchor = cards[middleBlockAnchorIndex];
+        if (anchor) {
+          const desired =
+            anchor.offsetLeft - container.offsetLeft - (container.clientWidth - anchor.clientWidth) / 2;
+          const max = Math.max(0, container.scrollWidth - container.clientWidth);
+          container.scrollLeft = Math.min(Math.max(0, desired), max);
+        }
+      } else {
+        // Con pocos elementos: centrar visualmente el grupo/card ancla.
+        const anchor = cards[Math.floor(cards.length / 2)];
+        if (anchor) {
+          const desired =
+            anchor.offsetLeft - container.offsetLeft - (container.clientWidth - anchor.clientWidth) / 2;
+          const max = Math.max(0, container.scrollWidth - container.clientWidth);
+          container.scrollLeft = Math.min(Math.max(0, desired), max);
+        }
+      }
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [isLoading, programasRender.length, programs.length]);
 
   const scroll = (direction: 'left' | 'right') => {
     if (!containerRef.current) return;
@@ -220,7 +308,7 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
                 {t('retry')}
               </button>
             </div>
-          ) : programasDuplicados.length > 0 ? (
+          ) : programasRender.length > 0 ? (
             <div
               ref={containerRef}
               className="flex items-stretch gap-8 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide min-h-[520px]"
@@ -229,12 +317,13 @@ export function ProgramasProyectosSection({ session }: ProgramasProyectosSection
                 msOverflowStyle: 'none',
               }}
             >
-              {programasDuplicados.map((programa, index) => (
+              {programasRender.map((programa, index) => (
                 <ProyectoCard
                   key={`${programa._id}-${index}`}
                   programa={programa}
                   verMasLabel={t('verMas')}
-                  className="snap-center shrink-0 w-[280px] sm:w-[320px] lg:w-[calc(25%-24px)] h-full min-h-[520px]"
+                  descriptionMinHeight={descriptionMinHeight}
+                  className="program-card snap-center shrink-0 w-[280px] sm:w-[320px] lg:w-[calc(25%-24px)] h-full min-h-[520px]"
                 />
               ))}
             </div>

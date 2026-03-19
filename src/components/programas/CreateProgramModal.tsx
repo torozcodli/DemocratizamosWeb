@@ -21,6 +21,7 @@ interface Program {
   shortDescription: string | { es: string; en?: string };
   content: string[] | { es: string[]; en?: string[] };
   imageUrl: string;
+  externalWebsiteUrl?: string;
   info: {
     date: string;
     time: string;
@@ -106,6 +107,7 @@ export function CreateProgramModal({
             title,
             shortDescription,
             content: { es: contentEs.join('\n\n'), en: contentEn.join('\n\n') },
+            externalWebsiteUrl: programToEdit.externalWebsiteUrl ?? '',
             info: programToEdit.info,
             order: programToEdit.order,
             status: programToEdit.status,
@@ -144,6 +146,7 @@ export function CreateProgramModal({
         title,
         shortDescription,
         content: { es: contentEs.join('\n\n'), en: contentEn.join('\n\n') },
+        externalWebsiteUrl: programToEdit.externalWebsiteUrl ?? '',
         info: programToEdit.info,
         order: programToEdit.order,
         status: programToEdit.status,
@@ -157,7 +160,7 @@ export function CreateProgramModal({
         unregister('imageUrl');
       }, 0);
     } else {
-      reset({ status: 'published', content: '' });
+      reset({ status: 'published', content: '', externalWebsiteUrl: '' });
       setImagePreview('');
       setUploadedImageUrl('');
       setManualImageUrl('');
@@ -373,7 +376,7 @@ export function CreateProgramModal({
               clearErrors('imageUrl');
               
               // Validar solo los campos necesarios (sin imageUrl)
-              const fieldsToValidate = ['title.es', 'shortDescription.es', 'content.es', 'info.date', 'info.time', 'info.location', 'info.instructor', 'info.duration', 'info.level', 'info.includes', 'order', 'status'];
+              const fieldsToValidate = ['title.es', 'shortDescription.es', 'content.es', 'externalWebsiteUrl', 'info.date', 'info.time', 'info.location', 'info.instructor', 'info.duration', 'info.level', 'info.includes', 'status'];
               const isValid = await (trigger as (names: string[]) => Promise<boolean>)(fieldsToValidate);
               
               // Limpiar error de imageUrl después de validar también
@@ -446,6 +449,15 @@ export function CreateProgramModal({
               <p className="mt-1 text-sm text-red-600">{(errors.content as any).es.message}</p>
             )}
           </div>
+
+          <Input
+            label={t('externalWebsiteUrlLabel')}
+            type="url"
+            {...(register as (name: string) => ReturnType<typeof register>)('externalWebsiteUrl')}
+            error={(errors as any).externalWebsiteUrl?.message}
+            placeholder={t('externalWebsiteUrlPlaceholder')}
+          />
+          <p className="-mt-4 text-xs text-slate-500">{t('externalWebsiteUrlHint')}</p>
 
           {/* Imagen - Subir archivo o URL */}
           <div>
@@ -633,27 +645,18 @@ export function CreateProgramModal({
             )}
           </div>
 
-          {/* Order y Status */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label={t('orderOptional')}
-              type="number"
-              {...register('order', { valueAsNumber: true })}
-              error={errors.order?.message}
-              placeholder={t('placeholderOrder')}
-            />
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                {t('status')}
-              </label>
-              <select
-                {...register('status')}
-                className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
-              >
-                <option value="published">{t('published')}</option>
-                <option value="draft">{t('draft')}</option>
-              </select>
-            </div>
+          {/* Status */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              {t('status')}
+            </label>
+            <select
+              {...register('status')}
+              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+            >
+              <option value="published">{t('published')}</option>
+              <option value="draft">{t('draft')}</option>
+            </select>
           </div>
 
           {/* Botones */}

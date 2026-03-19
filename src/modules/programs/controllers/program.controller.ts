@@ -7,6 +7,22 @@ import { isAdminEmail } from '@/lib/admin';
 
 export class ProgramController {
   /**
+   * Reasigna order de forma secuencial (1..n), sin huecos.
+   */
+  private static async resequenceProgramOrders(): Promise<void> {
+    const programs = await Program.find().sort({ order: 1, createdAt: 1 }).select('_id order').lean().exec();
+    const bulkOps = programs.map((program, index) => ({
+      updateOne: {
+        filter: { _id: program._id },
+        update: { $set: { order: index + 1 } },
+      },
+    }));
+    if (bulkOps.length > 0) {
+      await Program.bulkWrite(bulkOps);
+    }
+  }
+
+  /**
    * Lista programas publicados ordenados por order
    */
   static async listPublishedPrograms(): Promise<IProgram[]> {
@@ -109,8 +125,8 @@ export class ProgramController {
       return !!exists;
     });
 
-    // Asignar order si no viene
-    const order = validated.order || (await this.getLastOrder());
+    // Orden automatico: siempre al final.
+    const order = await this.getLastOrder();
 
     // Crear programa
     const program = new Program({
@@ -166,7 +182,7 @@ export class ProgramController {
       }
     }
 
-    const { slug: _s, ...updateData } = validated as any;
+    const { slug: _s, order: _o, ...updateData } = validated as any;
     Object.assign(program, updateData);
     await program.save();
 
@@ -194,5 +210,8 @@ export class ProgramController {
     if (!program) {
       throw new Error('NOT_FOUND');
     }
+
+    // Reindexar para mantener 1..n sin huecos.
+    await this.resequenceProgramOrders();
   }
 }

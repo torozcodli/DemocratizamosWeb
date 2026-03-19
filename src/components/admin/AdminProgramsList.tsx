@@ -21,6 +21,7 @@ interface Program {
   shortDescription: string | { es: string; en?: string };
   content: string[] | { es: string[]; en?: string[] };
   imageUrl: string;
+  externalWebsiteUrl?: string;
   info: {
     date: string;
     time: string;
