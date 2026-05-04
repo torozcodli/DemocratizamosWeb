@@ -189,10 +189,11 @@
       "p3": "Each axis connects with the others, forming a network that drives social transformation through technology."
     },
     "proyectos": {
-      "sectionTitle": "Projects.",
+      "sectionTitle": "Experiences.",
       "loading": "Loading programs...",
-      "empty": "No programs available",
+      "empty": "New experiences will be available soon.",
       "verMas": "Learn more",
+      "reserveNow": "View experience",
       "errorTitle": "Error loading programs",
       "retry": "Retry"
     }

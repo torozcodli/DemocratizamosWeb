@@ -8,6 +8,9 @@ import { NosotrosTestimonioVideoSection } from '@/components/nosotros/NosotrosTe
 import { ProgramasModeloIntervencionSection } from '@/components/sections/programas/ProgramasModeloIntervencionSection';
 import { ProgramasProyectosSection } from '@/components/sections/programas/ProgramasProyectosSection';
 import { Footer } from '@/components/sections/Footer';
+import { getSumaImpactoExperiences } from '@/modules/suma-impacto/client';
+import { adaptSumaExperiencesToCards } from '@/modules/suma-impacto/adapter';
+import type { DemocratizamosExperienceCard } from '@/modules/suma-impacto/types';
 
 export const metadata = buildBaseMetadata({
   title: 'Programas',
@@ -15,8 +18,21 @@ export const metadata = buildBaseMetadata({
   path: '/programas',
 });
 
+async function getProgramasExperienceCardsSafe(): Promise<DemocratizamosExperienceCard[]> {
+  try {
+    const sumaResponse = await getSumaImpactoExperiences();
+    return adaptSumaExperiencesToCards(sumaResponse.data);
+  } catch {
+    console.error('[programas] Failed to load Suma Impacto experiences');
+    return [];
+  }
+}
+
 export default async function ProgramasPage() {
-  const session = await getServerSession(authOptions);
+  const [session, experienceCards] = await Promise.all([
+    getServerSession(authOptions),
+    getProgramasExperienceCardsSafe(),
+  ]);
 
   return (
     <main className="w-full overflow-x-clip">
@@ -24,7 +40,7 @@ export default async function ProgramasPage() {
       <ProgramasHero />
       <NosotrosPropuestaValorSection />
       <NosotrosTestimonioVideoSection />
-      <ProgramasProyectosSection session={session} />
+      <ProgramasProyectosSection items={experienceCards} session={session} />
       <ProgramasModeloIntervencionSection />
       <Footer />
     </main>

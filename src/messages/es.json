@@ -189,10 +189,11 @@
       "p3": "Cada eje se conecta con los demás, formando una red que impulsa la transformación social a través de la tecnología."
     },
     "proyectos": {
-      "sectionTitle": "Proyectos.",
+      "sectionTitle": "Experiencias.",
       "loading": "Cargando programas...",
-      "empty": "No hay programas disponibles",
+      "empty": "Pronto tendremos nuevas experiencias disponibles.",
       "verMas": "Ver más",
+      "reserveNow": "Ver experiencia",
       "errorTitle": "Error al cargar programas",
       "retry": "Reintentar"
     }
