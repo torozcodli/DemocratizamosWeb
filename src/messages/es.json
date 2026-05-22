@@ -102,11 +102,10 @@
     },
     "valores": {
       "values": [
-        { "title": "Inclusión", "description": "Igualdad de oportunidades para todas las personas, sin excepciones." },
-        { "title": "Equidad", "description": "Distribuimos recursos y oportunidades para que cada quien alcance su potencial." },
-        { "title": "Solidaridad", "description": "Promover la colaboración, el apoyo mutuo y la responsabilidad compartida para lograr el bien común." },
-        { "title": "Innovación", "description": "Brindar soluciones creativas a problemas cotidianos." },
-        { "title": "Responsabilidad", "description": "Actuar consciente con compromiso ético procurando el impacto positivo de la organización." }
+        { "title": "Equidad", "description": "El reconocimiento de que no todas las personas parten de las mismas condiciones y la construcción de oportunidades justas y accesibles para todas las personas." },
+        { "title": "Innovación", "description": "Capacidad de generar soluciones creativas, eficientes y con impacto social a través del pensamiento crítico, aprendizaje continuo y adaptación al cambio." },
+        { "title": "Colaboración", "description": "Sumar talentos, conocimientos, recursos y esfuerzos de manera transparente y corresponsable para lograr un objetivo común." },
+        { "title": "Compromiso", "description": "Representa la responsabilidad firme y constante de trabajar con integridad, transparencia y dedicación." }
       ]
     },
     "principios": {
