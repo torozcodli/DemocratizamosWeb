@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
 import { AddProgramButton } from '@/components/programas/AddProgramButton';
 import type { DemocratizamosExperienceCard } from '@/modules/suma-impacto/types';
 
-function formatDate(value: string | undefined, locale: string): string | null {
+function formatDate(value: string | null | undefined, locale: string): string | null {
   if (!value) return null;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return null;
