@@ -22,8 +22,15 @@ async function getProgramasExperienceCardsSafe(): Promise<DemocratizamosExperien
   try {
     const sumaResponse = await getSumaImpactoExperiences();
     return adaptSumaExperiencesToCards(sumaResponse.data);
-  } catch {
-    console.error('[programas] Failed to load Suma Impacto experiences');
+  } catch (error) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('[programas] Failed to load Suma Impacto experiences', {
+        name: error instanceof Error ? error.name : 'UnknownError',
+        message: error instanceof Error ? error.message : String(error),
+      });
+    } else {
+      console.error('[programas] Failed to load Suma Impacto experiences');
+    }
     return [];
   }
 }

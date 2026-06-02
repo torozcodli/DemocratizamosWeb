@@ -94,7 +94,16 @@ export async function getSumaImpactoExperiences(): Promise<SumaImpactoLiteRespon
 
   const validated = sumaImpactoLiteResponseSchema.safeParse(parsed);
   if (!validated.success) {
-    logDev('error', 'Suma Impacto response did not match expected schema');
+    if (process.env.NODE_ENV === 'development') {
+      const issues = validated.error.issues.map((i) => ({
+        path: i.path.join('.'),
+        code: i.code,
+        message: i.message,
+      }));
+      console.error('[SumaImpacto] Response did not match expected schema', { issues });
+    } else {
+      logDev('error', 'Suma Impacto response did not match expected schema');
+    }
     return { ...FALLBACK };
   }
 
