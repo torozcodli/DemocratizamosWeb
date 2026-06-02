@@ -1,11 +1,50 @@
 import { describe, expect, it } from 'vitest';
 
-import { adaptSumaExperiencesToCards, stripHtmlForCardDescription } from './adapter';
+import { adaptSumaExperiencesToCards, mapSumaCostToLabel, stripHtmlForCardDescription } from './adapter';
 import type { SumaImpactoLiteExperience } from './types';
 
 describe('stripHtmlForCardDescription', () => {
   it('elimina etiquetas HTML', () => {
     expect(stripHtmlForCardDescription('<p>Hola <strong>mundo</strong></p>')).toBe('Hola mundo');
+  });
+});
+
+describe('mapSumaCostToLabel', () => {
+  it('maps FREE to Gratuito', () => {
+    expect(mapSumaCostToLabel('FREE')).toBe('Gratuito');
+  });
+
+  it('maps PAID to De pago', () => {
+    expect(mapSumaCostToLabel('PAID')).toBe('De pago');
+  });
+
+  it('maps SUBSIDY to Subsidio', () => {
+    expect(mapSumaCostToLabel('SUBSIDY')).toBe('Subsidio');
+  });
+
+  it('is case-insensitive (free → Gratuito)', () => {
+    expect(mapSumaCostToLabel('free')).toBe('Gratuito');
+    expect(mapSumaCostToLabel('paid')).toBe('De pago');
+    expect(mapSumaCostToLabel('subsidy')).toBe('Subsidio');
+  });
+
+  it('returns undefined for null', () => {
+    expect(mapSumaCostToLabel(null)).toBeUndefined();
+  });
+
+  it('returns undefined for undefined', () => {
+    expect(mapSumaCostToLabel(undefined)).toBeUndefined();
+  });
+
+  it('returns undefined for empty string', () => {
+    expect(mapSumaCostToLabel('')).toBeUndefined();
+    expect(mapSumaCostToLabel('   ')).toBeUndefined();
+  });
+
+  it('returns undefined for unknown values (does not expose raw enum)', () => {
+    expect(mapSumaCostToLabel('SCHOLARSHIP')).toBeUndefined();
+    expect(mapSumaCostToLabel('$500 MXN')).toBeUndefined();
+    expect(mapSumaCostToLabel('UNKNOWN')).toBeUndefined();
   });
 });
 
@@ -19,6 +58,8 @@ describe('adaptSumaExperiencesToCards', () => {
     types: ['Taller', 'Otro'],
     imageUrl: 'https://img.example/i.jpg',
     location: 'CDMX',
+    organization: 'Suma Impacto',
+    cost: 'FREE',
   };
 
   it('mapea name a title', () => {
@@ -77,5 +118,52 @@ describe('adaptSumaExperiencesToCards', () => {
     expect(withId.id).toBe('exp-1');
     const [noId] = adaptSumaExperiencesToCards([{ ...base, id: undefined }]);
     expect(noId.id).toBe(base.reserveUrl);
+  });
+
+  // organizationName
+  it('mapea organization a organizationName', () => {
+    const [card] = adaptSumaExperiencesToCards([base]);
+    expect(card.organizationName).toBe('Suma Impacto');
+  });
+
+  it('retorna organizationName undefined cuando organization es undefined', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, organization: undefined }]);
+    expect(card.organizationName).toBeUndefined();
+  });
+
+  it('retorna organizationName undefined cuando organization es string vacío', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, organization: '   ' }]);
+    expect(card.organizationName).toBeUndefined();
+  });
+
+  // costLabel
+  it('mapea cost FREE a costLabel Gratuito', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, cost: 'FREE' }]);
+    expect(card.costLabel).toBe('Gratuito');
+  });
+
+  it('mapea cost PAID a costLabel De pago', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, cost: 'PAID' }]);
+    expect(card.costLabel).toBe('De pago');
+  });
+
+  it('mapea cost SUBSIDY a costLabel Subsidio', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, cost: 'SUBSIDY' }]);
+    expect(card.costLabel).toBe('Subsidio');
+  });
+
+  it('retorna costLabel undefined cuando cost es null', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, cost: null }]);
+    expect(card.costLabel).toBeUndefined();
+  });
+
+  it('retorna costLabel undefined cuando cost es undefined', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, cost: undefined }]);
+    expect(card.costLabel).toBeUndefined();
+  });
+
+  it('retorna costLabel undefined para cost desconocido (no expone raw enum)', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, cost: 'SCHOLARSHIP' }]);
+    expect(card.costLabel).toBeUndefined();
   });
 });

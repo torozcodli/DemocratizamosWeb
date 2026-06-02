@@ -23,6 +23,20 @@ export function stripHtmlForCardDescription(raw: string): string {
 }
 
 /**
+ * Convierte el valor canónico de cost de Suma a un label legible para el usuario.
+ * Retorna undefined para valores nulos, vacíos o no reconocidos.
+ * No expone el raw enum al usuario final.
+ */
+export function mapSumaCostToLabel(cost?: string | null): string | undefined {
+  if (!cost || cost.trim() === '') return undefined;
+  const normalized = cost.trim().toUpperCase();
+  if (normalized === 'FREE') return 'Gratuito';
+  if (normalized === 'PAID') return 'De pago';
+  if (normalized === 'SUBSIDY') return 'Subsidio';
+  return undefined;
+}
+
+/**
  * Mapea DTO lite de Suma Impacto a shape de card interna.
  * Sin I/O: no fetch, no env, no reglas de publicación de Suma.
  */
@@ -65,6 +79,13 @@ export function adaptSumaExperiencesToCards(
 
       const id = item.id?.trim() && item.id.trim().length > 0 ? item.id.trim() : ctaHref;
 
+      const organizationName =
+        typeof item.organization === 'string' && item.organization.trim() !== ''
+          ? item.organization.trim()
+          : undefined;
+
+      const costLabel = mapSumaCostToLabel(item.cost);
+
       return {
         id,
         title,
@@ -75,6 +96,8 @@ export function adaptSumaExperiencesToCards(
         closingDate: item.closingDate,
         category,
         location,
+        organizationName,
+        costLabel,
         href,
         ctaHref,
       };
