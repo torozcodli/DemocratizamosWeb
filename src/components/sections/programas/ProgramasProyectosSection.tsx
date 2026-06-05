@@ -9,29 +9,7 @@ import { Container } from '@/components/ui/Container';
 import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
 import { AddProgramButton } from '@/components/programas/AddProgramButton';
 import type { DemocratizamosExperienceCard } from '@/modules/suma-impacto/types';
-
-function formatDate(value: string | null | undefined, locale: string): string | null {
-  if (!value) return null;
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-
-  return new Intl.DateTimeFormat(locale, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).format(date);
-}
-
-function formatExperienceDate(item: DemocratizamosExperienceCard, locale: string): string | null {
-  const startDate = formatDate(item.startDate, locale);
-  const endDate = formatDate(item.endDate, locale);
-
-  if (startDate && endDate && startDate !== endDate) {
-    return `${startDate} - ${endDate}`;
-  }
-
-  return startDate;
-}
+import { formatExperienceDateTime } from '@/modules/suma-impacto/formatters';
 
 function ProyectoCard({
   item,
@@ -48,7 +26,7 @@ function ProyectoCard({
 }) {
   const [imageError, setImageError] = useState(!item.imageUrl);
   const [imageSrc, setImageSrc] = useState(item.imageUrl ?? '');
-  const dateLabel = formatExperienceDate(item, locale);
+  const dateLabel = formatExperienceDateTime(item.startDate, item.endDate, locale);
 
   useEffect(() => {
     if (item.imageUrl) {
@@ -107,13 +85,27 @@ function ProyectoCard({
       </div>
 
       <div className="mt-6 flex min-h-0 flex-col gap-4">
+        {item.organizationName && item.organizationName !== item.title && (
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#1D194C]/50 shrink-0">
+            {item.organizationName}
+          </p>
+        )}
         <h3 className="text-[#1D194C] font-tech font-extrabold text-2xl leading-tight shrink-0">
           {item.title}
         </h3>
-        {(dateLabel || item.location) && (
-          <p className="text-sm font-semibold text-[#1D194C]/60">
-            {[dateLabel, item.location].filter(Boolean).join(' | ')}
-          </p>
+        {(dateLabel || item.location || item.costLabel) && (
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            {(dateLabel || item.location) && (
+              <span className="text-sm font-semibold text-[#1D194C]/60">
+                {[dateLabel, item.location].filter(Boolean).join(' | ')}
+              </span>
+            )}
+            {item.costLabel && (
+              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#7B87FF]/20 text-[#1D194C]">
+                {item.costLabel}
+              </span>
+            )}
+          </div>
         )}
         <p
           data-program-description
@@ -122,6 +114,7 @@ function ProyectoCard({
         >
           {item.description}
         </p>
+
       </div>
 
       <div className="flex items-end pt-2">
@@ -142,9 +135,10 @@ function ProyectoCard({
 interface ProgramasProyectosSectionProps {
   items: DemocratizamosExperienceCard[];
   session?: Session | null;
+  hasError?: boolean;
 }
 
-export function ProgramasProyectosSection({ items, session }: ProgramasProyectosSectionProps) {
+export function ProgramasProyectosSection({ items, session, hasError = false }: ProgramasProyectosSectionProps) {
   const t = useTranslations('programas.proyectos');
   const locale = useLocale();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -282,7 +276,7 @@ export function ProgramasProyectosSection({ items, session }: ProgramasProyectos
             </div>
           ) : (
             <div className="text-center py-12 text-[#1D194C]/60">
-              <p>{t('empty')}</p>
+              <p>{hasError ? t('error') : t('empty')}</p>
             </div>
           )}
         </div>

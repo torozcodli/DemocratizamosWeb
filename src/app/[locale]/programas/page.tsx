@@ -18,10 +18,19 @@ export const metadata = buildBaseMetadata({
   path: '/programas',
 });
 
-async function getProgramasExperienceCardsSafe(): Promise<DemocratizamosExperienceCard[]> {
+async function getProgramasExperienceCardsSafe(): Promise<{
+  items: DemocratizamosExperienceCard[];
+  hasError: boolean;
+}> {
   try {
     const sumaResponse = await getSumaImpactoExperiences();
-    return adaptSumaExperiencesToCards(sumaResponse.data);
+    if (!sumaResponse.success) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('[programas] Suma Impacto returned a failure response');
+      }
+      return { items: [], hasError: true };
+    }
+    return { items: adaptSumaExperiencesToCards(sumaResponse.data), hasError: false };
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
       console.error('[programas] Failed to load Suma Impacto experiences', {
@@ -31,12 +40,12 @@ async function getProgramasExperienceCardsSafe(): Promise<DemocratizamosExperien
     } else {
       console.error('[programas] Failed to load Suma Impacto experiences');
     }
-    return [];
+    return { items: [], hasError: true };
   }
 }
 
 export default async function ProgramasPage() {
-  const [session, experienceCards] = await Promise.all([
+  const [session, { items: experienceCards, hasError: experiencesHasError }] = await Promise.all([
     getServerSession(authOptions),
     getProgramasExperienceCardsSafe(),
   ]);
@@ -47,7 +56,7 @@ export default async function ProgramasPage() {
       <ProgramasHero />
       <NosotrosPropuestaValorSection />
       <NosotrosTestimonioVideoSection />
-      <ProgramasProyectosSection items={experienceCards} session={session} />
+      <ProgramasProyectosSection items={experienceCards} hasError={experiencesHasError} session={session} />
       <ProgramasModeloIntervencionSection />
       <Footer />
     </main>

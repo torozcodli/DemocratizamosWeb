@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { adaptSumaExperiencesToCards, mapSumaCostToLabel, stripHtmlForCardDescription } from './adapter';
+import { adaptSumaExperiencesToCards, mapSumaCostToLabel, mapSumaModalityToLabel, stripHtmlForCardDescription } from './adapter';
 import type { SumaImpactoLiteExperience } from './types';
 
 describe('stripHtmlForCardDescription', () => {
@@ -48,6 +48,69 @@ describe('mapSumaCostToLabel', () => {
   });
 });
 
+describe('mapSumaModalityToLabel', () => {
+  it('in_person → Presencial', () => {
+    expect(mapSumaModalityToLabel('in_person')).toBe('Presencial');
+  });
+
+  it('presencial → Presencial', () => {
+    expect(mapSumaModalityToLabel('presencial')).toBe('Presencial');
+  });
+
+  it('online → En línea', () => {
+    expect(mapSumaModalityToLabel('online')).toBe('En línea');
+  });
+
+  it('en_linea → En línea', () => {
+    expect(mapSumaModalityToLabel('en_linea')).toBe('En línea');
+  });
+
+  it('hybrid → Híbrido', () => {
+    expect(mapSumaModalityToLabel('hybrid')).toBe('Híbrido');
+  });
+
+  it('hibrido → Híbrido', () => {
+    expect(mapSumaModalityToLabel('hibrido')).toBe('Híbrido');
+  });
+
+  it('híbrido (con tilde) → Híbrido', () => {
+    expect(mapSumaModalityToLabel('híbrido')).toBe('Híbrido');
+  });
+
+  it('ONLINE (uppercase) → En línea', () => {
+    expect(mapSumaModalityToLabel('ONLINE')).toBe('En línea');
+  });
+
+  it('IN_PERSON (uppercase) → Presencial', () => {
+    expect(mapSumaModalityToLabel('IN_PERSON')).toBe('Presencial');
+  });
+
+  it('Online (mixed case) → En línea', () => {
+    expect(mapSumaModalityToLabel('Online')).toBe('En línea');
+  });
+
+  it('valor desconocido legible → raw trimmed (no expone nada técnico peor)', () => {
+    expect(mapSumaModalityToLabel('Semipresencial')).toBe('Semipresencial');
+  });
+
+  it('null → null', () => {
+    expect(mapSumaModalityToLabel(null)).toBeNull();
+  });
+
+  it('undefined → null', () => {
+    expect(mapSumaModalityToLabel(undefined)).toBeNull();
+  });
+
+  it('string vacío → null', () => {
+    expect(mapSumaModalityToLabel('')).toBeNull();
+    expect(mapSumaModalityToLabel('   ')).toBeNull();
+  });
+
+  it('número → null', () => {
+    expect(mapSumaModalityToLabel(42)).toBeNull();
+  });
+});
+
 describe('adaptSumaExperiencesToCards', () => {
   const base: SumaImpactoLiteExperience = {
     id: 'exp-1',
@@ -84,6 +147,47 @@ describe('adaptSumaExperiencesToCards', () => {
     expect(card.description).toBe('Desc rich');
   });
 
+  it('descripción de exactamente 10 palabras no agrega ...', () => {
+    const desc = 'una dos tres cuatro cinco seis siete ocho nueve diez';
+    const [card] = adaptSumaExperiencesToCards([{ ...base, description: desc }]);
+    expect(card.description).toBe(desc);
+    expect(card.description).not.toContain('...');
+  });
+
+  it('descripción de más de 10 palabras trunca a 10 con ...', () => {
+    const desc = 'una dos tres cuatro cinco seis siete ocho nueve diez once';
+    const [card] = adaptSumaExperiencesToCards([{ ...base, description: desc }]);
+    expect(card.description).toBe('una dos tres cuatro cinco seis siete ocho nueve diez...');
+  });
+
+  it('descripción con HTML y más de 10 palabras: limpia y trunca', () => {
+    const desc = '<p>una dos tres cuatro cinco seis siete ocho nueve diez <strong>once</strong></p>';
+    const [card] = adaptSumaExperiencesToCards([{ ...base, description: desc }]);
+    expect(card.description).toBe('una dos tres cuatro cinco seis siete ocho nueve diez...');
+  });
+
+  it('descripción vacía retorna string vacío', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, description: '' }]);
+    expect(card.description).toBe('');
+  });
+
+  it('descripción undefined retorna string vacío', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, description: undefined }]);
+    expect(card.description).toBe('');
+  });
+
+  it('espacios múltiples se normalizan antes de contar palabras', () => {
+    const desc = 'una  dos   tres cuatro cinco seis siete ocho nueve diez once';
+    const [card] = adaptSumaExperiencesToCards([{ ...base, description: desc }]);
+    expect(card.description).toBe('una dos tres cuatro cinco seis siete ocho nueve diez...');
+  });
+
+  it('no corta palabras a la mitad (respeta límite en espacio)', () => {
+    const desc = 'uno dos tres cuatro cinco seis siete ocho nueve complejísima once';
+    const [card] = adaptSumaExperiencesToCards([{ ...base, description: desc }]);
+    expect(card.description).toBe('uno dos tres cuatro cinco seis siete ocho nueve complejísima...');
+  });
+
   it('filtra items sin name', () => {
     expect(adaptSumaExperiencesToCards([{ ...base, name: undefined }])).toHaveLength(0);
     expect(adaptSumaExperiencesToCards([{ ...base, name: '   ' }])).toHaveLength(0);
@@ -100,17 +204,39 @@ describe('adaptSumaExperiencesToCards', () => {
     expect(b.imageUrl).toBeNull();
   });
 
-  it('usa location || modality y fallback', () => {
-    const [withLoc] = adaptSumaExperiencesToCards([{ ...base, location: 'GDL', modality: null }]);
-    expect(withLoc.location).toBe('GDL');
-    const [withMod] = adaptSumaExperiencesToCards([
-      { ...base, location: null, modality: 'Online' },
-    ]);
-    expect(withMod.location).toBe('Online');
-    const [fallback] = adaptSumaExperiencesToCards([
-      { ...base, location: null, modality: null },
-    ]);
-    expect(fallback.location).toBe('Por confirmar');
+  it('location física tiene prioridad sobre modality', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, location: 'GDL', modality: 'in_person' }]);
+    expect(card.location).toBe('GDL');
+  });
+
+  it('modality raw in_person → Presencial cuando location vacío', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, location: null, modality: 'in_person' }]);
+    expect(card.location).toBe('Presencial');
+  });
+
+  it('modality raw online → En línea cuando location vacío', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, location: null, modality: 'online' }]);
+    expect(card.location).toBe('En línea');
+  });
+
+  it('modality raw hybrid → Híbrido cuando location vacío', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, location: null, modality: 'hybrid' }]);
+    expect(card.location).toBe('Híbrido');
+  });
+
+  it('modality ONLINE (uppercase) → En línea', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, location: null, modality: 'ONLINE' }]);
+    expect(card.location).toBe('En línea');
+  });
+
+  it('modality híbrido (con tilde) → Híbrido', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, location: null, modality: 'híbrido' }]);
+    expect(card.location).toBe('Híbrido');
+  });
+
+  it('location y modality vacíos → fallback Por confirmar', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, location: null, modality: null }]);
+    expect(card.location).toBe('Por confirmar');
   });
 
   it('usa id o reserveUrl como id estable', () => {

@@ -1,6 +1,15 @@
 import type { DemocratizamosExperienceCard, SumaImpactoLiteExperience } from './types';
 
 const LOCATION_FALLBACK = 'Por confirmar';
+const DESCRIPTION_WORD_LIMIT = 10;
+
+function truncateWords(value: string, limit = DESCRIPTION_WORD_LIMIT): string {
+  const normalized = value.trim().replace(/\s+/g, ' ');
+  if (!normalized) return '';
+  const words = normalized.split(' ');
+  if (words.length <= limit) return normalized;
+  return `${words.slice(0, limit).join(' ')}...`;
+}
 
 /**
  * Quita etiquetas HTML y colapsa espacios para mostrar texto plano en cards.
@@ -36,6 +45,35 @@ export function mapSumaCostToLabel(cost?: string | null): string | undefined {
   return undefined;
 }
 
+const MODALITY_LABELS: Record<string, string> = {
+  in_person: 'Presencial',
+  presencial: 'Presencial',
+  online: 'En línea',
+  en_linea: 'En línea',
+  hybrid: 'Híbrido',
+  hibrido: 'Híbrido',
+};
+
+/**
+ * Normaliza el valor de modality de Suma a un label legible para el usuario.
+ * Acepta variantes en inglés (in_person, online, hybrid) y español (presencial, híbrido).
+ * Para valores no reconocidos retorna el raw trimmed — puede ser un string legible de Suma.
+ * Retorna null para valores nulos, vacíos o no-string.
+ */
+export function mapSumaModalityToLabel(raw: unknown): string | null {
+  if (typeof raw !== 'string') return null;
+  const trimmed = raw.trim();
+  if (trimmed === '') return null;
+
+  const key = trimmed
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/[\s-]+/g, '_');
+
+  return MODALITY_LABELS[key] ?? trimmed;
+}
+
 /**
  * Mapea DTO lite de Suma Impacto a shape de card interna.
  * Sin I/O: no fetch, no env, no reglas de publicación de Suma.
@@ -52,8 +90,10 @@ export function adaptSumaExperiencesToCards(
     .map((item) => {
       const title = item.name!.trim();
       const ctaHref = item.reserveUrl!.trim();
-      const description = stripHtmlForCardDescription(
-        item.description != null ? String(item.description) : ''
+      const description = truncateWords(
+        stripHtmlForCardDescription(
+          item.description != null ? String(item.description) : ''
+        )
       );
 
       const imageUrl =
@@ -62,10 +102,9 @@ export function adaptSumaExperiencesToCards(
           : null;
 
       const loc = item.location;
-      const mod = item.modality;
       const location =
         (typeof loc === 'string' && loc.trim() !== '' ? loc.trim() : null) ??
-        (typeof mod === 'string' && mod.trim() !== '' ? mod.trim() : null) ??
+        mapSumaModalityToLabel(item.modality) ??
         LOCATION_FALLBACK;
 
       const publicTrim = item.publicUrl?.trim();
