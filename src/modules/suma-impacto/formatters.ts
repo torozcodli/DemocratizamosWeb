@@ -1,7 +1,8 @@
 const EXPERIENCE_TZ = 'America/Mexico_City';
 
 function parseSafeDate(iso: string): Date | null {
-  const d = new Date(iso);
+  const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(iso);
+  const d = new Date(isDateOnly ? `${iso}T12:00:00.000Z` : iso);
   return Number.isNaN(d.getTime()) ? null : d;
 }
 

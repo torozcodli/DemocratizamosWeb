@@ -38,13 +38,18 @@ describe('sumaImpactoLiteItemSchema — valid cases', () => {
   });
 
   it('accepts an item with all optional fields absent', () => {
-    expect(sumaImpactoLiteItemSchema.safeParse({}).success).toBe(true);
+    expect(
+      sumaImpactoLiteItemSchema.safeParse({
+        publicUrl: 'https://suma.example/public/minimo',
+      }).success
+    ).toBe(true);
   });
 
-  it('accepts an item with only name and redirectUrl', () => {
+  it('accepts an item with only name, redirectUrl and publicUrl', () => {
     const result = sumaImpactoLiteItemSchema.safeParse({
       name: 'Mínimo',
       redirectUrl: 'https://suma.example/r',
+      publicUrl: 'https://suma.example/public/minimo',
     });
     expect(result.success).toBe(true);
   });
@@ -100,11 +105,6 @@ describe('sumaImpactoLiteItemSchema — valid cases', () => {
     expect(result.success).toBe(true);
   });
 
-  it('accepts cost: any other string (not enum — string schema)', () => {
-    const result = sumaImpactoLiteItemSchema.safeParse({ ...VALID_ITEM, cost: '$500 MXN' });
-    expect(result.success).toBe(true);
-  });
-
   it('passes through extra fields without failing (passthrough)', () => {
     const result = sumaImpactoLiteItemSchema.safeParse({
       ...VALID_ITEM,
@@ -133,6 +133,25 @@ describe('sumaImpactoLiteItemSchema — invalid cases', () => {
 
   it('fails when cost is a number instead of string', () => {
     const result = sumaImpactoLiteItemSchema.safeParse({ ...VALID_ITEM, cost: 500 });
+    expect(result.success).toBe(false);
+  });
+
+  it('fails when cost is an unknown string', () => {
+    const result = sumaImpactoLiteItemSchema.safeParse({ ...VALID_ITEM, cost: '$500 MXN' });
+    expect(result.success).toBe(false);
+  });
+
+  it('fails when publicUrl is missing', () => {
+    const { publicUrl: _publicUrl, ...withoutPublicUrl } = VALID_ITEM;
+    const result = sumaImpactoLiteItemSchema.safeParse(withoutPublicUrl);
+    expect(result.success).toBe(false);
+  });
+
+  it('fails when publicUrl is not a valid URL', () => {
+    const result = sumaImpactoLiteItemSchema.safeParse({
+      ...VALID_ITEM,
+      publicUrl: 'not-a-url',
+    });
     expect(result.success).toBe(false);
   });
 });

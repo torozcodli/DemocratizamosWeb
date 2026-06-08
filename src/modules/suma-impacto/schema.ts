@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 /**
  * Schema Zod para un item lite de Suma Impacto.
- * Todos los campos son opcionales/nullable — el contrato de Suma los puede omitir.
+ * Valida el contrato local consumido por Democratizados.
  * .passthrough() preserva campos extra que Suma agregue sin romper el schema.
  * Política A: si el shape estructural del response falla, el client devuelve fallback.
  */
@@ -24,10 +24,9 @@ export const sumaImpactoLiteItemSchema = z
     imageUrl: z.string().nullable().optional(),
     redirectUrl: z.string().url().nullish(),
     tags: z.array(z.string()).default([]),
-    publicUrl: z.string().optional(),
+    publicUrl: z.string().url(),
     shortLinkUrl: z.string().nullable().optional(),
-    // cost usa string genérico (no enum) para máxima compatibilidad con valores futuros de Suma.
-    cost: z.string().nullable().optional(),
+    cost: z.enum(['FREE', 'PAID', 'SUBSIDY']).nullable().optional(),
   })
   .passthrough();
 

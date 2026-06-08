@@ -172,7 +172,11 @@ describe('getSumaImpactoExperiences — response handling', () => {
   });
 
   it('returns data on valid 200 response', async () => {
-    const item = { id: 'exp-1', name: 'Taller Demo', reserveUrl: 'https://suma.example/r' };
+    const item = {
+      id: 'exp-1',
+      name: 'Taller Demo',
+      publicUrl: 'https://suma.example/demoinn/experiences?e=exp-1',
+    };
     fetchMock.mockResolvedValueOnce(
       makeMockResponse({ success: true, total: 1, data: [item] })
     );
@@ -219,7 +223,11 @@ describe('getSumaImpactoExperiences — schema validation (Política A)', () => 
   });
 
   it('returns data when response passes schema', async () => {
-    const item = { id: 'exp-1', name: 'Taller', reserveUrl: 'https://suma.example/r' };
+    const item = {
+      id: 'exp-1',
+      name: 'Taller',
+      publicUrl: 'https://suma.example/demoinn/experiences?e=exp-1',
+    };
     fetchMock.mockResolvedValueOnce(
       makeMockResponse({ success: true, total: 1, data: [item] })
     );

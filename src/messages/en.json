@@ -192,6 +192,7 @@
       "sectionTitle": "Experiences.",
       "loading": "Loading programs...",
       "empty": "New experiences will be available soon.",
+      "error": "We could not load experiences right now. Please try again later.",
       "verMas": "Learn more",
       "reserveNow": "View experience",
       "errorTitle": "Error loading programs",

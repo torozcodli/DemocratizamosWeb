@@ -134,7 +134,9 @@ describe('adaptSumaExperiencesToCards', () => {
   it('usa publicUrl || redirectUrl como href', () => {
     const [card] = adaptSumaExperiencesToCards([base]);
     expect(card.href).toBe(base.publicUrl);
-    const noPublic = adaptSumaExperiencesToCards([{ ...base, publicUrl: undefined }]);
+    const noPublic = adaptSumaExperiencesToCards([
+      { ...base, publicUrl: undefined } as unknown as SumaImpactoLiteItem,
+    ]);
     expect(noPublic[0].href).toBe(base.redirectUrl);
   });
 
@@ -191,10 +193,14 @@ describe('adaptSumaExperiencesToCards', () => {
 
   it('filtra items sin redirectUrl ni publicUrl', () => {
     expect(
-      adaptSumaExperiencesToCards([{ ...base, redirectUrl: undefined, publicUrl: undefined }])
+      adaptSumaExperiencesToCards([
+        { ...base, redirectUrl: undefined, publicUrl: undefined } as unknown as SumaImpactoLiteItem,
+      ])
     ).toHaveLength(0);
     expect(
-      adaptSumaExperiencesToCards([{ ...base, redirectUrl: null, publicUrl: undefined }])
+      adaptSumaExperiencesToCards([
+        { ...base, redirectUrl: null, publicUrl: undefined } as unknown as SumaImpactoLiteItem,
+      ])
     ).toHaveLength(0);
   });
 
@@ -306,7 +312,9 @@ describe('adaptSumaExperiencesToCards', () => {
   });
 
   it('retorna costLabel undefined para cost desconocido (no expone raw enum)', () => {
-    const [card] = adaptSumaExperiencesToCards([{ ...base, cost: 'SCHOLARSHIP' }]);
+    const [card] = adaptSumaExperiencesToCards([
+      { ...base, cost: 'SCHOLARSHIP' } as unknown as SumaImpactoLiteItem,
+    ]);
     expect(card.costLabel).toBeUndefined();
   });
 

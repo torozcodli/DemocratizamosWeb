@@ -192,6 +192,7 @@
       "sectionTitle": "Experiencias.",
       "loading": "Cargando programas...",
       "empty": "Pronto tendremos nuevas experiencias disponibles.",
+      "error": "No pudimos cargar las experiencias en este momento. Intenta más tarde.",
       "verMas": "Ver más",
       "reserveNow": "Ver experiencia",
       "errorTitle": "Error al cargar programas",
