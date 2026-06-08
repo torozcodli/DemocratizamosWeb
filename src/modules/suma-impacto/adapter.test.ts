@@ -131,11 +131,6 @@ describe('adaptSumaExperiencesToCards', () => {
     expect(card.title).toBe('Taller X');
   });
 
-  it('usa redirectUrl como ctaHref', () => {
-    const [card] = adaptSumaExperiencesToCards([base]);
-    expect(card.ctaHref).toBe(base.redirectUrl);
-  });
-
   it('usa publicUrl || redirectUrl como href', () => {
     const [card] = adaptSumaExperiencesToCards([base]);
     expect(card.href).toBe(base.publicUrl);
@@ -194,8 +189,29 @@ describe('adaptSumaExperiencesToCards', () => {
     expect(adaptSumaExperiencesToCards([{ ...base, name: '   ' }])).toHaveLength(0);
   });
 
-  it('filtra items sin redirectUrl', () => {
-    expect(adaptSumaExperiencesToCards([{ ...base, redirectUrl: undefined }])).toHaveLength(0);
+  it('filtra items sin redirectUrl ni publicUrl', () => {
+    expect(
+      adaptSumaExperiencesToCards([{ ...base, redirectUrl: undefined, publicUrl: undefined }])
+    ).toHaveLength(0);
+    expect(
+      adaptSumaExperiencesToCards([{ ...base, redirectUrl: null, publicUrl: undefined }])
+    ).toHaveLength(0);
+  });
+
+  it('no filtra items con redirectUrl: null cuando publicUrl es válido', () => {
+    expect(
+      adaptSumaExperiencesToCards([{ ...base, redirectUrl: null }])
+    ).toHaveLength(1);
+  });
+
+  it('usa publicUrl como ctaHref cuando redirectUrl es null', () => {
+    const [card] = adaptSumaExperiencesToCards([{ ...base, redirectUrl: null }]);
+    expect(card.ctaHref).toBe(base.publicUrl);
+  });
+
+  it('usa redirectUrl como ctaHref cuando está presente aunque haya publicUrl', () => {
+    const [card] = adaptSumaExperiencesToCards([base]);
+    expect(card.ctaHref).toBe(base.redirectUrl);
   });
 
   it('maneja imageUrl null o vacío', () => {
@@ -292,5 +308,36 @@ describe('adaptSumaExperiencesToCards', () => {
   it('retorna costLabel undefined para cost desconocido (no expone raw enum)', () => {
     const [card] = adaptSumaExperiencesToCards([{ ...base, cost: 'SCHOLARSHIP' }]);
     expect(card.costLabel).toBeUndefined();
+  });
+
+  // Casos reales del response de Suma (redirectUrl: null, publicUrl válido)
+  it('acepta item con redirectUrl: null, publicUrl válido y cost PAID (caso real Suma)', () => {
+    const item: SumaImpactoLiteItem = {
+      ...base,
+      name: 'taller con costo',
+      redirectUrl: null,
+      publicUrl: 'https://suma.example/demoinn/experiences?e=abc',
+      cost: 'PAID',
+      tags: [],
+    };
+    const [card] = adaptSumaExperiencesToCards([item]);
+    expect(card.title).toBe('taller con costo');
+    expect(card.ctaHref).toBe('https://suma.example/demoinn/experiences?e=abc');
+    expect(card.costLabel).toBe('De pago');
+  });
+
+  it('acepta item con redirectUrl: null, publicUrl válido y cost FREE (caso real Suma)', () => {
+    const item: SumaImpactoLiteItem = {
+      ...base,
+      name: 'taller gratis',
+      redirectUrl: null,
+      publicUrl: 'https://suma.example/demoinn/experiences?e=xyz',
+      cost: 'FREE',
+      tags: [],
+    };
+    const [card] = adaptSumaExperiencesToCards([item]);
+    expect(card.title).toBe('taller gratis');
+    expect(card.ctaHref).toBe('https://suma.example/demoinn/experiences?e=xyz');
+    expect(card.costLabel).toBe('Gratuito');
   });
 });

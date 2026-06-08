@@ -85,12 +85,12 @@ export function adaptSumaExperiencesToCards(
   return items
     .filter((item) => {
       const name = item.name?.trim();
-      const redirect = item.redirectUrl?.trim();
-      return Boolean(name && redirect);
+      const cta = item.redirectUrl?.trim() || item.publicUrl?.trim();
+      return Boolean(name && cta);
     })
     .map((item) => {
       const title = item.name!.trim();
-      const ctaHref = item.redirectUrl!.trim();
+      const ctaHref = item.redirectUrl?.trim() || item.publicUrl?.trim() || '';
       const description = truncateWords(
         stripHtmlForCardDescription(
           item.description != null ? String(item.description) : ''
