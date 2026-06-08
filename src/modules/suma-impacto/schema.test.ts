@@ -17,8 +17,8 @@ const VALID_ITEM = {
   location: 'CDMX',
   modality: 'Presencial',
   imageUrl: 'https://img.example/photo.jpg',
-  registrationUrl: 'https://suma.example/register',
-  reserveUrl: 'https://suma.example/reserve',
+  redirectUrl: 'https://suma.example/reserve',
+  tags: ['innovacion', 'tecnologia'],
   publicUrl: 'https://suma.example/public/taller',
   shortLinkUrl: 'https://s.example/abc',
   cost: 'FREE',
@@ -41,10 +41,10 @@ describe('sumaImpactoLiteItemSchema — valid cases', () => {
     expect(sumaImpactoLiteItemSchema.safeParse({}).success).toBe(true);
   });
 
-  it('accepts an item with only name and reserveUrl', () => {
+  it('accepts an item with only name and redirectUrl', () => {
     const result = sumaImpactoLiteItemSchema.safeParse({
       name: 'Mínimo',
-      reserveUrl: 'https://suma.example/r',
+      redirectUrl: 'https://suma.example/r',
     });
     expect(result.success).toBe(true);
   });

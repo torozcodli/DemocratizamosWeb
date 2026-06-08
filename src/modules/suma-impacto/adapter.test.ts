@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { adaptSumaExperiencesToCards, mapSumaCostToLabel, mapSumaModalityToLabel, stripHtmlForCardDescription } from './adapter';
-import type { SumaImpactoLiteExperience } from './types';
+import type { SumaImpactoLiteItem } from './schema';
 
 describe('stripHtmlForCardDescription', () => {
   it('elimina etiquetas HTML', () => {
@@ -112,13 +112,14 @@ describe('mapSumaModalityToLabel', () => {
 });
 
 describe('adaptSumaExperiencesToCards', () => {
-  const base: SumaImpactoLiteExperience = {
+  const base: SumaImpactoLiteItem = {
     id: 'exp-1',
     name: 'Taller X',
     description: '<p>Desc <em>rich</em></p>',
-    reserveUrl: 'https://suma.example/o/experiences?e=abc',
+    redirectUrl: 'https://suma.example/o/experiences?e=abc',
     publicUrl: 'https://suma.example/public/x',
     types: ['Taller', 'Otro'],
+    tags: [],
     imageUrl: 'https://img.example/i.jpg',
     location: 'CDMX',
     organization: 'Suma Impacto',
@@ -130,16 +131,16 @@ describe('adaptSumaExperiencesToCards', () => {
     expect(card.title).toBe('Taller X');
   });
 
-  it('usa reserveUrl como ctaHref', () => {
+  it('usa redirectUrl como ctaHref', () => {
     const [card] = adaptSumaExperiencesToCards([base]);
-    expect(card.ctaHref).toBe(base.reserveUrl);
+    expect(card.ctaHref).toBe(base.redirectUrl);
   });
 
-  it('usa publicUrl || reserveUrl como href', () => {
+  it('usa publicUrl || redirectUrl como href', () => {
     const [card] = adaptSumaExperiencesToCards([base]);
     expect(card.href).toBe(base.publicUrl);
     const noPublic = adaptSumaExperiencesToCards([{ ...base, publicUrl: undefined }]);
-    expect(noPublic[0].href).toBe(base.reserveUrl);
+    expect(noPublic[0].href).toBe(base.redirectUrl);
   });
 
   it('limpia HTML de description', () => {
@@ -193,8 +194,8 @@ describe('adaptSumaExperiencesToCards', () => {
     expect(adaptSumaExperiencesToCards([{ ...base, name: '   ' }])).toHaveLength(0);
   });
 
-  it('filtra items sin reserveUrl', () => {
-    expect(adaptSumaExperiencesToCards([{ ...base, reserveUrl: undefined }])).toHaveLength(0);
+  it('filtra items sin redirectUrl', () => {
+    expect(adaptSumaExperiencesToCards([{ ...base, redirectUrl: undefined }])).toHaveLength(0);
   });
 
   it('maneja imageUrl null o vacío', () => {
@@ -239,11 +240,11 @@ describe('adaptSumaExperiencesToCards', () => {
     expect(card.location).toBe('Por confirmar');
   });
 
-  it('usa id o reserveUrl como id estable', () => {
+  it('usa id o redirectUrl como id estable', () => {
     const [withId] = adaptSumaExperiencesToCards([base]);
     expect(withId.id).toBe('exp-1');
     const [noId] = adaptSumaExperiencesToCards([{ ...base, id: undefined }]);
-    expect(noId.id).toBe(base.reserveUrl);
+    expect(noId.id).toBe(base.redirectUrl);
   });
 
   // organizationName

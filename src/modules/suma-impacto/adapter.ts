@@ -1,4 +1,5 @@
-import type { DemocratizamosExperienceCard, SumaImpactoLiteExperience } from './types';
+import type { SumaImpactoLiteItem } from './schema';
+import type { DemocratizamosExperienceCard } from './types';
 
 const LOCATION_FALLBACK = 'Por confirmar';
 const DESCRIPTION_WORD_LIMIT = 10;
@@ -79,17 +80,17 @@ export function mapSumaModalityToLabel(raw: unknown): string | null {
  * Sin I/O: no fetch, no env, no reglas de publicación de Suma.
  */
 export function adaptSumaExperiencesToCards(
-  items: SumaImpactoLiteExperience[]
+  items: SumaImpactoLiteItem[]
 ): DemocratizamosExperienceCard[] {
   return items
     .filter((item) => {
       const name = item.name?.trim();
-      const reserve = item.reserveUrl?.trim();
-      return Boolean(name && reserve);
+      const redirect = item.redirectUrl?.trim();
+      return Boolean(name && redirect);
     })
     .map((item) => {
       const title = item.name!.trim();
-      const ctaHref = item.reserveUrl!.trim();
+      const ctaHref = item.redirectUrl!.trim();
       const description = truncateWords(
         stripHtmlForCardDescription(
           item.description != null ? String(item.description) : ''

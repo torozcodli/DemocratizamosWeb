@@ -22,8 +22,8 @@ export const sumaImpactoLiteItemSchema = z
     location: z.string().nullable().optional(),
     modality: z.string().nullable().optional(),
     imageUrl: z.string().nullable().optional(),
-    registrationUrl: z.string().optional(),
-    reserveUrl: z.string().optional(),
+    redirectUrl: z.string().url().nullish(),
+    tags: z.array(z.string()).default([]),
     publicUrl: z.string().optional(),
     shortLinkUrl: z.string().nullable().optional(),
     // cost usa string genérico (no enum) para máxima compatibilidad con valores futuros de Suma.
