@@ -30,24 +30,19 @@ function ProyectoCard({
 
   useEffect(() => {
     if (item.imageUrl) {
-      let normalizedPath = item.imageUrl;
-
-      // Si la ruta no empieza con http/https o /, agregar /
-      if (
-        !normalizedPath.startsWith('http://') &&
-        !normalizedPath.startsWith('https://') &&
-        !normalizedPath.startsWith('/')
-      ) {
-        normalizedPath = `/${normalizedPath}`;
-      }
-
-      setImageSrc(normalizedPath);
+      setImageSrc(item.imageUrl.trim());
       setImageError(false);
     } else {
       setImageSrc('');
       setImageError(true);
     }
   }, [item.imageUrl]);
+
+  const useUnoptimizedImage =
+    imageSrc.startsWith('http://') ||
+    imageSrc.startsWith('https://') ||
+    imageSrc.startsWith('/images/') ||
+    imageSrc.startsWith('/');
 
   return (
     <div className={`grid h-full min-w-0 grid-rows-[auto_1fr_auto] ${className}`}>
@@ -69,7 +64,7 @@ function ProyectoCard({
               fill
               className="object-cover"
               sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 25vw"
-              unoptimized={imageSrc.startsWith('/images/') || imageSrc.startsWith('/')}
+              unoptimized={useUnoptimizedImage}
               onError={() => setImageError(true)}
             />
           ) : (

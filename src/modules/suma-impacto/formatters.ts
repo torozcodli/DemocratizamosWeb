@@ -1,9 +1,16 @@
 const EXPERIENCE_TZ = 'America/Mexico_City';
 
-function parseSafeDate(iso: string): Date | null {
+export function parseSafeDate(iso: string): Date | null {
   const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(iso);
   const d = new Date(isDateOnly ? `${iso}T12:00:00.000Z` : iso);
   return Number.isNaN(d.getTime()) ? null : d;
+}
+
+/** Timestamp para ordenar cards: próximas primero; sin fecha válida al final. */
+export function getExperienceSortTimestamp(startDate: string | null | undefined): number {
+  if (!startDate) return Number.POSITIVE_INFINITY;
+  const parsed = parseSafeDate(startDate);
+  return parsed ? parsed.getTime() : Number.POSITIVE_INFINITY;
 }
 
 function hasTimeComponent(iso: string): boolean {

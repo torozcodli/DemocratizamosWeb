@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { adaptSumaExperiencesToCards, mapSumaCostToLabel, mapSumaModalityToLabel, stripHtmlForCardDescription } from './adapter';
+import {
+  adaptSumaExperiencesToCards,
+  mapSumaCostToLabel,
+  mapSumaModalityToLabel,
+  prepareSumaExperienceCardsForDisplay,
+  resolveExperienceImageUrl,
+  sortExperienceCardsByStartDate,
+  stripHtmlForCardDescription,
+} from './adapter';
 import type { SumaImpactoLiteItem } from './schema';
 
 describe('stripHtmlForCardDescription', () => {
@@ -347,5 +355,98 @@ describe('adaptSumaExperiencesToCards', () => {
     expect(card.title).toBe('taller gratis');
     expect(card.ctaHref).toBe('https://suma.example/demoinn/experiences?e=xyz');
     expect(card.costLabel).toBe('Gratuito');
+  });
+});
+
+describe('resolveExperienceImageUrl', () => {
+  it('retorna null para vacío o null', () => {
+    expect(resolveExperienceImageUrl(null)).toBeNull();
+    expect(resolveExperienceImageUrl('')).toBeNull();
+    expect(resolveExperienceImageUrl('   ')).toBeNull();
+  });
+
+  it('conserva URL absoluta https', () => {
+    expect(resolveExperienceImageUrl('https://res.cloudinary.com/demo/photo.jpg')).toBe(
+      'https://res.cloudinary.com/demo/photo.jpg'
+    );
+  });
+
+  it('resuelve ruta relativa de Suma contra baseUrl', () => {
+    expect(
+      resolveExperienceImageUrl('/uploads/taller.jpg', 'https://suma.example')
+    ).toBe('https://suma.example/uploads/taller.jpg');
+  });
+
+  it('resuelve path sin slash inicial contra baseUrl', () => {
+    expect(
+      resolveExperienceImageUrl('uploads/taller.jpg', 'https://suma.example')
+    ).toBe('https://suma.example/uploads/taller.jpg');
+  });
+
+  it('no reescribe assets locales /images/', () => {
+    expect(resolveExperienceImageUrl('/images/local.jpg', 'https://suma.example')).toBe(
+      '/images/local.jpg'
+    );
+  });
+});
+
+describe('sortExperienceCardsByStartDate', () => {
+  const mk = (id: string, startDate?: string | null) => ({
+    id,
+    title: id,
+    description: '',
+    imageUrl: null,
+    startDate,
+    href: 'https://suma.example/x',
+    ctaHref: 'https://suma.example/x',
+  });
+
+  it('ordena por startDate ascendente (próximas primero)', () => {
+    const sorted = sortExperienceCardsByStartDate([
+      mk('c', '2026-09-01'),
+      mk('a', '2026-07-01'),
+      mk('b', '2026-08-01'),
+    ]);
+    expect(sorted.map((c) => c.id)).toEqual(['a', 'b', 'c']);
+  });
+
+  it('manda items sin fecha al final', () => {
+    const sorted = sortExperienceCardsByStartDate([
+      mk('sin-fecha'),
+      mk('primero', '2026-07-01'),
+      mk('sin-fecha-2', null),
+    ]);
+    expect(sorted.map((c) => c.id)).toEqual(['primero', 'sin-fecha', 'sin-fecha-2']);
+  });
+});
+
+describe('prepareSumaExperienceCardsForDisplay', () => {
+  it('resuelve imagen y ordena en un solo paso', () => {
+    const items: SumaImpactoLiteItem[] = [
+      {
+        id: '2',
+        name: 'Después',
+        publicUrl: 'https://suma.example/demoinn/experiences?e=2',
+        startDate: '2026-09-01',
+        imageUrl: '/uploads/late.jpg',
+        tags: [],
+      },
+      {
+        id: '1',
+        name: 'Antes',
+        publicUrl: 'https://suma.example/demoinn/experiences?e=1',
+        startDate: '2026-07-01',
+        imageUrl: 'https://res.cloudinary.com/demo/early.jpg',
+        tags: [],
+      },
+    ];
+
+    const cards = prepareSumaExperienceCardsForDisplay(items, {
+      sumaBaseUrl: 'https://suma.example',
+    });
+
+    expect(cards.map((c) => c.id)).toEqual(['1', '2']);
+    expect(cards[0].imageUrl).toBe('https://res.cloudinary.com/demo/early.jpg');
+    expect(cards[1].imageUrl).toBe('https://suma.example/uploads/late.jpg');
   });
 });

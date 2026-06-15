@@ -1,3 +1,4 @@
+import { getExperienceSortTimestamp } from './formatters';
 import type { SumaImpactoLiteItem } from './schema';
 import type { DemocratizamosExperienceCard } from './types';
 
@@ -73,6 +74,56 @@ export function mapSumaModalityToLabel(raw: unknown): string | null {
     .replace(/[\s-]+/g, '_');
 
   return MODALITY_LABELS[key] ?? trimmed;
+}
+
+/**
+ * Resuelve imageUrl de Suma a URL absoluta usable en el browser.
+ * Rutas relativas de Suma se resuelven contra sumaBaseUrl.
+ * Assets locales de Democratizados (/images/...) no se reescriben.
+ */
+export function resolveExperienceImageUrl(
+  imageUrl: string | null | undefined,
+  sumaBaseUrl?: string
+): string | null {
+  if (imageUrl == null) return null;
+  const trimmed = String(imageUrl).trim();
+  if (trimmed === '') return null;
+
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed;
+  if (trimmed.startsWith('//')) return `https:${trimmed}`;
+  if (trimmed.startsWith('/images/')) return trimmed;
+
+  if (sumaBaseUrl) {
+    try {
+      const base = sumaBaseUrl.endsWith('/') ? sumaBaseUrl : `${sumaBaseUrl}/`;
+      return new URL(trimmed.startsWith('/') ? trimmed.slice(1) : trimmed, base).toString();
+    } catch {
+      return trimmed.startsWith('/') ? trimmed : null;
+    }
+  }
+
+  return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+}
+
+/** Ordena por startDate ascendente (próximas primero). Sin fecha al final. */
+export function sortExperienceCardsByStartDate(
+  cards: DemocratizamosExperienceCard[]
+): DemocratizamosExperienceCard[] {
+  return [...cards].sort(
+    (a, b) => getExperienceSortTimestamp(a.startDate) - getExperienceSortTimestamp(b.startDate)
+  );
+}
+
+/** Adapta, resuelve imágenes contra Suma y ordena para display en /programas. */
+export function prepareSumaExperienceCardsForDisplay(
+  items: SumaImpactoLiteItem[],
+  options: { sumaBaseUrl: string }
+): DemocratizamosExperienceCard[] {
+  const cards = adaptSumaExperiencesToCards(items).map((card) => ({
+    ...card,
+    imageUrl: resolveExperienceImageUrl(card.imageUrl, options.sumaBaseUrl),
+  }));
+  return sortExperienceCardsByStartDate(cards);
 }
 
 /**

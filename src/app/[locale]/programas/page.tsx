@@ -8,8 +8,9 @@ import { NosotrosTestimonioVideoSection } from '@/components/nosotros/NosotrosTe
 import { ProgramasModeloIntervencionSection } from '@/components/sections/programas/ProgramasModeloIntervencionSection';
 import { ProgramasProyectosSection } from '@/components/sections/programas/ProgramasProyectosSection';
 import { Footer } from '@/components/sections/Footer';
+import { prepareSumaExperienceCardsForDisplay } from '@/modules/suma-impacto/adapter';
 import { getSumaImpactoExperiences } from '@/modules/suma-impacto/client';
-import { adaptSumaExperiencesToCards } from '@/modules/suma-impacto/adapter';
+import { getSumaImpactoEnv } from '@/modules/suma-impacto/env';
 import type { DemocratizamosExperienceCard } from '@/modules/suma-impacto/types';
 
 export const metadata = buildBaseMetadata({
@@ -30,7 +31,11 @@ async function getProgramasExperienceCardsSafe(): Promise<{
       }
       return { items: [], hasError: true };
     }
-    return { items: adaptSumaExperiencesToCards(sumaResponse.data), hasError: false };
+    const { baseUrl } = getSumaImpactoEnv();
+    return {
+      items: prepareSumaExperienceCardsForDisplay(sumaResponse.data, { sumaBaseUrl: baseUrl }),
+      hasError: false,
+    };
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
       console.error('[programas] Failed to load Suma Impacto experiences', {
