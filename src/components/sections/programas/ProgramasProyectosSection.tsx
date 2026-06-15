@@ -15,13 +15,11 @@ function ProyectoCard({
   item,
   className = '',
   ctaLabel,
-  descriptionMinHeight,
   locale,
 }: {
   item: DemocratizamosExperienceCard;
   className?: string;
   ctaLabel: string;
-  descriptionMinHeight: number;
   locale: string;
 }) {
   const [imageError, setImageError] = useState(!item.imageUrl);
@@ -45,8 +43,8 @@ function ProyectoCard({
     imageSrc.startsWith('/');
 
   return (
-    <div className={`grid h-full min-w-0 grid-rows-[auto_1fr_auto] ${className}`}>
-      <div className="rounded-3xl overflow-hidden border-2 border-[#7B87FF] shadow-[0_16px_40px_rgba(0,0,0,0.18)]">
+    <div className={`flex h-full min-w-0 flex-col ${className}`}>
+      <div className="shrink-0 rounded-3xl overflow-hidden border-2 border-[#7B87FF] shadow-[0_16px_40px_rgba(0,0,0,0.18)]">
         <div className="h-12 bg-[#3B3B7A] flex items-center px-4 gap-2">
           <div className="flex gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-white/70"></div>
@@ -79,49 +77,42 @@ function ProyectoCard({
         </div>
       </div>
 
-      <div className="mt-6 flex min-h-0 flex-col gap-4">
-        {item.organizationName && item.organizationName !== item.title && (
-          <p className="text-xs font-semibold uppercase tracking-wide text-[#1D194C]/50 shrink-0">
-            {item.organizationName}
-          </p>
-        )}
-        <h3 className="text-[#1D194C] font-tech font-extrabold text-2xl leading-tight shrink-0">
+      <div className="mt-6 flex min-h-0 flex-1 flex-col gap-3">
+        <p className="min-h-[1.125rem] shrink-0 text-xs font-semibold uppercase tracking-wide text-[#1D194C]/50 line-clamp-1">
+          {item.organizationName && item.organizationName !== item.title
+            ? item.organizationName
+            : '\u00A0'}
+        </p>
+        <h3 className="min-h-[6.5rem] shrink-0 text-[#1D194C] font-tech font-extrabold text-2xl leading-tight line-clamp-4">
           {item.title}
         </h3>
-        {(dateLabel || item.location || item.costLabel) && (
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            {(dateLabel || item.location) && (
-              <span className="text-sm font-semibold text-[#1D194C]/60">
-                {[dateLabel, item.location].filter(Boolean).join(' | ')}
-              </span>
-            )}
-            {item.costLabel && (
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#7B87FF]/20 text-[#1D194C]">
-                {item.costLabel}
-              </span>
-            )}
-          </div>
-        )}
-        <p
-          data-program-description
-          className="text-[#1D194C]/70 leading-relaxed text-base"
-          style={{ minHeight: descriptionMinHeight > 0 ? `${descriptionMinHeight}px` : undefined }}
-        >
+        <div className="min-h-[1.5rem] shrink-0 flex flex-wrap items-center gap-x-2 gap-y-1">
+          {(dateLabel || item.location) && (
+            <span className="text-sm font-semibold text-[#1D194C]/60">
+              {[dateLabel, item.location].filter(Boolean).join(' | ')}
+            </span>
+          )}
+          {item.costLabel && (
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#7B87FF]/20 text-[#1D194C]">
+              {item.costLabel}
+            </span>
+          )}
+        </div>
+        <p className="min-h-[4.75rem] flex-1 text-[#1D194C]/70 leading-relaxed text-base line-clamp-3">
           {item.description}
         </p>
 
-      </div>
-
-      <div className="flex items-end pt-2">
-        <a
-          href={item.ctaHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-fit inline-block rounded-full px-6 py-3 bg-[#E68956] text-white font-semibold hover:bg-[#D67A45] transition-colors"
-          aria-label={`${ctaLabel}: ${item.title}`}
-        >
-          {ctaLabel}
-        </a>
+        <div className="mt-auto shrink-0 pt-2">
+          <a
+            href={item.ctaHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-fit inline-block rounded-full px-6 py-3 bg-[#E68956] text-white font-semibold hover:bg-[#D67A45] transition-colors"
+            aria-label={`${ctaLabel}: ${item.title}`}
+          >
+            {ctaLabel}
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -138,32 +129,9 @@ export function ProgramasProyectosSection({ items, session, hasError = false }: 
   const locale = useLocale();
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const [descriptionMinHeight, setDescriptionMinHeight] = useState(0);
 
   // Evitar duplicados visuales cuando hay pocos items.
   const itemsRender = items.length > 3 ? [...items, ...items, ...items] : items;
-
-  useEffect(() => {
-    const recalculateDescriptionHeight = () => {
-      if (!containerRef.current) return;
-      const descriptions = Array.from(
-        containerRef.current.querySelectorAll<HTMLElement>('[data-program-description]')
-      );
-      if (descriptions.length === 0) {
-        setDescriptionMinHeight(0);
-        return;
-      }
-      const maxHeight = Math.max(...descriptions.map((node) => node.scrollHeight));
-      setDescriptionMinHeight(maxHeight);
-    };
-
-    const frame = requestAnimationFrame(recalculateDescriptionHeight);
-    window.addEventListener('resize', recalculateDescriptionHeight);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('resize', recalculateDescriptionHeight);
-    };
-  }, [itemsRender.length, locale]);
 
   useEffect(() => {
     if (!containerRef.current || itemsRender.length === 0) return;
@@ -263,7 +231,6 @@ export function ProgramasProyectosSection({ items, session, hasError = false }: 
                   key={`${item.id}-${index}`}
                   item={item}
                   ctaLabel={t('reserveNow')}
-                  descriptionMinHeight={descriptionMinHeight}
                   locale={locale}
                   className="program-card snap-center shrink-0 w-[280px] sm:w-[320px] lg:w-[calc(25%-24px)] h-full min-h-[520px]"
                 />
