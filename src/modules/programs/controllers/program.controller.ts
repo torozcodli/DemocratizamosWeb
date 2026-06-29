@@ -56,6 +56,16 @@ export class ProgramController {
   }
 
   /**
+   * Lista todos los programas para el carrusel público.
+   * Incluye published y draft — el status se usa para mostrar badge "Abierto/Cerrado",
+   * no para ocultar programas del carrusel.
+   */
+  static async listCarouselPrograms(): Promise<IProgram[]> {
+    await connectDB();
+    return Program.find().sort({ order: 1 }).lean().exec();
+  }
+
+  /**
    * Obtiene un programa por slug
    */
   static async getProgramBySlug(slug: string): Promise<IProgram | null> {

@@ -14,6 +14,7 @@ export type InternalProgramItem = {
   shortDescription?: string | null;
   imageUrl?: string | null;
   externalWebsiteUrl?: string | null;
+  status?: 'published' | 'draft' | null;
   info?: {
     date?: string | null;
     time?: string | null;
@@ -34,16 +35,21 @@ function ProgramCard({
   item,
   ctaLabel,
   externalCtaLabel,
+  statusOpenLabel,
+  statusClosedLabel,
   className = '',
 }: {
   item: InternalProgramItem;
   ctaLabel: string;
   externalCtaLabel: string;
+  statusOpenLabel: string;
+  statusClosedLabel: string;
   className?: string;
 }) {
   const hasImage = !!item.imageUrl;
   const hasExternalLink = Boolean(item.externalWebsiteUrl?.trim());
   const infoLine = [item.info?.location, item.info?.level].filter(Boolean).join(' | ') || null;
+  const isOpen = item.status === 'published';
 
   const ctaClassName =
     'w-fit inline-block rounded-full px-6 py-3 bg-[#E68956] text-white font-semibold hover:bg-[#D67A45] transition-colors';
@@ -90,9 +96,22 @@ function ProgramCard({
       </div>
 
       <div className="mt-6 flex min-h-0 flex-1 flex-col gap-3">
-        <h3 className="min-h-[6.5rem] shrink-0 text-[#1D194C] font-tech font-extrabold text-2xl leading-tight line-clamp-4">
-          {item.title}
-        </h3>
+        <div className="shrink-0 flex items-start justify-between gap-2 min-h-[6.5rem]">
+          <h3 className="text-[#1D194C] font-tech font-extrabold text-2xl leading-tight line-clamp-4 flex-1">
+            {item.title}
+          </h3>
+          {item.status != null && (
+            <span
+              className={`flex-shrink-0 mt-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                isOpen
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-gray-100 text-gray-600'
+              }`}
+            >
+              {isOpen ? statusOpenLabel : statusClosedLabel}
+            </span>
+          )}
+        </div>
 
         {infoLine ? (
           <p className="min-h-[1.5rem] shrink-0 text-sm font-semibold text-[#1D194C]/60">
@@ -200,6 +219,8 @@ export function InternalProgramasSection({ items, locale: _locale, isAdmin = fal
                   item={item}
                   ctaLabel={t('cta')}
                   externalCtaLabel={t('externalCta')}
+                  statusOpenLabel={t('statusOpen')}
+                  statusClosedLabel={t('statusClosed')}
                   className="program-internal-card snap-center shrink-0 w-[280px] sm:w-[320px] lg:w-[calc(25%-24px)] h-full min-h-[520px]"
                 />
               ))}

@@ -282,7 +282,9 @@
       "empty": "Aún no hay programas disponibles.",
       "previous": "Programa anterior",
       "next": "Programa siguiente",
-      "externalCta": "Ir al programa"
+      "externalCta": "Ir al programa",
+      "statusOpen": "Abierto",
+      "statusClosed": "Cerrado"
     }
   },
   "blog": {
@@ -415,10 +417,10 @@
     "saving": "Guardando...",
     "manageExperiencias": "Administrar Experiencias",
     "programStatus": {
-      "active": "Programa activo",
-      "inactive": "Programa inactivo",
-      "activate": "Activar programa",
-      "deactivate": "Desactivar programa",
+      "active": "Programa abierto",
+      "inactive": "Programa cerrado",
+      "activate": "Abrir programa",
+      "deactivate": "Cerrar programa",
       "updating": "Actualizando estado..."
     }
   }

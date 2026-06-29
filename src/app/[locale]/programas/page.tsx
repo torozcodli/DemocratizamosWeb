@@ -57,7 +57,7 @@ async function getProgramasExperienceCardsSafe(): Promise<{
 
 async function getInternalProgramsSafe(locale: string): Promise<InternalProgramItem[]> {
   try {
-    const docs = await ProgramController.listPublishedPrograms();
+    const docs = await ProgramController.listCarouselPrograms();
     return docs
       .map((doc) => resolveProgram(doc, locale))
       .filter((p): p is NonNullable<typeof p> => p !== null && !!p.slug && !!p.title)
@@ -67,6 +67,9 @@ async function getInternalProgramsSafe(locale: string): Promise<InternalProgramI
         shortDescription: p.shortDescription ?? null,
         imageUrl: (p as any).imageUrl ?? null,
         externalWebsiteUrl: typeof (p as any).externalWebsiteUrl === 'string' ? (p as any).externalWebsiteUrl : null,
+        status: ((p as any).status === 'published' || (p as any).status === 'draft')
+          ? (p as any).status as 'published' | 'draft'
+          : null,
         info: p.info
           ? {
               date: p.info.date ?? null,
