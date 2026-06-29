@@ -2,12 +2,9 @@
 
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useRouter } from '@/i18n/navigation';
 import { useTranslations, useLocale } from 'next-intl';
-import type { Session } from 'next-auth';
 import { Container } from '@/components/ui/Container';
 import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
-import { AddProgramButton } from '@/components/programas/AddProgramButton';
 import type { DemocratizamosExperienceCard } from '@/modules/suma-impacto/types';
 import { formatExperienceDateTime } from '@/modules/suma-impacto/formatters';
 
@@ -120,15 +117,13 @@ function ProyectoCard({
 
 interface ProgramasProyectosSectionProps {
   items: DemocratizamosExperienceCard[];
-  session?: Session | null;
   hasError?: boolean;
 }
 
-export function ProgramasProyectosSection({ items, session, hasError = false }: ProgramasProyectosSectionProps) {
+export function ProgramasProyectosSection({ items, hasError = false }: ProgramasProyectosSectionProps) {
   const t = useTranslations('programas.proyectos');
   const locale = useLocale();
   const containerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   // Evitar duplicados visuales cuando hay pocos items.
   const itemsRender = items.length > 3 ? [...items, ...items, ...items] : items;
@@ -243,12 +238,6 @@ export function ProgramasProyectosSection({ items, session, hasError = false }: 
           )}
         </div>
 
-        {/* Botón + para admin (debajo del carrusel) */}
-        {session?.user?.isAdmin && (
-          <div className="flex justify-center mt-8">
-            <AddProgramButton onClick={() => router.push('/admin/programas')} />
-          </div>
-        )}
       </Container>
     </section>
   );

@@ -102,10 +102,22 @@
     },
     "valores": {
       "values": [
-        { "title": "Equity", "description": "The recognition that not all people start from the same conditions and the building of fair and accessible opportunities for all people." },
-        { "title": "Innovation", "description": "The ability to generate creative, efficient, and socially impactful solutions through critical thinking, continuous learning, and adaptability to change." },
-        { "title": "Collaboration", "description": "Bringing together talents, knowledge, resources, and efforts in a transparent and co-responsible way to achieve a common goal." },
-        { "title": "Commitment", "description": "Represents the firm and constant responsibility to work with integrity, transparency, and dedication." }
+        {
+          "title": "Equity",
+          "description": "The recognition that not all people start from the same conditions and the building of fair and accessible opportunities for all people."
+        },
+        {
+          "title": "Innovation",
+          "description": "The ability to generate creative, efficient, and socially impactful solutions through critical thinking, continuous learning, and adaptability to change."
+        },
+        {
+          "title": "Collaboration",
+          "description": "Bringing together talents, knowledge, resources, and efforts in a transparent and co-responsible way to achieve a common goal."
+        },
+        {
+          "title": "Commitment",
+          "description": "Represents the firm and constant responsibility to work with integrity, transparency, and dedication."
+        }
       ]
     },
     "principios": {
@@ -113,29 +125,68 @@
       "title2": "of ",
       "title3": "action.",
       "items": [
-        { "title": "Agility.", "description": "We avoid unnecessary bureaucracy. We act quickly, decisively, and focused on solutions that create social value." },
-        { "title": "Resilience.", "description": "In the face of challenges, we find creative alternatives. We adapt, learn, and move forward without losing our way." },
-        { "title": "Conviction.", "description": "Every action has purpose. We deeply believe in the impact that innovation can have on people's lives." }
+        {
+          "title": "Agility.",
+          "description": "We avoid unnecessary bureaucracy. We act quickly, decisively, and focused on solutions that create social value."
+        },
+        {
+          "title": "Resilience.",
+          "description": "In the face of challenges, we find creative alternatives. We adapt, learn, and move forward without losing our way."
+        },
+        {
+          "title": "Conviction.",
+          "description": "Every action has purpose. We deeply believe in the impact that innovation can have on people's lives."
+        }
       ]
     },
     "team": {
       "title": "Our team.",
       "members": [
-        { "role": "Legal Representative.", "name": "Paulina García" },
-        { "role": "Director", "name": "Daniel García" },
-        { "role": "Operations Coordinator", "name": "Daniel Santiesteban" },
-        { "role": "Process Automation Engineer", "name": "Tomás Orozco" },
-        { "role": "Administrative Coordinator", "name": "Xochitl Castillo" },
-        { "role": "", "name": "Silvia" }
+        {
+          "role": "Legal Representative.",
+          "name": "Paulina García"
+        },
+        {
+          "role": "Director",
+          "name": "Daniel García"
+        },
+        {
+          "role": "Operations Coordinator",
+          "name": "Daniel Santiesteban"
+        },
+        {
+          "role": "Process Automation Engineer",
+          "name": "Tomás Orozco"
+        },
+        {
+          "role": "Administrative Coordinator",
+          "name": "Xochitl Castillo"
+        },
+        {
+          "role": "",
+          "name": "Silvia"
+        }
       ]
     },
     "results": {
       "alt": "Results and metrics",
       "metrics": [
-        { "value": "420", "label": "Consulting\nsolutions" },
-        { "value": "+5000", "label": "Cases\ncompleted" },
-        { "value": "4999", "label": "Satisfied\nclients" },
-        { "value": "160", "label": "Expert\nconsultants" }
+        {
+          "value": "420",
+          "label": "Consulting\nsolutions"
+        },
+        {
+          "value": "+5000",
+          "label": "Cases\ncompleted"
+        },
+        {
+          "value": "4999",
+          "label": "Satisfied\nclients"
+        },
+        {
+          "value": "160",
+          "label": "Expert\nconsultants"
+        }
       ]
     },
     "ubicacion": {
@@ -145,9 +196,18 @@
       "scheduleTitle": "Schedule.",
       "schedule": "Monday to Friday 08:00 to 17:00.",
       "locations": [
-        { "name": "Utopic Workspace", "address": "Francisco Xavier Mina #1000 Int. 9, Col. Zona Centro, C.P. 31000, Chihuahua, Chih. México." },
-        { "name": "PIT 3, 2nd floor", "address": "Av. H. Colegio Militar s/n, Bodegas del Estado, 31300 Chihuahua, Chih." },
-        { "name": "Mifam Canaco", "address": "Av. Pedro Zuloaga 11200, Labor de Terrazas, 31207 Chihuahua, Chih." }
+        {
+          "name": "Utopic Workspace",
+          "address": "Francisco Xavier Mina #1000 Int. 9, Col. Zona Centro, C.P. 31000, Chihuahua, Chih. México."
+        },
+        {
+          "name": "PIT 3, 2nd floor",
+          "address": "Av. H. Colegio Militar s/n, Bodegas del Estado, 31300 Chihuahua, Chih."
+        },
+        {
+          "name": "Mifam Canaco",
+          "address": "Av. Pedro Zuloaga 11200, Labor de Terrazas, 31207 Chihuahua, Chih."
+        }
       ]
     },
     "testimonios": {
@@ -163,12 +223,30 @@
       "title4": "and services",
       "intro": "Our proposal is articulated in six components that strengthen people's capabilities to improve their economic autonomy, their participation in the digital economy, and their well-being, with a focus on social inclusion and local development.",
       "cards": [
-        { "title": "Professionalization", "description": "We strengthen the capabilities of self-employed people, entrepreneurs, and local teams through training processes that allow them to improve the management of their economic activity, adapt to digital environments, and make better decisions for their livelihood and growth." },
-        { "title": "Technological Skills", "description": "We promote digital literacy and strengthen technological skills in people with different needs, providing practical knowledge to navigate digital environments with autonomy, improve their economic participation, and adapt to technological changes." },
-        { "title": "Support", "description": "We support people and productive projects in implementing technological solutions and innovation processes, providing guidance, mentoring, and follow-up to reduce barriers and facilitate the adoption of technology in an accessible and relevant way." },
-        { "title": "Awareness", "description": "We promote a culture of responsible and conscious use of technology, fostering understanding of its social, economic, and creative value, as well as basic knowledge about rights, innovation, and idea protection." },
-        { "title": "Guidance", "description": "We channel people toward support networks, complementary services, and technological resources that strengthen their development, facilitating access to tools, equipment, and opportunities that would otherwise be inaccessible." },
-        { "title": "Protection", "description": "We guide people and projects in understanding basic mechanisms for protecting their ideas and innovations, helping knowledge and creativity generate sustainable value and fair recognition." }
+        {
+          "title": "Professionalization",
+          "description": "We strengthen the capabilities of self-employed people, entrepreneurs, and local teams through training processes that allow them to improve the management of their economic activity, adapt to digital environments, and make better decisions for their livelihood and growth."
+        },
+        {
+          "title": "Technological Skills",
+          "description": "We promote digital literacy and strengthen technological skills in people with different needs, providing practical knowledge to navigate digital environments with autonomy, improve their economic participation, and adapt to technological changes."
+        },
+        {
+          "title": "Support",
+          "description": "We support people and productive projects in implementing technological solutions and innovation processes, providing guidance, mentoring, and follow-up to reduce barriers and facilitate the adoption of technology in an accessible and relevant way."
+        },
+        {
+          "title": "Awareness",
+          "description": "We promote a culture of responsible and conscious use of technology, fostering understanding of its social, economic, and creative value, as well as basic knowledge about rights, innovation, and idea protection."
+        },
+        {
+          "title": "Guidance",
+          "description": "We channel people toward support networks, complementary services, and technological resources that strengthen their development, facilitating access to tools, equipment, and opportunities that would otherwise be inaccessible."
+        },
+        {
+          "title": "Protection",
+          "description": "We guide people and projects in understanding basic mechanisms for protecting their ideas and innovations, helping knowledge and creativity generate sustainable value and fair recognition."
+        }
       ]
     }
   },
@@ -196,6 +274,15 @@
       "reserveNow": "View experience",
       "errorTitle": "Error loading programs",
       "retry": "Retry"
+    },
+    "internos": {
+      "title": "Programs",
+      "subtitle": "Explore Democratizamos programs.",
+      "cta": "View program",
+      "empty": "There are no programs available yet.",
+      "previous": "Previous program",
+      "next": "Next program",
+      "externalCta": "Go to program"
     }
   },
   "blog": {

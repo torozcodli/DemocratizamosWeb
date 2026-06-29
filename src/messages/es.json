@@ -102,10 +102,22 @@
     },
     "valores": {
       "values": [
-        { "title": "Equidad", "description": "El reconocimiento de que no todas las personas parten de las mismas condiciones y la construcción de oportunidades justas y accesibles para todas las personas." },
-        { "title": "Innovación", "description": "Capacidad de generar soluciones creativas, eficientes y con impacto social a través del pensamiento crítico, aprendizaje continuo y adaptación al cambio." },
-        { "title": "Colaboración", "description": "Sumar talentos, conocimientos, recursos y esfuerzos de manera transparente y corresponsable para lograr un objetivo común." },
-        { "title": "Compromiso", "description": "Representa la responsabilidad firme y constante de trabajar con integridad, transparencia y dedicación." }
+        {
+          "title": "Equidad",
+          "description": "El reconocimiento de que no todas las personas parten de las mismas condiciones y la construcción de oportunidades justas y accesibles para todas las personas."
+        },
+        {
+          "title": "Innovación",
+          "description": "Capacidad de generar soluciones creativas, eficientes y con impacto social a través del pensamiento crítico, aprendizaje continuo y adaptación al cambio."
+        },
+        {
+          "title": "Colaboración",
+          "description": "Sumar talentos, conocimientos, recursos y esfuerzos de manera transparente y corresponsable para lograr un objetivo común."
+        },
+        {
+          "title": "Compromiso",
+          "description": "Representa la responsabilidad firme y constante de trabajar con integridad, transparencia y dedicación."
+        }
       ]
     },
     "principios": {
@@ -113,29 +125,68 @@
       "title2": "de ",
       "title3": "acción.",
       "items": [
-        { "title": "Agilidad.", "description": "Evitamos la burocracia innecesaria. Actuamos rápido, decididos y enfocados en soluciones que generen valor social." },
-        { "title": "Resiliencia.", "description": "Ante los retos, encontramos alternativas creativas. Nos adaptamos, aprendemos, y seguimos adelante sin perder el rumbo." },
-        { "title": "Convicción.", "description": "Cada acción tiene propósito. Creemos profundamente en el impacto que la innovación puede tener en la vida de las personas." }
+        {
+          "title": "Agilidad.",
+          "description": "Evitamos la burocracia innecesaria. Actuamos rápido, decididos y enfocados en soluciones que generen valor social."
+        },
+        {
+          "title": "Resiliencia.",
+          "description": "Ante los retos, encontramos alternativas creativas. Nos adaptamos, aprendemos, y seguimos adelante sin perder el rumbo."
+        },
+        {
+          "title": "Convicción.",
+          "description": "Cada acción tiene propósito. Creemos profundamente en el impacto que la innovación puede tener en la vida de las personas."
+        }
       ]
     },
     "team": {
       "title": "Nuestro equipo.",
       "members": [
-        { "role": "Representante Legal.", "name": "Paulina García" },
-        { "role": "Director", "name": "Daniel García" },
-        { "role": "Coordinador de Operaciones", "name": "Daniel Santiesteban" },
-        { "role": "Ing. Automatización de Procesos", "name": "Tomás Orozco" },
-        { "role": "Coordinadora Administrativa", "name": "Xochitl Castillo" },
-        { "role": "", "name": "Silvia" }
+        {
+          "role": "Representante Legal.",
+          "name": "Paulina García"
+        },
+        {
+          "role": "Director",
+          "name": "Daniel García"
+        },
+        {
+          "role": "Coordinador de Operaciones",
+          "name": "Daniel Santiesteban"
+        },
+        {
+          "role": "Ing. Automatización de Procesos",
+          "name": "Tomás Orozco"
+        },
+        {
+          "role": "Coordinadora Administrativa",
+          "name": "Xochitl Castillo"
+        },
+        {
+          "role": "",
+          "name": "Silvia"
+        }
       ]
     },
     "results": {
       "alt": "Resultados y métricas",
       "metrics": [
-        { "value": "420", "label": "Soluciones\nde consultoría" },
-        { "value": "+5000", "label": "Casos\ncompletados" },
-        { "value": "4999", "label": "Clientes\nsatisfechos" },
-        { "value": "160", "label": "Consultores\nexpertos" }
+        {
+          "value": "420",
+          "label": "Soluciones\nde consultoría"
+        },
+        {
+          "value": "+5000",
+          "label": "Casos\ncompletados"
+        },
+        {
+          "value": "4999",
+          "label": "Clientes\nsatisfechos"
+        },
+        {
+          "value": "160",
+          "label": "Consultores\nexpertos"
+        }
       ]
     },
     "ubicacion": {
@@ -145,9 +196,18 @@
       "scheduleTitle": "Horario.",
       "schedule": "Lunes a Viernes 08:00 a 17:00 hrs.",
       "locations": [
-        { "name": "Utopic Workspace", "address": "Francisco Xavier Mina #1000 Int. 9, Col. Zona Centro, C.P. 31000, Chihuahua, Chih. México." },
-        { "name": "PIT 3, 2do piso", "address": "Av. H. Colegio Militar s/n, Bodegas del Estado, 31300 Chihuahua, Chih." },
-        { "name": "Mifam Canaco", "address": "Av. Pedro Zuloaga 11200, Labor de Terrazas, 31207 Chihuahua, Chih." }
+        {
+          "name": "Utopic Workspace",
+          "address": "Francisco Xavier Mina #1000 Int. 9, Col. Zona Centro, C.P. 31000, Chihuahua, Chih. México."
+        },
+        {
+          "name": "PIT 3, 2do piso",
+          "address": "Av. H. Colegio Militar s/n, Bodegas del Estado, 31300 Chihuahua, Chih."
+        },
+        {
+          "name": "Mifam Canaco",
+          "address": "Av. Pedro Zuloaga 11200, Labor de Terrazas, 31207 Chihuahua, Chih."
+        }
       ]
     },
     "testimonios": {
@@ -163,12 +223,30 @@
       "title4": "y servicios",
       "intro": "Nuestra propuesta se articula en seis componentes que fortalecen las capacidades de las personas para mejorar su autonomía económica, su participación en la economía digital y su bienestar, con un enfoque de inclusión social y desarrollo local.",
       "cards": [
-        { "title": "Profesionalización", "description": "Fortalecemos las capacidades de personas autoempleadas, emprendedoras y equipos locales mediante procesos formativos que les permiten mejorar la gestión de su actividad económica, adaptarse a entornos digitales y tomar mejores decisiones para su sustento y crecimiento." },
-        { "title": "Habilidades Tecnológicas", "description": "Impulsamos la alfabetización digital y fortalecemos habilidades tecnológicas en personas con distintas necesidades, brindando conocimientos prácticos para desenvolverse con autonomía en entornos digitales, mejorar su participación económica y adaptarse a los cambios tecnológicos." },
-        { "title": "Acompañamiento", "description": "Acompañamos a personas y proyectos productivos en la implementación de soluciones tecnológicas y procesos de innovación, brindando orientación, mentoría y seguimiento para reducir barreras y facilitar la adopción de tecnología de forma accesible y pertinente." },
-        { "title": "Sensibilización", "description": "Promovemos una cultura de uso responsable y consciente de la tecnología, fomentando la comprensión de su valor social, económico y creativo, así como el conocimiento básico sobre derechos, innovación y protección de ideas." },
-        { "title": "Orientación", "description": "Canalizamos a las personas hacia redes de apoyo, servicios complementarios y recursos tecnológicos que fortalecen su desarrollo, facilitando el acceso a herramientas, equipos y oportunidades que de otra forma serían inaccesibles." },
-        { "title": "Protección", "description": "Orientamos a personas y proyectos en la comprensión de mecanismos básicos de protección de sus ideas e innovaciones, contribuyendo a que el conocimiento y la creatividad generen valor sostenible y reconocimiento justo." }
+        {
+          "title": "Profesionalización",
+          "description": "Fortalecemos las capacidades de personas autoempleadas, emprendedoras y equipos locales mediante procesos formativos que les permiten mejorar la gestión de su actividad económica, adaptarse a entornos digitales y tomar mejores decisiones para su sustento y crecimiento."
+        },
+        {
+          "title": "Habilidades Tecnológicas",
+          "description": "Impulsamos la alfabetización digital y fortalecemos habilidades tecnológicas en personas con distintas necesidades, brindando conocimientos prácticos para desenvolverse con autonomía en entornos digitales, mejorar su participación económica y adaptarse a los cambios tecnológicos."
+        },
+        {
+          "title": "Acompañamiento",
+          "description": "Acompañamos a personas y proyectos productivos en la implementación de soluciones tecnológicas y procesos de innovación, brindando orientación, mentoría y seguimiento para reducir barreras y facilitar la adopción de tecnología de forma accesible y pertinente."
+        },
+        {
+          "title": "Sensibilización",
+          "description": "Promovemos una cultura de uso responsable y consciente de la tecnología, fomentando la comprensión de su valor social, económico y creativo, así como el conocimiento básico sobre derechos, innovación y protección de ideas."
+        },
+        {
+          "title": "Orientación",
+          "description": "Canalizamos a las personas hacia redes de apoyo, servicios complementarios y recursos tecnológicos que fortalecen su desarrollo, facilitando el acceso a herramientas, equipos y oportunidades que de otra forma serían inaccesibles."
+        },
+        {
+          "title": "Protección",
+          "description": "Orientamos a personas y proyectos en la comprensión de mecanismos básicos de protección de sus ideas e innovaciones, contribuyendo a que el conocimiento y la creatividad generen valor sostenible y reconocimiento justo."
+        }
       ]
     }
   },
@@ -196,6 +274,15 @@
       "reserveNow": "Ver experiencia",
       "errorTitle": "Error al cargar programas",
       "retry": "Reintentar"
+    },
+    "internos": {
+      "title": "Programas",
+      "subtitle": "Explora los programas disponibles de Democratizamos.",
+      "cta": "Ver programa",
+      "empty": "Aún no hay programas disponibles.",
+      "previous": "Programa anterior",
+      "next": "Programa siguiente",
+      "externalCta": "Ir al programa"
     }
   },
   "blog": {

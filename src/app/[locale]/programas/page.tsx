@@ -7,10 +7,16 @@ import { NosotrosPropuestaValorSection } from '@/components/nosotros/NosotrosPro
 import { NosotrosTestimonioVideoSection } from '@/components/nosotros/NosotrosTestimonioVideoSection';
 import { ProgramasModeloIntervencionSection } from '@/components/sections/programas/ProgramasModeloIntervencionSection';
 import { ProgramasProyectosSection } from '@/components/sections/programas/ProgramasProyectosSection';
+import {
+  InternalProgramasSection,
+  type InternalProgramItem,
+} from '@/components/sections/programas/InternalProgramasSection';
 import { Footer } from '@/components/sections/Footer';
 import { prepareSumaExperienceCardsForDisplay } from '@/modules/suma-impacto/adapter';
 import { getSumaImpactoExperiences } from '@/modules/suma-impacto/client';
 import { getSumaImpactoEnv } from '@/modules/suma-impacto/env';
+import { ProgramController } from '@/modules/programs/controllers/program.controller';
+import { resolveProgram } from '@/lib/i18n/resolve';
 import type { DemocratizamosExperienceCard } from '@/modules/suma-impacto/types';
 
 export const metadata = buildBaseMetadata({
@@ -49,11 +55,50 @@ async function getProgramasExperienceCardsSafe(): Promise<{
   }
 }
 
-export default async function ProgramasPage() {
-  const [session, { items: experienceCards, hasError: experiencesHasError }] = await Promise.all([
-    getServerSession(authOptions),
-    getProgramasExperienceCardsSafe(),
-  ]);
+async function getInternalProgramsSafe(locale: string): Promise<InternalProgramItem[]> {
+  try {
+    const docs = await ProgramController.listPublishedPrograms();
+    return docs
+      .map((doc) => resolveProgram(doc, locale))
+      .filter((p): p is NonNullable<typeof p> => p !== null && !!p.slug && !!p.title)
+      .map((p) => ({
+        slug: p.slug,
+        title: p.title,
+        shortDescription: p.shortDescription ?? null,
+        imageUrl: (p as any).imageUrl ?? null,
+        externalWebsiteUrl: typeof (p as any).externalWebsiteUrl === 'string' ? (p as any).externalWebsiteUrl : null,
+        info: p.info
+          ? {
+              date: p.info.date ?? null,
+              time: p.info.time ?? null,
+              location: p.info.location ?? null,
+              level: p.info.level ?? null,
+              duration: p.info.duration ?? null,
+              instructor: p.info.instructor ?? null,
+            }
+          : null,
+      }));
+  } catch {
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('[programas] Failed to load internal programs');
+    }
+    return [];
+  }
+}
+
+interface ProgramasPageProps {
+  params: Promise<{ locale: string }>;
+}
+
+export default async function ProgramasPage({ params }: ProgramasPageProps) {
+  const { locale } = await params;
+
+  const [session, { items: experienceCards, hasError: experiencesHasError }, internalPrograms] =
+    await Promise.all([
+      getServerSession(authOptions),
+      getProgramasExperienceCardsSafe(),
+      getInternalProgramsSafe(locale),
+    ]);
 
   return (
     <main className="w-full overflow-x-clip">
@@ -61,7 +106,8 @@ export default async function ProgramasPage() {
       <ProgramasHero />
       <NosotrosPropuestaValorSection />
       <NosotrosTestimonioVideoSection />
-      <ProgramasProyectosSection items={experienceCards} hasError={experiencesHasError} session={session} />
+      <ProgramasProyectosSection items={experienceCards} hasError={experiencesHasError} />
+      <InternalProgramasSection items={internalPrograms} locale={locale} isAdmin={session?.user?.isAdmin ?? false} />
       <ProgramasModeloIntervencionSection />
       <Footer />
     </main>

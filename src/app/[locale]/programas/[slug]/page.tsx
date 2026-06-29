@@ -48,6 +48,10 @@ export default async function ProgramaPage({ params }: ProgramaPageProps) {
   const prevResolved = previousPrograma ? resolveProgram(previousPrograma as any, locale) : null;
   const nextResolved = nextPrograma ? resolveProgram(nextPrograma as any, locale) : null;
 
+  const externalUrl = typeof (resolved as any).externalWebsiteUrl === 'string'
+    ? (resolved as any).externalWebsiteUrl as string
+    : null;
+
   const programaAdapted = {
     slug: resolved.slug,
     title: resolved.title,
@@ -56,7 +60,7 @@ export default async function ProgramaPage({ params }: ProgramaPageProps) {
     content: resolved.content,
     info: resolved.info,
     ctaText: 'Reserva mi lugar',
-    ctaHref: 'https://wa.me/526144105989',
+    ctaHref: externalUrl || 'https://wa.me/526144105989',
   };
 
   const previousAdapted = prevResolved
@@ -68,7 +72,9 @@ export default async function ProgramaPage({ params }: ProgramaPageProps) {
         content: prevResolved.content,
         info: prevResolved.info,
         ctaText: 'Reserva mi lugar',
-        ctaHref: 'https://wa.me/526144105989',
+        ctaHref: (typeof (prevResolved as any).externalWebsiteUrl === 'string'
+          ? (prevResolved as any).externalWebsiteUrl
+          : null) || 'https://wa.me/526144105989',
       }
     : null;
 
@@ -81,7 +87,9 @@ export default async function ProgramaPage({ params }: ProgramaPageProps) {
         content: nextResolved.content,
         info: nextResolved.info,
         ctaText: 'Reserva mi lugar',
-        ctaHref: 'https://wa.me/526144105989',
+        ctaHref: (typeof (nextResolved as any).externalWebsiteUrl === 'string'
+          ? (nextResolved as any).externalWebsiteUrl
+          : null) || 'https://wa.me/526144105989',
       }
     : null;
 
