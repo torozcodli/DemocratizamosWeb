@@ -109,8 +109,8 @@ export default async function ProgramasPage({ params }: ProgramasPageProps) {
       <ProgramasHero />
       <NosotrosPropuestaValorSection />
       <NosotrosTestimonioVideoSection />
-      <ProgramasProyectosSection items={experienceCards} hasError={experiencesHasError} />
       <InternalProgramasSection items={internalPrograms} locale={locale} isAdmin={session?.user?.isAdmin ?? false} />
+      <ProgramasProyectosSection items={experienceCards} hasError={experiencesHasError} />
       <ProgramasModeloIntervencionSection />
       <Footer />
     </main>
