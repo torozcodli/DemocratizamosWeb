@@ -412,6 +412,14 @@
     "placeholderExcerptEn": "Post summary",
     "imageUrlOrUpload": "Or enter an image URL",
     "publishImmediately": "Publish immediately",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "manageExperiencias": "Manage Experiences",
+    "programStatus": {
+      "active": "Active program",
+      "inactive": "Inactive program",
+      "activate": "Activate program",
+      "deactivate": "Deactivate program",
+      "updating": "Updating status..."
+    }
   }
 }

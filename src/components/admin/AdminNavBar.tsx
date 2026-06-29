@@ -1,35 +1,44 @@
 'use client';
 
-import { Link, usePathname } from '@/i18n/navigation';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-export function AdminNavBar() {
+interface AdminNavBarProps {
+  locale: string;
+}
+
+export function AdminNavBar({ locale }: AdminNavBarProps) {
   const t = useTranslations('admin');
   const pathname = usePathname();
 
   const navItems = [
-    { href: '/admin/programas', label: t('managePrograms') },
-    { href: '/admin/blog', label: t('manageBlog') },
-    { href: '/admin/herramientas', label: t('manageTools') },
-  ] as const;
+    { path: 'programas', label: t('managePrograms') },
+    { path: 'herramientas', label: t('manageTools') },
+    { path: 'blog', label: t('manageBlog') },
+  ];
 
   return (
     <nav className="bg-white border-b border-[#C7CAE8]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 xl:px-8 flex gap-1 py-1">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 xl:px-8 flex flex-wrap gap-1 py-1">
+        {navItems.map(({ path, label }) => {
+          const href = `/${locale}/admin/${path}`;
+          const segment = `/admin/${path}`;
+          const isActive =
+            pathname === href ||
+            pathname.startsWith(`${href}/`) ||
+            pathname === segment ||
+            pathname.startsWith(`${segment}/`);
           return (
             <Link
-              key={item.href}
-              href={item.href}
+              key={path}
+              href={href}
               className={`px-4 py-2 text-sm font-medium text-[#1D194C] rounded-md transition-colors ${
-                isActive
-                  ? 'bg-[#E7E9FF] font-semibold'
-                  : 'hover:bg-[#E7E9FF]'
+                isActive ? 'bg-[#E7E9FF] font-semibold' : 'hover:bg-[#E7E9FF]'
               }`}
               aria-current={isActive ? 'page' : undefined}
             >
-              {item.label}
+              {label}
             </Link>
           );
         })}

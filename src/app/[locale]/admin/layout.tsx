@@ -40,7 +40,7 @@ export default async function AdminLayout({
     <NextIntlClientProvider locale={locale} messages={messages}>
       <div className="min-h-screen w-full bg-[#E7E9FF]">
         <Navbar />
-        <AdminNavBar />
+        <AdminNavBar locale={locale} />
         <div className="pt-8">{children}</div>
       </div>
     </NextIntlClientProvider>
